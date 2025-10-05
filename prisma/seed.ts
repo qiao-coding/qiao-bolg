@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 // 配置连接池参数
 let databaseUrl = process.env.DATABASE_URL || '';
 if (databaseUrl && !databaseUrl.includes('connection_limit') && !databaseUrl.includes('pool_timeout')) {
-  // 添加连接池参数到URL
+  // URL
   const separator = databaseUrl.includes('?') ? '&' : '?';
   databaseUrl += `${separator}connection_limit=5&pool_timeout=30&connect_timeout=30`;
 }
