@@ -3,8 +3,30 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { Note, NotesPage } from "@/app/notes/page";
+import NotePage from "@/app/article/[notesID]/[notePageID]/page";
 
+interface NotesPage {
+  id: number;
+  uid: number;
+  title: string;
+  contentTitle: string;
+  excerpt: string;
+  BasicUsage: string;
+  author: string;
+  dateStart: string;
+  dateEnd: string;
+  picture: string | null;
+  pageTags: string[];
+  noteId: number | null;
+}
+
+interface Note {
+  id: number;
+  title: string;
+  tags: string[];
+  titlePicture: string | null;
+  page: NotesPage[];
+}
 
 const HomeArticles = () => {
   const [articles, setArticles] = useState<NotesPage[]>([]);
@@ -16,7 +38,7 @@ const HomeArticles = () => {
   const [notesPage, setNotesPage] = useState<Note[]>([]);  
 
   const handleArticleClick = useCallback((noteId: number) => {
-    router.push(`/notes/${noteId}`);
+    router.push(`/article/${noteId}`);
   }, [router]);
 
 
@@ -32,39 +54,46 @@ const HomeArticles = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/notes`);
+        const response = await fetch("/api/notes");
 
         if (response.ok) {
           const data = await response.json();
-          
-    
-          const page:Note[]=data
-          setNotesPage(page)
+
+
+
           
 
-         
+
+          
+
+          const page:Note[]=data
+
+          setNotesPage(page)
+
+          
+
           const resData=page.map(n=>n.page).flat()
 
-          
+
+
 
           const allArticles: NotesPage[] = [...(resData as NotesPage[]).map((note: NotesPage) => ({
             id: note.id,
             uid: note.uid,
             title: note.title || '无分类',
+            contentTitle: note.contentTitle , 
+            excerpt: note.excerpt || '暂无摘要', 
+            BasicUsage: note.BasicUsage || '暂无使用说明', 
             author: note.author || '未知作者',
             dateStart: note.dateStart || '',
             dateEnd: note.dateEnd || '',
             pageTags: Array.isArray(note.pageTags) ? note.pageTags : [],
             picture: "",
             noteId: note.noteId,
-            note: note.note,
-            content: note.content || '',
-            pageId: note.pageId,
-          }))]
-
+          }))];
           
+ 
 
-          
 
           allArticles.sort((a, b) => new Date(b.dateStart).getTime() - new Date(a.dateStart).getTime());
 
@@ -82,12 +111,9 @@ const HomeArticles = () => {
     fetchArticles();
   }, []);
 
-  console.log('notesPage:',notesPage);
-  console.log('articles:',articles);
+  console.log(notesPage);
   
   
-
-
 
   const articlesList = useMemo(() => {
     return articles.map((article, index) => (

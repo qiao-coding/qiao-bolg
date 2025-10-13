@@ -33,7 +33,6 @@ const LoadingPage: React.FC = () => {
     };
   }, []);
 
-  // 模拟文章段落
   const paragraphs: string[] = [
     '欢迎阅读我的个人博客...',
     '记录学习笔记...',

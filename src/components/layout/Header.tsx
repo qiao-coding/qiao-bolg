@@ -10,6 +10,9 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { throttle } from "lodash";
 import UpImg from "../../../public/UserImage/up.jpg";
+import { UserAvatar } from "../features/home/login/UserAvatar";
+import {  signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 
 
@@ -23,18 +26,20 @@ const Header = () => {
     icons?: string;
   }
 
-  const [HbtnStyle] = useState<btnInterface[]>([
+  const HbtnStyle = [
     { id: 1, tlitle: "首页", hrfe: "/", icons: zhuye },
     { id: 2, tlitle: "笔记", hrfe: "/notes", icons: bijiben },
     { id: 3, tlitle: "友链", hrfe: "/friend", icons: youlian },
     { id: 4, tlitle: "说说", hrfe: "/miscellaneous", icons: shuoshuo },
     // { id: 5, tlitle: "技能点", hrfe: "/technology", icons: luxian },
     { id: 6, tlitle: "关于我", hrfe: "/about", icons: leaf },
-  ]);
+  ]
 
   const { resolvedTheme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
-  const [user, setUser] = useState(false);
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
 
 
 
@@ -56,6 +61,14 @@ const Header = () => {
 
   const [HeaderStyle, setHeaderStyle] = useState(false);
 
+
+  const handleLogout = async () => {
+    try {
+      await signOut({ callbackUrl: '/' });
+    } catch (error) {
+      console.error('退出登录失败:', error);
+    }
+  };
   const scrollRef = useRef(null);
 
 
@@ -85,10 +98,10 @@ const Header = () => {
   return (
     <div
       className={`w-full  fixed z-50 mr-5  ${HeaderStyle
-          ? isDark
-            ? "bg-gray-700/80 pt-0 duration-700 h-15 bottom-[94vh]"
-            : "bg-sky-300/70 pt-0 duration-700 h-15 bottom-[94vh]"
-          : `${isDark ? "bg-gray-0 pt-0 bottom-[92vh] h-18 duration-700" : " duration-700 bg-sky-0 pt-0 bottom-[92vh] h-18"}`
+        ? isDark
+          ? "bg-gray-700/80 pt-0 duration-700 h-15 bottom-[94vh]"
+          : "bg-sky-300/70 pt-0 duration-700 h-15 bottom-[94vh]"
+        : `${isDark ? "bg-gray-0 pt-0 bottom-[92vh] h-18 duration-700" : " duration-700 bg-sky-0 pt-0 bottom-[92vh] h-18"}`
         } `}
     >
       <div
@@ -208,16 +221,17 @@ const Header = () => {
             </svg>
           </label>
           <div>
-            {user ? (
+            {isAuthenticated ? (
               <span>
                 <div className="dropdown dropdown-start p-2 ">
-                  <Image
-                    src={UpImg}
-                    alt="1"
+                  <div
                     tabIndex={0}
                     role="button"
                     className="btn btn-circle relativep-0 cursor-target"
-                  />
+                  >
+                    <UserAvatar />
+                  </div>
+
                   <div className="relative right-20 ">
                     <ul
                       tabIndex={0}
@@ -227,9 +241,11 @@ const Header = () => {
                         <Link href="/adminLogin" className="cursor-target">后台管理</Link>
                       </li>
                       <li>
-                          <button type="submit"  className="text-red-500 cursor-target">
-                            退出登录？
-                          </button>
+                        <button
+                        onClick={handleLogout}
+                         type="submit" className="text-red-500 cursor-target">
+                          退出登录？
+                        </button>
                       </li>
                     </ul>
                   </div>
