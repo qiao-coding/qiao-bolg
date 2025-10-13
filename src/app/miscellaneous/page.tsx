@@ -1,63 +1,43 @@
 "use client";
-
 import NextRouter from "@/components/layout/NextRouter";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import AnimatedContent from "@/components/ui/shadcnComponents/AnimatedContent";
-import { RootState } from "@/lib/store";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+
+
+interface Miscellaneous {
+  id: number;
+  content: string;
+  date: string;
+}
 
 const Miscellaneous = () => {
-  const MisceUp = useSelector(
-    (state: RootState) => state.Misce.fristMiscellaneous
-  )
-//   const [HeaderStyle,setHeaderStyle] =useState(true)
-//  const lastScrollTop = useRef(0)
 
-// type ThrottleFunction<T extends any[]>=(...args:T)=>void
 
-//  const throttle=<T extends any[]>(
-//   func:ThrottleFunction<T>,
-//   limit:number
-// )=>{
-//   let lastFunc=Reaturn;
-//   let lastRan=0;
+  // const MisceUp = useSelector(
+  //   (state: RootState) => state.Misce.fristMiscellaneous
+  // )
 
-//   return function(){
-//     const context = this;
-//     const args = arguments;
-//     if(!lastRan){
-//       func.apply(context,args);
-//       lastRan=Date.now();
-//     }else{
-//       clearTimeout(lastFunc)
-//       lastFunc =setTimeout(()=>{
-//         if(Date.now()-lastRan>=limit){
-//           func.apply(context,args);
-//           lastRan=Date.now();
-//         }
-        
-//       },
-//     limit-(Date.now()-lastRan))
-//     }
-//   }
-// }
-//   useEffect(()=>{
-//     const handleScroll=()=>{
-//       const scrollTop = window.scrollY
+  const [miscellaneous,setMiscellaneous] = useState<Miscellaneous[]>([])
 
-//       if(scrollTop>150&&scrollTop>lastScrollTop.current){
-//         setHeaderStyle(false)
-//       }else{
-//         setHeaderStyle(true)
-//       }
-//     }
-//     lastScrollTop.current= window.scrollY<=0? 0 : window.scrollY
+  useEffect(()=>{
+    const fetchMiscellaneous=async()=>{
+      try {
+        const res=await fetch("/api/miscellaneous")
+        if (!res.ok) {
+          return Response.json({error:"获取失败"})
+        }
+        const data=await res.json()
+        setMiscellaneous(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchMiscellaneous()
+  },[])
 
-    
-//     window.addEventListener("scroll",handleScroll)
-//   },[])
+
 
   return (
     <TechBackgroundNoGrid>
@@ -83,9 +63,9 @@ const Miscellaneous = () => {
               {/* 中间连接线 */}
               <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-blue-100 -translate-x-1/2 z-0"></div>
 
-              {MisceUp.map((mis, index) => (
+              {miscellaneous.map((mis, index) => (
                 <li
-                  key={mis.MisceUid}
+                  key={mis.id}
                   className="relative z-10 mb-10 md:mb-16 last:mb-0"
                 >
                   {/* 左右交替的内容卡片 */}

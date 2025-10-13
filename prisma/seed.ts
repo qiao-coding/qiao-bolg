@@ -363,7 +363,6 @@ main()
 // npx prisma db push  推送数据库架构更改
   //npx prisma migrate dev --name init 创建迁移文件
 
-
   //npx prisma studio 可以打开数据库可视化界面
   //npx prisma db push 应用迁移到数据库
   //npx prisma seed 运行种子脚本

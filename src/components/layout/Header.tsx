@@ -25,7 +25,7 @@ const Header = () => {
 
   const [HbtnStyle] = useState<btnInterface[]>([
     { id: 1, tlitle: "首页", hrfe: "/", icons: zhuye },
-    { id: 2, tlitle: "笔记", hrfe: "/article", icons: bijiben },
+    { id: 2, tlitle: "笔记", hrfe: "/notes", icons: bijiben },
     { id: 3, tlitle: "友链", hrfe: "/friend", icons: youlian },
     { id: 4, tlitle: "说说", hrfe: "/miscellaneous", icons: shuoshuo },
     // { id: 5, tlitle: "技能点", hrfe: "/technology", icons: luxian },
@@ -84,7 +84,7 @@ const Header = () => {
 
   return (
     <div
-      className={`w-full  fixed z-50  ${HeaderStyle
+      className={`w-full  fixed z-50 mr-5  ${HeaderStyle
           ? isDark
             ? "bg-gray-700/80 pt-0 duration-700 h-15 bottom-[94vh]"
             : "bg-sky-300/70 pt-0 duration-700 h-15 bottom-[94vh]"

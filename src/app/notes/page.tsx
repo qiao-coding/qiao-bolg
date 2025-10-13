@@ -1,18 +1,60 @@
 'use client'
-
 import NextRouter from "@/components/layout/NextRouter";
-import NotesCard from "@/app/article/NotesCard";
+import NotesCard from "@/app/notes/NotesCard";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import { RootState } from "@/lib/store";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotesSideber from "@/components/ui/notes/NotesSideber";
 import AnimatedContent from "@/components/ui/shadcnComponents/AnimatedContent";
 
+
+
+interface Note {
+  id: number;
+
+  title: string;
+  tags: string[];
+  titlePicture: string
+  page?: NotesPage[]
+}
+
+interface NotesPage {
+  id: number;
+  uid: number;
+  pageId: number;
+  title: string;
+  content: string;
+  author: string;
+  dateStart: string;
+  dateEnd: string;
+  pageTags: string[];
+  noteId: number ;
+  note: Note ;
+}
+
+export type{Note,NotesPage}
+
 const Article = () => {
 
-  const notes = useSelector((state: RootState) => state.note).fristNotes
+  // const notes = useSelector((state: RootState) => state.note).fristNotes
+  const [notes, setNotes] = useState<Note[]>([])
+
+  //数据获取
+  useEffect(() => {
+    const fetchNotes = async () => {
+      const res = await fetch('/api/notes');
+
+      if (!res.ok) {
+        throw new Error('数据获取失败');
+        }
+      const data = await res.json();
+      setNotes(data);
+    };
+    fetchNotes();
+  }, []);
+
 
 
 
@@ -40,12 +82,11 @@ const Article = () => {
                 {/* 两列网格布局，小屏幕自动转为单列 */}
                 {notes.map((note) => (
                   <div key={note.id}>
-                    <NotesCard id={note.id} title={note.title} tags={note.tags} page={note.page} />
+                    <NotesCard id={note.id} title={note.title} tags={note.tags} titlePicture={note.titlePicture} />
                   </div>
                 ))}
               </div>
               <span className="hidden lg:block lg:w-[200px] xl:w-[250px] px-0 ml-8">
-
                 <NotesSideber />
               </span>
             </div>
