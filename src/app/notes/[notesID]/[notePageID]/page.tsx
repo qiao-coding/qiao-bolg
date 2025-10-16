@@ -12,11 +12,76 @@ import rehypeSanitize from 'rehype-sanitize';
 import { useTheme } from 'next-themes';
 import 'highlight.js/styles/github.css';
 import { Moon, Sun, ArrowLeft, Share2, Heart, MessageSquare, Calendar, Clock, User, Bookmark, ChevronRight }
- from 'lucide-react';
+  from 'lucide-react';
 import { Switch } from '@/components/ui/shadcnComponents/switch';
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import LoadingPage from '@/components/ui/shadcnComponents/loadingPage';
 import ThemePage from '@/components/ui/public/themePage';
+import { RenderComment } from '@/components/features/notes/RenderComment';
+
+
+// 定义回复接口
+interface ReplyComment {
+  id: string;
+  author: string;
+  content: string;
+  date: string;
+}
+
+// 定义评论接口
+interface Comment {
+  id: string;
+  author: string;
+  content: string;
+  date: string;
+  replies?: ReplyComment[];
+}
+
+// 模拟评论数据
+const mockComments: Comment[] = [
+  {
+    id: '1',
+    author: '用户A',
+    content: '这篇文章写得非常好，很有深度！',
+    date: '2024-03-10',
+    replies: [
+      {
+        id: '11',
+        author: '用户B',
+        content: '感谢认可，希望能帮到你！',
+        date: '2024-03-11',
+      },
+      {
+        id: '12',
+        author: '用户C',
+        content: '我也觉得很不错，学到很多！',
+        date: '2024-03-12',
+      },
+    ],
+  },
+  {
+    id: '2',
+
+    author: '用户B',
+    content: '感谢分享，学到了很多新知识。',
+    date: '2024-03-11',
+    replies: [
+      {
+        id: '21',
+
+        author: '用户A',
+        content: '不客气，希望你继续关注！',
+        date: '2024-03-12',
+      },
+    ],
+  },
+  {
+    id: '3',
+    author: '用户C',
+    content: '希望能看到更多类似的内容。',
+    date: '2024-03-12',
+  },
+];
 
 interface Note {
   id: number;
@@ -44,6 +109,8 @@ const NotePage = () => {
   const [note, setNote] = useState<Note | null>(null);
   const [notesPage, setNotesPage] = useState<NotesPage | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [comments, setComments] = useState<Comment[]>([]);
+
 
 
 
@@ -78,7 +145,29 @@ const NotePage = () => {
 
 
 
-  // 加载状态
+  //获取评论数据
+  // useEffect(() => {
+  //   const fetchComments = async () => {
+  //     if (!notePageID) return;
+
+  //     try {
+  //       setIsLoading(true);
+  //       const res = await fetch(`/api/note_comments/getComments`);
+  //       if (!res.ok) {
+  //         throw new Error('获取评论数据失败');
+  //       }
+  //       const data = await res.json();
+  //       setComments(data);
+  //     } catch (error) {
+  //       console.error('获取评论数据失败', error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchComments();
+  // }, [notesID, notePageID]);
+
+
   if (isLoading || !notesPage || !note) {
     return (
       <article>
@@ -93,14 +182,15 @@ const NotePage = () => {
     );
   }
 
+
   return (
     <div className={`  font-sans transition-colors duration-300 ${theme === 'light' ? 'bg-[#FAFAFA]' : 'bg-gray-900'}`}>
       <NextRouter showHeader={false}>
-        <header 
-          className={`sticky top-0 z-30 border-b shadow-sm backdrop-blur-sm transition-all duration-300 ${theme === 'light' 
-            ? 'bg-white/90 border-[#EDEFF2]' 
-            : 'bg-gray-900/90 border-gray-800' 
-          }`}>
+        <header
+          className={`sticky top-0 z-30 border-b shadow-sm backdrop-blur-sm transition-all duration-300 ${theme === 'light'
+            ? 'bg-white/90 border-[#EDEFF2]'
+            : 'bg-gray-900/90 border-gray-800'
+            }`}>
           <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <Link
               href={`/notes/${notesID}`}
@@ -111,8 +201,7 @@ const NotePage = () => {
             </Link>
 
             <div className="flex items-center gap-4">
-              <ThemePage/>
-
+              <ThemePage />
             </div>
           </div>
         </header>
@@ -140,7 +229,7 @@ const NotePage = () => {
           </div>
 
           <div className={`${theme === 'light' ? 'text-[#4A5568]' : 'text-gray-300'} mb-12`}>
-            
+
 
             <div className={`prose min-h-[50vh] prose-slate max-w-none ${theme === 'dark' ? 'prose-invert' : ''}`}>
               <ReactMarkdown
@@ -153,8 +242,8 @@ const NotePage = () => {
                   h3: ({ className, ...props }) => <h3 className={`text-xl font-bold mt-6 mb-2 ${className || ''}`} {...props} />,
                   code: ({ className, ...props }) => <code className={`font-mono text-sm ${theme === 'light' ? 'text-[#6B7A90]' : 'text-gray-400'} ${className || ''}`} {...props} />,
                   pre: ({ className, ...props }) => <pre className={`p-4 rounded-lg bg-black/10  overflow-x-auto my-4 ${className || ''}`} {...props} />,
-                  a: ({ className, ...props }) => <a 
-                    className={`${theme === 'light' ? 'text-[#4A6FA5] hover:text-[#3A5F95] underline' : 'text-blue-400 hover:text-blue-300 underline'}`} 
+                  a: ({ className, ...props }) => <a
+                    className={`${theme === 'light' ? 'text-[#4A6FA5] hover:text-[#3A5F95] underline' : 'text-blue-400 hover:text-blue-300 underline'}`}
                     {...props} />
                 }}
               >
@@ -169,10 +258,10 @@ const NotePage = () => {
                   <Link
                     key={index}
                     href={`/article?tag=${encodeURIComponent(tag)}`}
-                    className={`text-sm px-3 py-1.5 rounded-full transition-all duration-300 ${theme === 'light' 
-                      ? 'bg-[#E9EEF6] text-[#4A6FA5] hover:bg-[#D9E2EC] hover:shadow-sm' 
-                      : 'bg-gray-800 text-blue-400 hover:bg-gray-700 hover:shadow-sm' 
-                    }`}
+                    className={`text-sm px-3 py-1.5 rounded-full transition-all duration-300 ${theme === 'light'
+                      ? 'bg-[#E9EEF6] text-[#4A6FA5] hover:bg-[#D9E2EC] hover:shadow-sm'
+                      : 'bg-gray-800 text-blue-400 hover:bg-gray-700 hover:shadow-sm'
+                      }`}
                   >
                     {tag}
                   </Link>
@@ -180,8 +269,10 @@ const NotePage = () => {
               </div>
             </div>
 
-          </div>
-
+          </div>  
+              {/* <div key="comment-render-container">
+                <RenderComment comments={comments} notesId={notePageID?.toString() || ''} />
+              </div> */}
         </main>
       </NextRouter>
     </div>

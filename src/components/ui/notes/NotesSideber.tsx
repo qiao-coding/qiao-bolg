@@ -28,15 +28,11 @@ export default function NotesSideber() {
                           className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                         />
                       </div>
-                      {/* 装饰环 */}
                       <div className={`absolute -inset-1 rounded-full border-2 border-dashed border-primary/30 animate-spin-slow`}></div>
                     </div>
 
-                    {/* 个人基本信息 */}
                     <h1 className={`text-xl font-bold mb-1 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>昊小白</h1>
-                    <p className={`text-primary mb-4 text-sm ${theme === 'dark' ? 'text-primary/80' : ''}`}>前端学习者</p>
 
-                    {/* 技能标签 */}
                     <div className="flex flex-wrap justify-center gap-1.5 mb-6">
                       <Badge variant="secondary" className={`${theme === 'dark' ? 'bg-gray-700 text-gray-300' : ''} text-xs`}>React</Badge>
                       <Badge variant="secondary" className={`${theme === 'dark' ? 'bg-gray-700 text-gray-300' : ''} text-xs`}>JavaScript</Badge>
@@ -46,7 +42,6 @@ export default function NotesSideber() {
                     </div>
                   </div>
 
-                  {/* 联系方式 */}
                   <div className="space-y-3 mb-6">
                     <h3 className={`text-base font-semibold mb-3 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>联系方式</h3>
                     <a 

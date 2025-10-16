@@ -10,6 +10,9 @@ import LoadingPage from "@/components/ui/shadcnComponents/loadingPage";
 import ThemePage from "@/components/ui/public/themePage";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
+import {motion} from "framer-motion"
+
+
 
 
 
@@ -153,7 +156,7 @@ const Notestitle = () => {
                 <div
                 id={`section-${note.uid}`}
                 
-                  className="cursor-target   grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 sm:w-[80vw] md:w-[65vw] lg:w-[40vw] m-auto p-4 "
+                  className="cursor-target  cursor-pointer  grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 sm:w-[80vw] md:w-[65vw] lg:w-[40vw] m-auto p-4 "
                   key={note.uid}
                   ref={(el) => {
                     if (note.uid) {
@@ -162,6 +165,9 @@ const Notestitle = () => {
                     }
                   }}
                 >
+                  <motion.div
+                  whileHover={{scale:1.05,transition:{duration:0.3},translateY:-10}}
+                  >
                   <div
                     onClick={() => handleUid(note.uid)}
                     className={
@@ -195,6 +201,7 @@ const Notestitle = () => {
                       </div>
                     </div>
                   </div>
+                  </motion.div>
                 </div>
               ))}
             </div>

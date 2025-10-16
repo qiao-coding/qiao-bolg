@@ -42,7 +42,6 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {/* SessionProvider 仍然需要包装应用 */}
             <SessionProvider session={session}>
               {children}
             </SessionProvider>

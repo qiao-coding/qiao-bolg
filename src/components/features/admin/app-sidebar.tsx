@@ -114,11 +114,23 @@ const data = {
       url: "/admin/study-nodes",
       icon: PieChart,
     },
+        {
+      name:'说说管理',
+      url:'/admin/miscellaneous',
+      icon:AudioWaveform,
+    },
+        {
+      name:'友链管理',
+      url:'/admin/friend-links',
+      icon:Map,
+    },
     {
       name: "用户管理",
       url: "/admin/user-management",
       icon: Bot,
     },
+
+
   ],
 }
 

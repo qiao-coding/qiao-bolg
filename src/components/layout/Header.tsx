@@ -9,22 +9,13 @@ import leaf from "../../../public/titleImage/leaf.svg";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { throttle } from "lodash";
-import UpImg from "../../../public/UserImage/up.jpg";
 import { UserAvatar } from "../features/home/login/UserAvatar";
-import {  signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
-
+import { signOut, useSession } from "next-auth/react";
+import { motion } from "framer-motion";
 
 
 
 const Header = () => {
-  interface btnInterface {
-    id: number;
-    tlitle: string;
-    hrfe: string;
-    icons?: string;
-  }
 
   const HbtnStyle = [
     { id: 1, tlitle: "首页", hrfe: "/", icons: zhuye },
@@ -37,8 +28,7 @@ const Header = () => {
 
   const { resolvedTheme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isAuthenticated = status === 'authenticated';
 
 
@@ -64,7 +54,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut({ callbackUrl: '/' });
+      await signOut({ redirect: true, redirectTo: '/' });
     } catch (error) {
       console.error('退出登录失败:', error);
     }
@@ -155,25 +145,33 @@ const Header = () => {
             {HbtnStyle.map((item) => (
               <li key={item.id}>
                 {resolvedTheme ? (
+
+
                   <Link
                     href={item.hrfe}
-                    className={` z-50 p-2 bg-transparent mr-4   cursor-target no-border font-extrabold  
+                    className={` z-50 p-2 bg-transparent mr-4  bg-transparent cursor-target no-border font-extrabold  
                           ${!HeaderStyle ? "text-[15px]" : "text-[14px]"}
                          ${resolvedTheme === "light"
                         ? "text-black"
                         : "text-white"
                       }`}
                   >
-                    {item.icons && (
-                      <Image
-                        src={item.icons}
-                        alt=""
-                        className="w-5 h-5 opacity-80"
-                      />
-                    )}
+                    <motion.div
+                      whileHover={{ scale: 1.04, rotate: -3, transition: { duration: 0.3 }, translateY: -10 }}
+                      className="flex items-center gap-2 cursor-target "
+                    >
+                      {item.icons && (
+                        <Image
+                          src={item.icons}
+                          alt=""
+                          className="w-5 h-5 opacity-80"
+                        />
+                      )}
 
-                    <span>{item.tlitle}</span>
+                      <span>{item.tlitle}</span>
+                    </motion.div>
                   </Link>
+
                 ) : (
                   <Link
                     href={item.hrfe}
@@ -242,8 +240,8 @@ const Header = () => {
                       </li>
                       <li>
                         <button
-                        onClick={handleLogout}
-                         type="submit" className="text-red-500 cursor-target">
+                          onClick={handleLogout}
+                          type="submit" className="text-red-500 cursor-target">
                           退出登录？
                         </button>
                       </li>

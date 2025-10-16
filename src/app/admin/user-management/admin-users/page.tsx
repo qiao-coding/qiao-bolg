@@ -224,7 +224,6 @@ const RegularUsersPage: React.FC = () => {
     }
   };
 
-  // 批量操作处理
   const handleBulkOperation = (operation: 'delete' | 'activate' | 'deactivate' | 'ban') => {
     if (selectedUsers.length === 0) return;
     
@@ -254,7 +253,6 @@ const RegularUsersPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* 页面标题 */}
       <header className="flex flex-col gap-4 py-4 px-6 md:gap-6 md:py-6 border-b mb-4">
         <div>
           <h1 className="text-2xl font-bold">管理员用户管理</h1>

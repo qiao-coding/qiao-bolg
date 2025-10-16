@@ -25,7 +25,7 @@ async function retryOperation<T>(
       return await operation();
     } catch (error) {
       if (i === maxRetries - 1) throw error;
-      
+
       console.log(`操作失败，${delay}ms后重试 (${i + 1}/${maxRetries})...`);
       await new Promise(resolve => setTimeout(resolve, delay));
       delay *= 2; // 指数退避
@@ -92,7 +92,7 @@ async function main() {
     console.log(`已创建 ${createdNotes.count} 个笔记分类`);
 
     //笔记页
-    console.log("正在创建笔记页面...");  
+    console.log("正在创建笔记页面...");
     const createdPages = await prisma.notesPage.createMany({
       data: [
         // Javascript 
@@ -129,7 +129,7 @@ async function main() {
           pageTags: ["js", "异步", "Promise"],
           noteId: 1,
         },
-        
+
         // TypeScript 
         {
           pageId: 4,
@@ -153,7 +153,7 @@ async function main() {
           pageTags: ["ts", "interface", "接口"],
           noteId: 2,
         },
-        
+
         // Tailwind CSS
         {
           pageId: 6,
@@ -177,7 +177,7 @@ async function main() {
           pageTags: ["tailwind", "配置", "定制"],
           noteId: 3,
         },
-        
+
         // React 
         {
           pageId: 8,
@@ -201,7 +201,7 @@ async function main() {
           pageTags: ["react", "hooks", "状态"],
           noteId: 4,
         },
-        
+
         // Next.js 
         {
           pageId: 10,
@@ -261,77 +261,208 @@ async function main() {
         {
           id: 1,
           content: "终于弄好一点react的基础了，弄个网页练习一下",
-          date: "2025-7-25",
+          date: "2025-07-25",
         },
         {
           id: 2,
           content:
             "今天把网页的内容完善一下，为部署上线做点准备，笔记什么的得加进入了",
-          date: "2025-8-3",
+          date: "2025-08-03",
         },
         {
           id: 3,
           content: "写完一部分的功能了，明天继续吧",
-          date: "2025-8-26",
+          date: "2025-08-26",
         },
         {
           id: 4,
           content: "数据库终于弄完了，终于把数据连接到云了，方便做后台管理面板",
-          date: "2025-8-26",
+          date: "2025-08-26",
         },
         {
           id: 5,
           content: "后台管理面板终于弄完了大体功能了，接下来完善一下逻辑和样式了",
-          date: "2025-9-9",
+          date: "2025-09-09",
         },
         {
           id: 6,
           content: "终于搞完手头的东西了，接下来继续完善一下",
-          date: "2025-9-20",
+          date: "2025-09-20",
         },
         {
           id: 7,
           content: "还在完善项目了...",
           date: "2025-10-04",
         },
+        {
+          id: 8,
+          content: "添加了三方认证和评论区，看起来还不错",
+          date: "2025-10-14",
+        }
       ],
       skipDuplicates: true,
     });
     console.log(`已创建 ${createdMisc.count} 个杂项记录`);
-    console.log("正在创建用户...");
-    const hashedPassword = await bcrypt.hash('123456', 10);
-    const createdUser = await prisma.user.createMany({
-      data: [{
-        username: "HaoWhite",
-        password: hashedPassword, 
-      }],
-      skipDuplicates: true,
-    });
-    
+    // console.log("正在创建用户数据...");
+    // const createdUsers = await prisma.user.createMany({
+    //   data: [
+    //     {
+    //       name: "HaoWhite",
+    //       email: "haowhite@example.com",
+    //       emailVerified: new Date(),
+    //       image: "/UserImage/up.jpg",
+    //     },
+    //     {
+    //       name: "张小明",
+    //       email: "zhang@example.com",
+    //       emailVerified: new Date(),
+    //       image: "https://avatars.githubusercontent.com/u/1?v=4",
+    //     },
+    //     {
+    //       name: "李华",
+    //       email: "li@example.com",
+    //       emailVerified: new Date(),
+    //       image: "https://avatars.githubusercontent.com/u/2?v=4",
+    //     },
+    //     {
+    //       name: "王小红",
+    //       email: "wang@example.com",
+    //       emailVerified: new Date(),
+    //       image: "https://avatars.githubusercontent.com/u/3?v=4",
+    //     },
+    //   ],
+    //   skipDuplicates: true,
+    // });
+    // console.log(`已创建 ${createdUsers.count} 个用户`);
+
+    // // 获取用户ID，用于关联评论
+    // const users = await prisma.user.findMany();
+    // const userMap = {
+    //   haowhite: users.find(u => u.email === "haowhite@example.com")?.id || "",
+    //   zhang: users.find(u => u.email === "zhang@example.com")?.id || "",
+    //   li: users.find(u => u.email === "li@example.com")?.id || "",
+    //   wang: users.find(u => u.email === "wang@example.com")?.id || "",
+    // };
+
+    // // 创建公开评论
+    // console.log("正在创建公开评论...");
+    // const publicComments = await Promise.all([
+    //   prisma.publicComment.create({
+    //     data: {
+    //       title: "JavaScript 变量声明笔记评论",
+    //       content: "这篇关于JS变量声明的笔记非常清晰，让我对var、let和const的区别有了更深的理解。",
+    //       published: true,
+    //       authorId: userMap.zhang,
+    //       notesId: "1", // 关联到第一个笔记页面
+    //     },
+    //   }),
+    //   prisma.publicComment.create({
+    //     data: {
+    //       title: "React Hooks 学习心得",
+    //       content: "Hooks确实简化了React开发，useState和useEffect是最常用的两个Hook。",
+    //       published: true,
+    //       authorId: userMap.li,
+    //       notesId: "9", // 关联到React Hooks笔记页面
+    //     },
+    //   }),
+    //   prisma.publicComment.create({
+    //     data: {
+    //       title: "Next.js路由系统探讨",
+    //       content: "文件系统路由是Next.js的一大特色，非常方便！",
+    //       published: true,
+    //       authorId: userMap.wang,
+    //       notesId: "11", // 关联到Next.js路由系统笔记页面
+    //     },
+    //   }),
+    // ]);
+    // console.log(`已创建 ${publicComments.length} 条公开评论`);
+
+    // // 创建评论回复
+    // console.log("正在创建评论回复...");
+    // // 第一个公开评论的回复
+    // const comment1 = await prisma.comment.create({
+    //   data: {
+    //     content: "我同意，特别是对块级作用域的解释很到位。",
+    //     authorId: userMap.li,
+    //     postId: publicComments[0].id,
+    //     notesId: "1",
+    //   },
+    // });
+
+    // // 对第一个回复的回复（二级评论）
+    // await prisma.comment.create({
+    //   data: {
+    //     content: "是的，在实际项目中，我现在基本上只用let和const了。",
+    //     authorId: userMap.haowhite,
+    //     postId: publicComments[0].id,
+    //     parentId: comment1.id,
+    //     notesId: "1",
+    //   },
+    // });
+
+    // // 第二个公开评论的回复
+    // const comment2 = await prisma.comment.create({
+    //   data: {
+    //     content: "除了useState和useEffect，useContext和useReducer也很有用。",
+    //     authorId: userMap.haowhite,
+    //     postId: publicComments[1].id,
+    //     notesId: "2",
+    //   },
+    // });
+
+    // // 对第二个回复的回复（二级评论）
+    // await prisma.comment.create({
+    //   data: {
+    //     content: "同意，useReducer对于复杂状态管理很有帮助。",
+    //     authorId: userMap.zhang,
+    //     postId: publicComments[1].id,
+    //     parentId: comment2.id,
+    //     notesId: "2",
+    //   },
+    // });
+
+    // // 第三个公开评论的回复
+    // await prisma.comment.create({
+    //   data: {
+    //     content: "动态路由和嵌套路由的实现方式也很优雅。",
+    //     authorId: userMap.li,
+    //     postId: publicComments[2].id,
+    //     notesId: "2",
+    //   },
+    // });
+
+    // console.log("评论数据创建完成");
+
+
+
+
+
     const hashedAdminPassword = await bcrypt.hash('341244', 10);
     const createdAdminUser = await prisma.adminUser.createMany({
       data: [{
         username: "adminHaoWhite",
-        password: hashedAdminPassword, 
+        password: hashedAdminPassword,
         role: "admin"
       }],
       skipDuplicates: true,
     })
-    
-    console.log(`已创建 ${createdUser.count} 个用户`);
+
     console.log(`已创建 ${createdAdminUser.count} 个管理员用户`);
-    
+
+
     const noteCount = await prisma.note.count();
     const pageCount = await prisma.notesPage.count();
     const userCount = await prisma.user.count();
+    // const publicCommentCount = await prisma.publicComment.count();
+    // const commentCount = await prisma.comment.count();
     console.log(
-      `验证: 数据库中存在 ${noteCount} 条 Note 记录和 ${pageCount} 条 NotesPage 记录, ${pageCount} 条 NotesPage 记录, ${userCount} 条 User 记录`
+      `验证: 数据库中存在 ${noteCount} 条 Note 记录, ${pageCount} 条 NotesPage 记录, ${userCount} 条 User 记录     `
     );
-    
+
     console.log("数据导入完成！");
   } catch (error) {
     console.error(`导入数据时出错:`, error);
-    
+
     if (error instanceof Error && error.message.includes('connection pool')) {
       console.error('连接池超时错误。可能的原因：');
       console.error('1. 数据库连接数已达到上限');
@@ -339,7 +470,7 @@ async function main() {
       console.error('3. 数据库服务器响应缓慢');
       console.error('建议：检查数据库连接配置，或稍后重试');
     }
-    
+
     throw error;
   } finally {
     try {
@@ -361,10 +492,10 @@ main()
 
 //npx prisma generate 更新数据库模型文件到最新状态
 // npx prisma db push  推送数据库架构更改
-  //npx prisma migrate dev --name init 创建迁移文件
+//npx prisma migrate dev --name init 创建迁移文件
 
-  //npx prisma studio 可以打开数据库可视化界面
-  //npx prisma db push 应用迁移到数据库
-  //npx prisma seed 运行种子脚本
+//npx prisma studio 可以打开数据库可视化界面
+//npx prisma db push 应用迁移到数据库
+//npx prisma seed 运行种子脚本
 
-  //npm run seed 运行种子脚本
+//npm run seed 运行种子脚本

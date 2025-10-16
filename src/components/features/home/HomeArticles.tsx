@@ -82,8 +82,6 @@ const HomeArticles = () => {
     fetchArticles();
   }, []);
 
-  console.log('notesPage:',notesPage);
-  console.log('articles:',articles);
   
   
 

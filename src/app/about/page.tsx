@@ -3,11 +3,12 @@ import React from 'react';
 import { useTheme } from 'next-themes';
 import NextRouter from '@/components/layout/NextRouter';
 import AnimatedContent from '@/components/ui/shadcnComponents/AnimatedContent';
-import {BookOpen,  }
+import {Book, BookOpen,  }
   from 'lucide-react';
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import NotesSideber from '@/components/ui/notes/NotesSideber';
 import Title from '@/components/ui/public/title';
+import Image from 'next/image';
 
 const AboutPage = () => {
   const { theme } = useTheme();
@@ -16,7 +17,6 @@ const AboutPage = () => {
     <TechBackgroundNoGrid>
       <NextRouter>
         <div className="pt-20 pb-16 px-4">
-          {/* 标题区域 */}
           <AnimatedContent
             distance={150}
             direction="vertical"
@@ -32,7 +32,6 @@ const AboutPage = () => {
             </div>
           </AnimatedContent>
 
-          {/* 主要内容区域 - 左右排版，小屏幕下卡片消失 */}
           <AnimatedContent
             distance={100}
             direction="vertical"
@@ -46,9 +45,7 @@ const AboutPage = () => {
           >
             <div className="max-w-6xl w-full mx-auto">
               <div className="flex flex-col lg:flex-row gap-8">
-                {/* 左侧详细介绍 - 自适应宽度 */}
                 <div className="w-full">
-                  {/* 个人简介 */}
                   <div className={`mb-8 ${theme === 'light' ? 'bg-white rounded-2xl shadow-sm p-6' : 'bg-gray-800/90 rounded-2xl shadow-lg shadow-gray-900/20 p-6 border border-gray-700'}`}>
                     <div className="flex items-center gap-3 mb-5">
                       <div className={`p-2 rounded-lg ${theme === 'light' ? 'bg-primary/10 text-primary' : 'bg-primary/20 text-primary/90'}`}>
@@ -63,6 +60,15 @@ const AboutPage = () => {
                         </p>
                     </div>
                   </div>
+
+                   {/* <div className={`mb-8 ${theme === 'light' ? 'bg-white rounded-2xl shadow-sm p-6' : 'bg-gray-800/90 rounded-2xl shadow-lg shadow-gray-900/20 p-6 border border-gray-700'}`}>
+                    <div className="flex items-center gap-3 mb-5">
+                      <div className={`p-2 rounded-lg ${theme === 'light' ? 'bg-primary/10 text-primary' : 'bg-primary/20 text-primary/90'}`}>
+                        <Book className="w-5 h-5" />
+                      </div>
+                      <h2 className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}></h2>
+                    </div>
+                  </div> */}
 
 
                 </div>

@@ -65,6 +65,7 @@ import {
 } from '@/components/ui/shadcnComponents/avatar';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -76,6 +77,7 @@ import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import Link from 'next/link';
+import { Label } from '@/components/ui/shadcnComponents/label';
 
 // 根据 Prisma 模型定义的笔记类型
 interface Note {
@@ -104,6 +106,28 @@ interface NotesPage {
 
 const StudyNodes: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
+  const [addNotesPage, setAddNotesPage] = useState<Note>({
+    id: 0,
+    title: '',
+    tags: [],
+    titlePicture: '',
+    createdAt: '',
+    updatedAt: '',
+    page: [
+      {
+        id: 0,
+        uid: 0,
+        title: '',
+        content: '',
+        author: '',
+        dateStart: '',
+        dateEnd: '',
+        pageTags: [],
+        noteId: 0,
+        note: undefined
+      }
+    ]
+  });
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filterTags, setFilterTags] = useState<string>('all');
   const [sortField, setSortField] = useState<'title' | 'createdAt' | 'updatedAt' | null>(null);
@@ -111,25 +135,25 @@ const StudyNodes: React.FC = () => {
   const [selectedNotes, setSelectedNotes] = useState<number[]>([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [noteToDelete, setNoteToDelete] = useState<number | null>(null);
-  
+
   // 计算所有笔记页面的扁平化列表
-  const allNotePages = notes.flatMap(note => 
+  const allNotePages = notes.flatMap(note =>
     note.page.map(page => ({ ...page, noteTitle: note.title, noteTags: note.tags }))
   );
 
   // 过滤和搜索笔记页面 
   const filteredAndSearchedPages = allNotePages.filter(page => {
-    const matchesSearch = 
+    const matchesSearch =
       page.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       page.pageTags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
       page.noteTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
       page.noteTags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesTag = 
-      filterTags === 'all' || 
-      page.pageTags.includes(filterTags) || 
+
+    const matchesTag =
+      filterTags === 'all' ||
+      page.pageTags.includes(filterTags) ||
       page.noteTags.includes(filterTags);
-    
+
     return matchesSearch && matchesTag;
   });
 
@@ -143,13 +167,13 @@ const StudyNodes: React.FC = () => {
     const fetchNotes = async () => {
       try {
         const response = await fetch('/api/notes', { method: 'GET', credentials: 'include' });
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch notes');
         }
-        
+
         const data = await response.json();
-        const formattedNotes: Note[] = data.map((note:Note) => ({
+        const formattedNotes: Note[] = data.map((note: Note) => ({
           id: note.id,
           title: note.title,
           tags: note.tags || [],
@@ -171,7 +195,7 @@ const StudyNodes: React.FC = () => {
     // 事件监听器和清理函数
     const handleAuthChange = () => fetchNotes();
     window.addEventListener('authChange', handleAuthChange);
-    
+
     return () => {
       window.removeEventListener('authChange', handleAuthChange);
     };
@@ -180,11 +204,11 @@ const StudyNodes: React.FC = () => {
   // 排序笔记页面
   const sortedPages = [...filteredAndSearchedPages].sort((a, b) => {
     if (!sortField) return 0;
-    
+
     // 根据不同字段进行排序
     let valueA: string | number = '';
     let valueB: string | number = '';
-    
+
     if (sortField === 'title') {
       valueA = a.title.toLowerCase();
       valueB = b.title.toLowerCase();
@@ -193,7 +217,7 @@ const StudyNodes: React.FC = () => {
       valueA = new Date(a.dateStart).getTime();
       valueB = new Date(b.dateStart).getTime();
     }
-    
+
     if (valueA < valueB) return sortDirection === 'asc' ? -1 : 1;
     if (valueA > valueB) return sortDirection === 'asc' ? 1 : -1;
     return 0;
@@ -217,6 +241,34 @@ const StudyNodes: React.FC = () => {
     }
   };
 
+  
+  //新建笔记
+
+  const submitAddNote = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/notes/post_notes', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(addNotesPage)
+      })
+      if (!response.ok) {
+        throw new Error('新建笔记失败');
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        setNotes(prev => [...prev, { ...addNotesPage }]);
+      }
+    } catch (error) {
+      console.error('新建笔记失败:', error);
+    }
+  }
+
+
 
 
 
@@ -224,7 +276,7 @@ const StudyNodes: React.FC = () => {
     <div className="min-h-screen bg-background text-foreground">
       <main className="p-6">
         {/* 统计卡片 */}
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -243,7 +295,7 @@ const StudyNodes: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -257,7 +309,7 @@ const StudyNodes: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -273,21 +325,50 @@ const StudyNodes: React.FC = () => {
           </Card>
         </motion.div>
 
-        {/* 笔记管理区域 */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div>
               <CardTitle>笔记列表</CardTitle>
               <CardDescription>管理和编辑所有学习笔记</CardDescription>
             </div>
-            <Button size="sm" className="gap-1">
-              <Plus className="h-4 w-4" />
-              <span>新建笔记</span>
-            </Button>
+            <Dialog>
+              <form onSubmit={submitAddNote}>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="gap-1 cursor-pointer">
+                    <Plus className="h-4 w-4" />
+                    <span>新建笔记</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>新建笔记</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid gap-4">
+                    <div className="grid gap-3">
+                      <Label htmlFor="name-1">标题</Label>
+                      <Input id="name-1" name="name" onChange={(e) => setAddNotesPage({ ...addNotesPage, title: e.target.value })} />
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="username-1">标签</Label>
+                      <Input id="username-1" name="username" onChange={(e) => setAddNotesPage({ ...addNotesPage, tags: e.target.value.split(',') })} />
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="username-1">创建时间</Label>
+                      <Input id="username-1" name="username" type='date' className='w-40 flex items-center justify-center' onChange={(e) => setAddNotesPage({ ...addNotesPage, createdAt: e.target.value })} />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">添加</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </form>
+            </Dialog>
           </CardHeader>
-          
+
+
+
+
           <CardContent>
-            {/* 搜索和筛选 */}
             <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
               <div className="relative flex-grow">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -299,7 +380,7 @@ const StudyNodes: React.FC = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              
+
               <div className="flex flex-wrap gap-2">
                 <Select value={filterTags} onValueChange={setFilterTags}>
                   <SelectTrigger className="w-[140px]">
@@ -315,7 +396,6 @@ const StudyNodes: React.FC = () => {
               </div>
             </div>
 
-            {/* 笔记表格 */}
             <div className="rounded-md border">
               <Table>
                 <TableHeader>
@@ -339,9 +419,9 @@ const StudyNodes: React.FC = () => {
                         <FileText className="h-4 w-4" />
                         <span>标题</span>
                         {sortField === 'title' && (
-                          sortDirection === 'asc' ? 
-                          <ChevronUp className="h-4 w-4" /> : 
-                          <ChevronDown className="h-4 w-4" />
+                          sortDirection === 'asc' ?
+                            <ChevronUp className="h-4 w-4" /> :
+                            <ChevronDown className="h-4 w-4" />
                         )}
                       </div>
                     </TableHead>
@@ -358,9 +438,9 @@ const StudyNodes: React.FC = () => {
                         <Calendar className="h-4 w-4" />
                         <span>创建时间</span>
                         {sortField === 'createdAt' && (
-                          sortDirection === 'asc' ? 
-                          <ChevronUp className="h-4 w-4" /> : 
-                          <ChevronDown className="h-4 w-4" />
+                          sortDirection === 'asc' ?
+                            <ChevronUp className="h-4 w-4" /> :
+                            <ChevronDown className="h-4 w-4" />
                         )}
                       </div>
                     </TableHead>
@@ -375,7 +455,6 @@ const StudyNodes: React.FC = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    // 直接渲染过滤和搜索后的页面列表
                     sortedPages.map((page) => (
                       <TableRow key={page.id}>
                         <TableCell>
@@ -416,11 +495,8 @@ const StudyNodes: React.FC = () => {
                                   编辑
                                 </Link>
                               </DropdownMenuItem>
-                              {/* <DropdownMenuItem>
-                                <Eye className="h-4 w-4 mr-2" />
-                                <span>查看</span>
-                              </DropdownMenuItem> */}
-                              <DropdownMenuItem 
+
+                              <DropdownMenuItem
                                 className="text-red-600 dark:text-red-400"
                                 onClick={() => {
                                   setNoteToDelete(page.id);
@@ -440,7 +516,6 @@ const StudyNodes: React.FC = () => {
               </Table>
             </div>
 
-            {/* 分页控制 */}
             <div className="flex items-center justify-between mt-6">
               <div className="text-sm text-muted-foreground">
                 显示 {Math.min(1, filteredAndSearchedPages.length)} 到 {Math.min(10, filteredAndSearchedPages.length)} 条，共 {filteredAndSearchedPages.length} 条
@@ -488,7 +563,7 @@ const StudyNodes: React.FC = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   );
 };
 
