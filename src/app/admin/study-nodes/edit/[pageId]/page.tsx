@@ -12,7 +12,6 @@ import { Separator } from '@/components/ui/shadcnComponents/separator';
 import { Textarea } from '@/components/ui/shadcnComponents/textarea';
 import { Switch } from '@/components/ui/shadcnComponents/switch';
 import { Moon, Sun, Save, ArrowLeft, Tag, FileText, Calendar } from 'lucide-react';
-import ThemePage from '@/components/style/themePage';
 
 interface NotesPage {
   id: number;

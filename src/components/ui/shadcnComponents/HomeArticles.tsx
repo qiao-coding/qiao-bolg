@@ -3,7 +3,6 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import NotePage from "@/app/article/[notesID]/[notePageID]/page";
 
 interface NotesPage {
   id: number;

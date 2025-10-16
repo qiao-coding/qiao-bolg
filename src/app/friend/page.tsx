@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/shadcnComponents/input';
 import { Button } from '@/components/ui/shadcnComponents/button';
 import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
 // 友链类型定义
 interface Friend {
@@ -153,9 +154,11 @@ const Friend = () => {
                       <div className="flex items-center gap-4 mb-4">
                         <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-50 flex items-center justify-center">
                           {friend.avatar ? (
-                            <img
+                            <Image
                               src={friend.avatar}
                               alt={friend.name}
+                              width={40}
+                              height={40}
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                             />
                           ) : (

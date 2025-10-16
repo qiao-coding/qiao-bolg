@@ -14,7 +14,7 @@ const monthlyData = [
 ];
 
 
-export default function adminPage() {
+export default function AdminPage() {
   const router = useRouter();
   
   const handleLogout = async () => {

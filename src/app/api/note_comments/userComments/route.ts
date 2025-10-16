@@ -19,19 +19,23 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json();
-        const { notesId, comment, parentId,authorId } = body;
+        const { notesId, comment, parentId, authorId } = body;
         if (!notesId || !comment) {
             return NextResponse.json({ error: 'notesId and comment are required' }, { status: 400 });
         }
         const response = await prisma.comment.create({
             data: {
-                id: crypto.randomUUID(),
                 content: comment,
                 postId: notesId,
-                parentId: parentId,
-                authorId: authorId,
-                createdAt: new Date(),
-                updatedAt: new Date()
+                notesId: notesId,
+                author: {
+                    connect: { id: authorId }
+                },
+                publicComment: {
+                    connect: { id: notesId }
+                },
+                parent: parentId ? { connect: { id: parentId } } : undefined,
+
             }
         })
 

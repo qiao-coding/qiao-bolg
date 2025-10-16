@@ -1,8 +1,8 @@
 'use client'
 import type React from "react"
-import type { Children } from "../../style/styleBg"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
+import { Children } from "../public/background_img"
 
 
 const Title:React.FC<Children> = ({children}) => {

@@ -1,5 +1,5 @@
 'use client'
-import { Note, NotesPage } from "@/app/article/[notesID]/page";
+import { Note, NotesPage } from "@/app/notes/[notesID]/page";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
