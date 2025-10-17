@@ -154,7 +154,7 @@ const Friend = () => {
                       <div className="flex items-center gap-4 mb-4">
                         <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-50 flex items-center justify-center">
                           {friend.avatar ? (
-                            <Image
+                            <img        
                               src={friend.avatar}
                               alt={friend.name}
                               width={40}
