@@ -12,11 +12,14 @@ import { FaAngleDoubleDown } from "react-icons/fa";
 import HomeArticles from "@/components/features/home/HomeArticles";
 import TiltedCard from "@/components/ui/shadcnComponents/TiltedCard";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   const { resolvedTheme } = useTheme()
   const [isDark, setIsDark] = useState(true)
   const [mounted, setmounted] = useState(false)
+   const { data: session } = useSession()
+
 
   const HomeIcon = [
     {
@@ -93,7 +96,7 @@ export default function Home() {
                     </div>
                     <div>
                       <h1 className="mt-2 text-5xl font-bold text-center">
-                        Hi! HaoWhite
+                        Hi!  {session?.user?.name || 'HaoWhite'} 🥰
                       </h1>
 
                       <p className="py-6">愿生活的每一天，都有惊喜!</p>

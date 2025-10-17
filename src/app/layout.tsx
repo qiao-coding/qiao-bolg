@@ -28,7 +28,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
   
   return (
     <html lang="en">
@@ -42,7 +41,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <SessionProvider session={session}>
+            <SessionProvider session={await auth()}>
               {children}
             </SessionProvider>
           </ThemeProvider>

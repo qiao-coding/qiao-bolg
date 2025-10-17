@@ -28,8 +28,8 @@ const Header = () => {
 
   const { resolvedTheme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
-  const { status } = useSession();
   const isAuthenticated = status === 'authenticated';
+   const { data: session } = useSession()
 
 
 
@@ -219,7 +219,7 @@ const Header = () => {
             </svg>
           </label>
           <div>
-            {isAuthenticated ? (
+            {session ? (
               <span>
                 <div className="dropdown dropdown-start p-2 ">
                   <div
@@ -227,7 +227,13 @@ const Header = () => {
                     role="button"
                     className="btn btn-circle relativep-0 cursor-target"
                   >
-                    <UserAvatar />
+                    <Image
+                      src={session.user?.image || '/default-avatar.png'}
+                      alt={session.user?.name || 'User Avatar'}
+                      className="w-8 h-8 rounded-full"
+                      width={40}
+                      height={40}
+                    />
                   </div>
 
                   <div className="relative right-20 ">
@@ -240,7 +246,7 @@ const Header = () => {
                       </li>
                       <li>
                         <button
-                          onClick={handleLogout}
+                        onClick={() => signOut()}
                           type="submit" className="text-red-500 cursor-target">
                           退出登录？
                         </button>

@@ -10,6 +10,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import GitHubLoginButton from "@/components/ui/auth/GitHubLoginButton"
 import { auth } from "../../../../../auth"
+import { GithubSignIn} from "../../auth/Github_signIn"
 
 
 
@@ -51,11 +52,7 @@ export function LoginForm({
       console.error('Login error:', error)
     }
   }
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleLogin(e as unknown as React.FormEvent)
-    }
-  }
+
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -106,7 +103,7 @@ export function LoginForm({
               <div className="flex flex-col items-center text-center pb-6">
                 {/* <span className="text-muted-foreground py-2">或者你可以使用--</span> */}
                 <div>
-                  <GitHubLoginButton />
+                  <GithubSignIn />
                 </div>
               </div>
 
