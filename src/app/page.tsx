@@ -25,21 +25,21 @@ export default function Home() {
     {
 
       icon: <VscGithub className="btn bg-black border-0 text-white rounded p-0 p-2 cursor-target mt-2 " />,
-      link: "https://github.com/hanwhite"
+      link: "https://github.com/xier123456"
     },
     {
       icon: <SiGitee className="fill-current rounded text-3xl btn btn-soft btn-error p-2 hover:text-white cursor-target mt-2 " />
       ,
-      link: "https://gitee.com/hanwhite"
+      link: "https://gitee.com/xier123456"
     },
     {
       icon: <SiTiktok className="btn hover:btn-neutral rounded hover:text-white fill-current text-4xl  p-2 cursor-target mt-2" />
       ,
-      link: "https://www.tiktok.com/@hanwhite"
+      link: "https://www.douyin.com/user/self?from_tab_name=main&showTab=post"
     },
     {
       icon: <FaBilibili className="fill-current rounded  text-3xl p-2 btn btn-soft btn-secondary cursor-target mt-2" />,
-      link: "https://space.bilibili.com/322849243"
+      link: "https://space.bilibili.com/3493288889813717?spm_id_from=333.1007.0.0"
     }
   ]
 
