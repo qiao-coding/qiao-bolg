@@ -5,10 +5,10 @@ import Title from "@/components/ui/public/title";
 import { useEffect, useState } from "react";
 import NotesSideber from "@/components/ui/notes/NotesSideber";
 import AnimatedContent from "@/components/ui/shadcnComponents/AnimatedContent";
-import NotesCard from "@/components/features/notes/notesCard";
 import { motion } from "framer-motion";
 import { useNotes } from "@/hooks/note/useNotes";
 import { Note } from "@/types/note/type";
+import NotesCard from "@/components/features/notes/notesCard";
 
 
 
