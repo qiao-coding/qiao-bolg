@@ -111,7 +111,7 @@ const data = {
     },
     {
       name: "笔记管理",
-      url: "/admin/study-nodes",
+      url: "/admin/notes",
       icon: PieChart,
     },
         {
@@ -124,12 +124,6 @@ const data = {
       url:'/admin/friend-links',
       icon:Map,
     },
-    {
-      name: "用户管理",
-      url: "/admin/user-management",
-      icon: Bot,
-    },
-
 
   ],
 }

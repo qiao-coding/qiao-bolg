@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { Note, NotesPage } from "@/app/notes/page";
+import { Note, NotesPage } from "@/types/note/type";
 
 
 const HomeArticles = () => {
@@ -41,7 +41,6 @@ const HomeArticles = () => {
           const page:Note[]=data
           setNotesPage(page)
           
-
          
           const resData=page.map(n=>n.page).flat()
 
@@ -66,7 +65,7 @@ const HomeArticles = () => {
 
           
 
-          allArticles.sort((a, b) => new Date(b.dateStart).getTime() - new Date(a.dateStart).getTime());
+          allArticles.sort((a, b) => new Date(b.dateStart||'').getTime() - new Date(a.dateStart||'').getTime());
 
           setArticles(allArticles.slice(0, 6));
         } else {
@@ -125,7 +124,7 @@ const HomeArticles = () => {
             <span className={`text-xs px-2 py-1 rounded-full font-medium  text-white  ${isDark ? 'bg-blue-900/60 ' : 'bg-blue-900 '}`}>
               {article.pageTags[0]}
             </span>
-            {(article.pageTags || []).map((tag, tagIndex) => (
+            {(article.pageTags || []).map((tag: string, tagIndex: number) => (
               <span
                 key={`${article.id}-tag-${tagIndex}`}
                 className={`text-xs px-2 py-1 rounded-full font-medium bg-gray-700/60 text-white ${isDark ? 'bg-blue-900/60' : 'bg-blue-900'} `}

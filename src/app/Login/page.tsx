@@ -1,5 +1,5 @@
 'use client'
-import { LoginForm } from "@/components/features/home/login/login-form"
+import { LoginForm } from "@/components/features/login/login-form"
 import TechBackgroundNoGrid from "@/components/ui/public/background_img"
 import { useEffect, useState } from "react"
 

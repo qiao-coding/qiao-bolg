@@ -3,33 +3,23 @@ import NextRouter from "@/components/layout/NextRouter";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import AnimatedContent from "@/components/ui/shadcnComponents/AnimatedContent";
+import { useMiscellaneous } from "@/hooks/miscellaneous/useMiscellaneous";
+import { miscellaneousType } from "@/types/miscellaneous/type";
 import React, { useEffect, useState } from "react";
+import { MiscellaneousTimeline } from "@/components/features/miscellaneous/MiscellaneousTimeline";
 
 
-interface Miscellaneous {
-  id: number;
-  content: string;
-  date: string;
-}
+
 
 const Miscellaneous = () => {
 
-
-  // const MisceUp = useSelector(
-  //   (state: RootState) => state.Misce.fristMiscellaneous
-  // )
-
-  const [miscellaneous,setMiscellaneous] = useState<Miscellaneous[]>([])
+  const [miscellaneous,setMiscellaneous] = useState<miscellaneousType[]>([])
 
   useEffect(()=>{
     const fetchMiscellaneous=async()=>{
       try {
-        const res=await fetch("/api/miscellaneous")
-        if (!res.ok) {
-          return Response.json({error:"获取失败"})
-        }
-        const data=await res.json()
-        setMiscellaneous(data)
+        const res=await useMiscellaneous.getMiscellaneousList()
+        setMiscellaneous(res)
       } catch (error) {
         console.log(error)
       }
@@ -54,61 +44,7 @@ const Miscellaneous = () => {
         >
         <article className="pt-18 min-h-screen">
           <Title>说说</Title>
-
-          <div className=" max-w-4xl mx-auto">
-            <ul className="timeline timeline-vertical relative pb-20">
-              <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-blue-100 -translate-x-1/2 z-0"></div>
-
-              {miscellaneous.map((mis, index) => (
-                <li
-                  key={mis.id}
-                  className="relative z-10 mb-10 md:mb-16 last:mb-0 flex items-center"
-                >
-                  <div
-                    className={`timeline-start pr-8 md:pr-12 pl-4 md:pl-0  min-h-[100px] w-80 lg:w-90 pl-4 cursor-pointer`}
-                  >
-                    <div
-                      className={`p-6 md:p-8 rounded-xl shadow-sm transition-all duration-300 hover:shadow-md 
-                            
-                                 bg-white  hover:translate-x-1
-                                
-                             `}
-                    >
-                      <p className="text-gray-700 leading-relaxed text-base md:text-lg">
-                        {mis.content}
-                      </p>
-
-                      <div
-                        className={`mt-4 text-xs text-gray-500 ${
-                          index % 2 === 0 ? "text-blue-500" : "text-blue-400"
-                        }`}
-                      >
-                        记录于 {mis.date}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="timeline-middle">
-                    <div
-                      className={`
-                  w-6 h-6 rounded-full flex items-center justify-center shadow-md
-                  ${index % 2 === 0 ? "bg-blue-400" : "bg-blue-300"}
-                  transition-transform duration-300 hover:scale-125
-                `}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="white"
-                        className="h-3.5 w-3.5"
-                      >
-                      </svg>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <MiscellaneousTimeline items={miscellaneous} />
         </article>
         </AnimatedContent>
       </NextRouter>

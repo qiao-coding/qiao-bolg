@@ -9,7 +9,7 @@ import leaf from "../../../public/titleImage/leaf.svg";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { throttle } from "lodash";
-import { UserAvatar } from "../features/home/login/UserAvatar";
+import { UserAvatar } from "../features/login/UserAvatar";
 import { signOut, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 
@@ -28,7 +28,6 @@ const Header = () => {
 
   const { resolvedTheme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
-  const isAuthenticated = status === 'authenticated';
    const { data: session } = useSession()
 
 
@@ -52,13 +51,7 @@ const Header = () => {
   const [HeaderStyle, setHeaderStyle] = useState(false);
 
 
-  const handleLogout = async () => {
-    try {
-      await signOut({ redirect: true, redirectTo: '/' });
-    } catch (error) {
-      console.error('退出登录失败:', error);
-    }
-  };
+
   const scrollRef = useRef(null);
 
 
@@ -83,16 +76,14 @@ const Header = () => {
   }, []);
 
 
-  //  ${HeaderStyle?isDark?'bg-gray-500 pt-0':'bg-sky-300 pt-0':''}
 
   return (
     <div
-      className={`w-full  fixed z-50 mr-5  ${HeaderStyle
-        ? isDark
-          ? "bg-gray-700/80 pt-0 duration-700 h-15 bottom-[94vh]"
-          : "bg-sky-300/70 pt-0 duration-700 h-15 bottom-[94vh]"
-        : `${isDark ? "bg-gray-0 pt-0 bottom-[92vh] h-18 duration-700" : " duration-700 bg-sky-0 pt-0 bottom-[92vh] h-18"}`
-        } `}
+      className={`w-full fixed z-50 mr-5 duration-700
+        ${HeaderStyle
+          ? "h-15 bottom-[94vh] header-scrolled"
+          : "h-18 bottom-[92vh] header-normal"
+        }`}
     >
       <div
         ref={scrollRef}
@@ -151,9 +142,7 @@ const Header = () => {
                     href={item.hrfe}
                     className={` z-50 p-2 bg-transparent mr-4  bg-transparent cursor-target no-border font-extrabold  
                           ${!HeaderStyle ? "text-[15px]" : "text-[14px]"}
-                         ${resolvedTheme === "light"
-                        ? "text-black"
-                        : "text-white"
+                         ${"text-black dark:text-white"}
                       }`}
                   >
                     <motion.div

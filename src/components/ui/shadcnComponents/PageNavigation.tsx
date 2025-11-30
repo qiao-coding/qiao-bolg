@@ -1,5 +1,5 @@
 'use client'
-import { Note, NotesPage } from "@/app/notes/[notesID]/page";
+import { Note, NotesPage } from "@/types/note/type";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -69,7 +69,7 @@ export default function PageNavigation({notesValue,pageStyle,activeStyle}: {note
     &&notesValue.map((n) => (
             <div key={'uid' in n ? n.uid : n.id} >
             <span
-              onClick={() => handleMenuClick('uid' in n ? n.uid : n.id)}
+              onClick={() => handleMenuClick(('uid' in n ? n.uid : n.id) ?? 0)}
               className={`${
                 activeSection===('uid' in n ? n.uid : n.id)
                 ?`${activeStyle} rounded `

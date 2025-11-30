@@ -19,7 +19,7 @@ import {
 // } from "@/components/ui/shadcnComponents/chart"
 import { useEffect, useState } from "react"
 import { Technology } from "./SkillRoadmap"
-import { Note } from "@/app/notes/[notesID]/page"
+import { Note } from "@/types/note/type"
 
 export const description = "A radar chart"
 
@@ -58,11 +58,6 @@ export function ChartRadarDefault() {
     }
     fetchNotes()
   },[])
-  const chartData=notes.map((item)=>({
-    month:item.title,
-    desktop:item.page.length,
-  }))
-  const[isTitle,setIsTitle]=useState(true)
  
   return (
     <div>

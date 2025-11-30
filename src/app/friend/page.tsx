@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/shadcnComponents/input';
 import { Button } from '@/components/ui/shadcnComponents/button';
 import { useTheme } from 'next-themes';
-import Image from 'next/image';
+import { useFriend } from '@/hooks/friend/useFriend';
 
 // 友链类型定义
 interface Friend {
@@ -41,9 +41,8 @@ const Friend = () => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await fetch('/api/friend');
-        const data = await response.json();
-        setFriends(data);
+        const response = await useFriend.getFriendList()
+        setFriends(response);
       } catch (error) {
         console.error('获取友链数据失败:', error);
       }
@@ -52,19 +51,6 @@ const Friend = () => {
     fetchFriends();
   }, []);
 
-
-// model Friend {
-//   id        Int      @id @default(autoincrement())
-//   name      String
-//   url       String
-//   avatar    String?
-//   bio       String?
-//   status    Boolean  @default(false)
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-
-//   @@map("friend")
-// }
 
   //提交友链
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -86,14 +72,8 @@ const Friend = () => {
         status: false
       }
 
-      const res=await fetch('/api/friend/post_friend',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify(newFriend)
-      })
-      if(res.ok){
+      const res=await useFriend.postFriend(newFriend)
+      if(res){
         alert('提交友链成功！');
         setFriendData({
           id: 0,
