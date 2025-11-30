@@ -4,11 +4,11 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useNotes } from '@/hooks/note/useNotes';
 import { Note, NotesPage } from '@/types/note/type';
-import { NotePageHeader } from '@/components/features/notes/NotePageHeader';
-import { NotePageMeta } from '@/components/features/notes/NotePageMeta';
-import { NotePageContent } from '@/components/features/notes/NotePageContent';
-import { NotePageTags } from '@/components/features/notes/NotePageTags';
-import { NotePageLoading } from '@/components/features/notes/NotePageLoading';
+import { NotePageHeader } from '@/components/features/notes/notePageHeader';
+import { NotePageMeta } from '@/components/features/notes/notePageMeta';
+import { NotePageContent } from '@/components/features/notes/notePageContent';
+import { NotePageTags } from '@/components/features/notes/notePageTags';
+import { NotePageLoading } from '@/components/features/notes/notePageLoading';
 const NotePage = () => {
   const { notesID, notePageID } = useParams();
   const [note, setNote] = useState<Note | null>(null);
