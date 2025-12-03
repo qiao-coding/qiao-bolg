@@ -9,23 +9,13 @@ import { Input } from '@/components/ui/shadcnComponents/input';
 import { Button } from '@/components/ui/shadcnComponents/button';
 import { useTheme } from 'next-themes';
 import { useFriend } from '@/hooks/friend/useFriend';
+import { FriendType } from '@/types/friend/type';
 
-// 友链类型定义
-interface Friend {
-  id: number;
-  name: string;
-  url: string;
-  avatar?: string;
-  bio?: string;
-  createdAt: string;
-  updatedAt: string;
-  status: boolean;
-}
 
 const Friend = () => {
   const { theme } = useTheme();
-  const [friends, setFriends] = useState<Friend[]>([]);
-  const [friendData, setFriendData] = useState<Friend>({
+  const [friends, setFriends] = useState<FriendType[]>([]);
+  const [friendData, setFriendData] = useState<FriendType>({
     id: 0,
     name: '',
     url: '',
@@ -37,7 +27,7 @@ const Friend = () => {
   });
 
 
-  // 获取友链数据
+  // 获取友链数据(GET)
   useEffect(() => {
     const fetchFriends = async () => {
       try {
@@ -61,7 +51,7 @@ const Friend = () => {
         alert("请填写完整信息！");
         return;
       }
-      const newFriend: Friend = {
+      const newFriend: FriendType = {
         id: friends.length + 1,
         name: friendData.name,
         url: friendData.url,

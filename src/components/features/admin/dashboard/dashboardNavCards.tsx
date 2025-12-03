@@ -46,7 +46,7 @@ export function DashboardNavCards() {
 
   const statCards = [
     {
-      title: "笔记",
+      title: "笔记分类",
       value: +adminCardData.notesValue,
       icon: <BookOpen className="h-6 w-6 text-blue-500" />,
       color: "blue"

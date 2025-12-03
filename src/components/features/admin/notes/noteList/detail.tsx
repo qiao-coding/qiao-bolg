@@ -26,6 +26,7 @@ export function NoteListDetail({ initialNotes, notesId }: NoteListDetailProps) {
   const [selectedNotes, setSelectedNotes] = React.useState<number[]>([]);
   const [isAddNotesDialogOpen, setIsAddNotesDialogOpen] = React.useState<boolean>(false);
   const { data: session } = useSession();
+const [pageTags, setPageTags] = React.useState<string[]>([]);
 
   // 获取notesList(GET)
   React.useEffect(() => {
@@ -98,7 +99,7 @@ export function NoteListDetail({ initialNotes, notesId }: NoteListDetailProps) {
       author: session?.user?.name || '',
       dateStart: new Date().toLocaleString('sv-SE'),
       dateEnd: new Date().toLocaleString('sv-SE'),
-      pageTags: [],
+      pageTags: pageTags,
       noteId: Number(notesId),
       pageId: notes.id * 10000 + notesPage.length + 1,
     };
@@ -125,11 +126,6 @@ export function NoteListDetail({ initialNotes, notesId }: NoteListDetailProps) {
     }
   }
 
-  const handleTagsChange = (tags: string[]) => {
-
-
-    
-  };
 
   const handleSortChange = (field: 'title' | 'dateStart' | 'dateEnd') => {
     setSortField(field);
@@ -157,7 +153,7 @@ export function NoteListDetail({ initialNotes, notesId }: NoteListDetailProps) {
           addNotesPageTitle={addNotesPageTitle}
           setAddNotesPageTitle={setAddNotesPageTitle}
           defaultTags={[notes?.title || '']}
-          onTagsChange={handleTagsChange}
+          onTagsChange={setPageTags}
           onSubmit={submitAddNote}
         />
 

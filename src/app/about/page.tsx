@@ -6,7 +6,7 @@ import AnimatedContent from '@/components/ui/shadcnComponents/AnimatedContent';
 import { Book, BookOpen, TreeDeciduousIcon, }
   from 'lucide-react';
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
-import NotesSideber from '@/components/ui/notes/NotesSideber';
+import NotesSideber from '@/components/ui/notes/noteSideber';
 import Title from '@/components/ui/public/title';
 import Image from 'next/image';
 import InfiniteScroll from '@/components/ui/about/InfiniteScroll';
@@ -49,27 +49,27 @@ const AboutPage = () => {
             <div className="max-w-6xl w-full mx-auto">
               <div className="flex flex-col lg:flex-row gap-8">
                 <div className="w-full lg:w-230">
-                  <div className={`mb-8 ${theme === 'light' ? 'bg-white rounded-2xl shadow-sm p-6' : 'bg-gray-800/90 rounded-2xl shadow-lg shadow-gray-900/20 p-6 border border-gray-700'}`}>
+                  <div className="mb-8 bg-white dark:bg-gray-800/90 rounded-2xl shadow-sm dark:shadow-lg dark:shadow-gray-900/20 p-6 dark:border dark:border-gray-700">
                     <div className="flex items-center gap-3 mb-5">
-                      <div className={`p-2 rounded-lg ${theme === 'light' ? 'bg-primary/10 text-primary' : 'bg-primary/20 text-primary/90'}`}>
+                      <div className="p-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary/90">
                         <BookOpen className="w-5 h-5" />
                       </div>
-                      <h2 className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>个人简介</h2>
+                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">个人简介</h2>
                     </div>
 
-                    <div className={`space-y-3 leading-relaxed ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>
+                    <div className="space-y-3 leading-relaxed text-gray-700 dark:text-gray-300">
                       <p className="text-sm">
                         你好！我是昊小白，一名热爱前端开发的前端小白
                       </p>
                     </div>
                   </div>
 
-                  <div className={`mb-8  ${theme === 'light' ? 'bg-white rounded-2xl shadow-sm p-6' : 'bg-gray-800/90 rounded-2xl shadow-lg shadow-gray-900/20 p-6 border border-gray-700'}`}>
+                  <div className="mb-8 bg-white dark:bg-gray-800/90 rounded-2xl shadow-sm dark:shadow-lg dark:shadow-gray-900/20 p-6 dark:border dark:border-gray-700">
                     <div className="flex items-center gap-3 mb-5">
-                      <div className={`p-2 rounded-lg ${theme === 'light' ? 'bg-primary/10 text-primary' : 'bg-primary/20 text-primary/90'}`}>
+                      <div className="p-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary/90">
                         <TreeDeciduousIcon className="w-6 h-6" />
                       </div>
-                      <h2 className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>技能树</h2>
+                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">技能树</h2>
                       <div>
 
                       </div>
@@ -81,7 +81,7 @@ const AboutPage = () => {
                         <div className="flex items-center gap-8 mb-5 w-130 flex-col">
 
                           <div>
-                            <span className={`text-lg font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'} p-0 w-full flex justify-center`}>基础知识</span>
+                            <span className="text-lg font-bold text-gray-800 dark:text-white p-0 w-full flex justify-center">基础知识</span>
                             <span className='pt-5 flex items-center w-full gap-12'>
                               <motion.div
                                 whileInView={{ opacity: 1, x: 0 }}
@@ -120,7 +120,7 @@ const AboutPage = () => {
                           </div>
 
                           <div>
-                            <span className={`text-lg font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'} p-0 w-full flex justify-center`}>前端框架</span>
+                            <span className="text-lg font-bold text-gray-800 dark:text-white p-0 w-full flex justify-center">生产实践</span>
                             <span className='pt-5 flex items-center w-full gap-12'>
                               <motion.div
                                 whileInView={{ opacity: 1, x: 0 }}

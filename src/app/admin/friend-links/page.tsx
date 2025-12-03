@@ -10,20 +10,11 @@ import { FriendLinksTable } from '@/components/features/admin/friend-links/Frien
 import { FriendLinksAddDialog } from '@/components/features/admin/friend-links/FriendLinksAddDialog';
 import { FriendLinksEditDialog } from '@/components/features/admin/friend-links/FriendLinksEditDialog';
 import { FriendLinksDeleteDialog } from '@/components/features/admin/friend-links/FriendLinksDeleteDialog';
+import { FriendType } from '@/types/friend/type';
 
-interface Friend {
-    id: number;
-    name: string;
-    url: string;
-    avatar?: string;
-    bio?: string;
-    status: boolean;
-    createdAt: string;
-    updatedAt: string;
-}
 
-const FriendLinksManagement: React.FC = () => {
-    const [friends, setFriends] = useState<Friend[]>([]);
+const FriendLinksManagement= () => {
+    const [friends, setFriends] = useState<FriendType[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [sortField, setSortField] = useState<'createdAt' | 'name' | 'status' | null>('createdAt');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -39,7 +30,7 @@ const FriendLinksManagement: React.FC = () => {
         status: true
     });
     const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
-    const [editItem, setEditItem] = useState<Friend | null>(null);
+    const [editItem, setEditItem] = useState<FriendType | null>(null);
     const [editFriend, setEditFriend] = useState<{ name: string; url: string; avatar?: string; bio?: string; status: boolean }>({
         name: '',
         url: '',
@@ -60,6 +51,8 @@ const FriendLinksManagement: React.FC = () => {
         || (item.bio && item.bio.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
+
+    // 获取友链数据(GET)
     useEffect(() => {
         const fetchFriends = async () => {
             setIsLoading(true);
@@ -71,7 +64,7 @@ const FriendLinksManagement: React.FC = () => {
                 }
 
                 const data = await response.json();
-                const formattedItems: Friend[] = data.map((item: Friend) => ({
+                const formattedItems: FriendType[] = data.map((item: FriendType) => ({
                     ...item,
                     status: item.status !== undefined ? item.status : true
                 }));
@@ -134,7 +127,7 @@ const FriendLinksManagement: React.FC = () => {
         }
     };
 
-    // 切换友链状态
+    // 切换友链状态(PUT)
     const toggleFriendStatus = async (id: number) => {
         try {
             const friend = friends.find(f => f.id === id);
@@ -157,13 +150,12 @@ const FriendLinksManagement: React.FC = () => {
         } catch (error) {
             console.error('切换友链状态失败:', error);
 
-            // 重试获取友链数据
             const fetchFriends = async () => {
                 try {
                     const response = await fetch('/api/friend', { method: 'GET', credentials: 'include' });
                     if (response.ok) {
                         const data = await response.json();
-                        const formattedItems: Friend[] = data.map((item: Friend) => ({
+                        const formattedItems: FriendType[] = data.map((item: FriendType) => ({
                             ...item,
                             status: item.status !== undefined ? item.status : true
                         }));
@@ -195,11 +187,11 @@ const FriendLinksManagement: React.FC = () => {
     };
 
 
-    // 添加新友链
+    // 添加新友链(POST)
     const handleAddItem = async () => {
         try {
             if (newFriend.name.trim() && newFriend.url.trim()) {
-                const newItem: Friend = {
+                const newItem: FriendType = {
                     id: friends.length + 1,
                     ...newFriend,
                     createdAt: new Date().toISOString(),
@@ -208,7 +200,6 @@ const FriendLinksManagement: React.FC = () => {
                 setFriends([...friends, newItem]);
                 setIsAddDialogOpen(false);
 
-                // 发送到服务器
                 const response = await fetch('/api/friend/post_friend', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -218,7 +209,6 @@ const FriendLinksManagement: React.FC = () => {
                     throw new Error('Failed to post friend link');
                 }
             }
-            // 重置表单
             setNewFriend({ name: '', url: '', avatar: '', bio: '', status: true });
         } catch (error) {
             console.error('添加新友链失败:', error);
@@ -226,21 +216,19 @@ const FriendLinksManagement: React.FC = () => {
         }
     };
 
-    // 编辑友链
+    // 编辑友链(PUT)
     const handleEditItem = async () => {
         try {
             if (!editItem || !editFriend.name.trim() || !editFriend.url.trim()) {
                 return console.error('编辑友链失败: 缺少必要字段');
             }
 
-            // 本地更新
             const updatedItems = friends.map(item =>
                 item.id === editItem.id ? { ...item, ...editFriend, updatedAt: new Date().toISOString() } : item
             );
             setFriends(updatedItems);
             setIsEditDialogOpen(false);
 
-            // 发送到服务器
             const response = await fetch('/api/friend/put_friend', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -250,7 +238,6 @@ const FriendLinksManagement: React.FC = () => {
                 throw new Error('Failed to update friend link');
             }
 
-            // 重置表单
             setEditItem(null);
             setEditFriend({ name: '', url: '', avatar: '', bio: '', status: true });
         } catch (error) {
@@ -258,16 +245,13 @@ const FriendLinksManagement: React.FC = () => {
         }
     };
 
-    // 删除友链
     const handleDeleteItem = async () => {
         try {
             if (itemToDelete !== null) {
-                // 本地更新
                 const updatedItems = friends.filter(item => item.id !== itemToDelete);
                 setFriends(updatedItems);
                 setIsDeleteDialogOpen(false);
 
-                // 发送到服务器
                 const response = await fetch('/api/friend/delete_friend', {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
@@ -277,7 +261,6 @@ const FriendLinksManagement: React.FC = () => {
                     throw new Error('Failed to delete friend link');
                 }
 
-                // 重置删除状态
                 setItemToDelete(null);
             }
         } catch (error) {
@@ -285,8 +268,7 @@ const FriendLinksManagement: React.FC = () => {
         }
     };
 
-    // 打开编辑对话框
-    const openEditDialog = (friend: Friend) => {
+    const openEditDialog = (friend: FriendType) => {
         setEditItem(friend);
         setEditFriend({
             name: friend.name,
@@ -298,7 +280,6 @@ const FriendLinksManagement: React.FC = () => {
         setIsEditDialogOpen(true);
     };
 
-    // 打开删除对话框
     const openDeleteDialog = (id: number) => {
         setItemToDelete(id);
         setIsDeleteDialogOpen(true);
@@ -372,7 +353,6 @@ const FriendLinksManagement: React.FC = () => {
                             />
                         )}
 
-                        {/* 分页信息 */}
                         {filteredAndSearchedItems.length > 0 && (
                             <div className="flex items-center justify-between mt-6">
                                 <div className="text-sm text-muted-foreground">
@@ -382,10 +362,6 @@ const FriendLinksManagement: React.FC = () => {
                                     <Button
                                         variant="destructive"
                                         size="sm"
-                                        onClick={() => {
-                                            // 这里可以添加批量删除功能
-                                            console.log('批量删除选中的', selectedItems.length, '条友链');
-                                        }}
                                     >
                                         <Trash2 className="h-4 w-4 mr-2" />
                                         批量删除

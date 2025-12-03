@@ -2,7 +2,13 @@ import { useTheme } from 'next-themes';
 import React, { useEffect, useState } from 'react';
 import TechBackgroundNoGrid from '../public/background_img';
 // 加载动画组件 - 博客风格设计
-const LoadingPage: React.FC = () => {
+const LoadingPage= (
+  {
+    className
+  }:{
+    className?: string;
+  }
+) => {
   const { theme } = useTheme();
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);

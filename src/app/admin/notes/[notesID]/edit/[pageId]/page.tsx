@@ -5,11 +5,12 @@ import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/shadcnComponents/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/shadcnComponents/alert';
-import { Save, ArrowLeft, Tag, FileText, Calendar } from 'lucide-react';
+import {  ArrowLeft, FileText } from 'lucide-react';
 import { useNotes } from '@/hooks/note/useNotes';
 import { NotesPage } from '@/types/note/type';
 import { useSession } from 'next-auth/react';
 import { NoteListPageContentCard } from '@/components/features/admin/notes/noteList/noteListPage/ContentCard';
+import LoadingPage from '@/components/ui/shadcnComponents/loadingPage';
 
 
 const NoteEditPage = () => {
@@ -112,16 +113,15 @@ const NoteEditPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-6 flex flex-col items-center justify-center">
-        <Card className="w-full max-w-4xl shadow-lg border border-border/20 overflow-hidden transition-all duration-500 hover:shadow-xl">
-          <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border/10">
+        <Card className="w-full py-0 max-w-4xl shadow-lg border border-border/20 overflow-hidden transition-all duration-500 hover:shadow-xl">
+          <CardHeader className="bg-gradient-to-r py-6 from-primary/10 to-primary/5 border-b border-border/10">
             <CardTitle className="flex items-center gap-2 text-primary">
               <FileText className="h-5 w-5" />
               加载笔记内容...
             </CardTitle>
           </CardHeader>
           <CardContent className="py-8 flex flex-col items-center justify-center">
-            <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4"></div>
-            <p className="text-muted-foreground animate-pulse">正在准备您的笔记...</p>
+            <p className="text-muted-foreground animate-pulse text-lg">正在准备笔记...</p>
           </CardContent>
         </Card>
       </div>
@@ -132,7 +132,7 @@ const NoteEditPage = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-background p-6 flex flex-col items-center justify-center">
-        <Card className="w-full max-w-2xl">
+        <Card className="w-full max-w-2xl px-6 py-8">
           <Alert variant="destructive" className="mb-4">
             <AlertTitle>错误</AlertTitle>
             <AlertDescription>{error}</AlertDescription>

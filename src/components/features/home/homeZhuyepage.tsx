@@ -37,7 +37,7 @@ export function HomeZhuyepage() {
         }
     ]
     return (
-        <article className={` min-h-screen bg-cover homebg bg-center bg-no-repeat  to-white  dark:bg-black/60 min-h-screen bg-cover p-6 `}>
+        <article className={` min-h-screen bg-cover homebg bg-center bg-no-repeat  to-white   min-h-screen bg-cover `}>
             <AnimatedContent
                 distance={150}
                 direction="vertical"
@@ -50,7 +50,7 @@ export function HomeZhuyepage() {
                 threshold={0.1}
                 delay={0}
             >
-                <section className="hero min-h-screen">
+                <section className="hero min-h-screen dark:bg-black/60 p-6" >
                     <div className="hero-content flex-col lg:flex-row-reverse gap-22">
                         <figure className="cursor-target">
                             <TiltedCard
