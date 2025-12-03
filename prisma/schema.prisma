@@ -28,8 +28,8 @@ model Note {
 
 model NotesPage {
   id        Int      @id @default(autoincrement())
-  uid       Int
-  pageId    Int      @unique
+  uid       String
+  pageId    String      @unique
   title     String
   content   String
   author    String   @default("HaoWhite")

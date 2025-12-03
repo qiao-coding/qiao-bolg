@@ -93,15 +93,15 @@ const [pageTags, setPageTags] = React.useState<string[]>([]);
 
     const newNotesPage: NotesPage = {
       id: new Date().getTime(),
-      uid: notesPage.length + 1,
+      uid: crypto.randomUUID() || '',
       title: addNotesPageTitle,
       content: '',
       author: session?.user?.name || '',
       dateStart: new Date().toLocaleString('sv-SE'),
       dateEnd: new Date().toLocaleString('sv-SE'),
       pageTags: pageTags,
-      noteId: Number(notesId),
-      pageId: notes.id * 10000 + notesPage.length + 1,
+      noteId: notesId || '',
+      pageId:crypto.randomUUID() ,
     };
 
     try {
@@ -120,7 +120,7 @@ const [pageTags, setPageTags] = React.useState<string[]>([]);
 
     try {
       await useNotes.deleteNotePage(pageID)
-      setNotesPage(prev => prev.filter(page => page.pageId !== pageID))
+      setNotesPage(prev => prev.filter(page => page.pageId !== pageID.toString()))
     } catch (error) {
       console.error('删除笔记失败:', error);
     }

@@ -11,15 +11,15 @@ interface Note {
 // 根据 Prisma 模型定义的笔记页面类型
 interface NotesPage {
   id: number;
-  uid?: number;
+  uid?: String;
   title: string;
   content: string;
   author?: string;
   dateStart?: string;
   dateEnd: string;
-  pageId?: number;
+  pageId?: string;
   pageTags: string[];
-  noteId?: number;
+  noteId?: string;
   note?: Note;
 }
 
