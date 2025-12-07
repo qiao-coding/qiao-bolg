@@ -19,7 +19,8 @@ const Miscellaneous = () => {
     const fetchMiscellaneous=async()=>{
       try {
         const res=await useMiscellaneous.getMiscellaneousList()
-        setMiscellaneous(res)
+        const data=res.reverse()
+        setMiscellaneous(data)
       } catch (error) {
         console.log(error)
       }
