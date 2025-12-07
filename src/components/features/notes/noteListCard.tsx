@@ -12,14 +12,14 @@ export function NoteListCard(
 
     }: {
         note: Note
-        handleUid: (uid: number) => void,
+        handleUid: (uid: string) => void,
 
 
     }
 ) {
-    const sectionRefs = useRef<{ [key: number]: HTMLElement | null }>({})
+    const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
 
-    const cardRefs = useRef<{ [key: number]: HTMLSpanElement | null }>({});
+    const cardRefs = useRef<{ [key: string]: HTMLSpanElement | null }>({});
 
 
 
@@ -33,8 +33,8 @@ export function NoteListCard(
                     key={note.uid}
                     ref={(el) => {
                         if (note.uid) {
-                            cardRefs.current[note.uid] = el;
-                            sectionRefs.current[note.uid] = el;
+                            cardRefs.current[note.uid as unknown as number] = el;
+                            sectionRefs.current[note.uid as unknown as number] = el;
                         }
                     }}
                 >
@@ -42,7 +42,7 @@ export function NoteListCard(
                         whileHover={{ scale: 1.05, transition: { duration: 0.3 }, translateY: -10 }}
                     >
                         <div
-                            onClick={() => handleUid(note.uid || 0)}
+                            onClick={() => handleUid(note.uid || '')}
                             className="group bg-white/70 rounded-xl shadow-[0_2px_12px_rgba(59,130,246,0.07)] 
                     hover:shadow-[0_12px_16px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden
                      border border-[#EFF6FF] dark:bg-gray-900/60 dark:hover:shadow-white dark:border-white"

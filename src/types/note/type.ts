@@ -11,7 +11,7 @@ interface Note {
 // 根据 Prisma 模型定义的笔记页面类型
 interface NotesPage {
   id: number;
-  uid?: String;
+  uid?: string;
   title: string;
   content: string;
   author?: string;

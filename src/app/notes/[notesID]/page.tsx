@@ -47,7 +47,7 @@ const Notestitle = () => {
     fetchNotes()
   }, [notesID])
 
-  const handleUid = (notePageID: number) => {
+  const handleUid = (notePageID: string) => {
     router.push(`/notes/${notesID}/${notePageID}`);
   };
 

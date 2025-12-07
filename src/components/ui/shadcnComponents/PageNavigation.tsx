@@ -45,11 +45,11 @@ export default function PageNavigation({notesValue,pageStyle,activeStyle}: {note
   return () => observer.disconnect();
   },[notesValue])
 
-  const handleMenuClick = ( uid: number) => {
+  const handleMenuClick = ( uid: string) => {
   const element = document.getElementById(`section-${uid}`);
   
   if (element) {
-    const yOffset = -80; // 导航栏高度补偿
+    const yOffset = -80; 
     const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
     
     window.scrollTo({
@@ -69,7 +69,7 @@ export default function PageNavigation({notesValue,pageStyle,activeStyle}: {note
     &&notesValue.map((n) => (
             <div key={'uid' in n ? n.uid : n.id} >
             <span
-              onClick={() => handleMenuClick(('uid' in n ? n.uid : n.id) ?? 0)}
+              onClick={() => handleMenuClick(('uid' in n ? n.uid : n.id)  as string)}
               className={`${
                 activeSection===('uid' in n ? n.uid : n.id)
                 ?`${activeStyle} rounded `

@@ -37,7 +37,7 @@
     "lucide": "^0.544.0",
     "lucide-react": "^0.544.0",
     "motion": "^12.23.24",
-    "next": "^16.0.7",
+    "next": "^15.0.0",
     "next-auth": "^5.0.0-beta.29",
     "next-themes": "^0.4.6",
     "rc-tween-one": "^3.0.6",

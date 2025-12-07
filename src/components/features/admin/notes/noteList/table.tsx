@@ -191,7 +191,7 @@ export function NoteListTable({
                           <DialogFooter>
                             <Button 
                               variant="destructive" 
-                              onClick={() => onDeletePage(page.pageId as number)}
+                              onClick={() => onDeletePage(page.id)}
                             >
                               删除
                             </Button>

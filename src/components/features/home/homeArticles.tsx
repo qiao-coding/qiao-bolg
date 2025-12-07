@@ -15,7 +15,7 @@ const HomeArticles = () => {
   const [isDark, setIsDark] = useState(false);
   const [notesPage, setNotesPage] = useState<Note[]>([]);  
 
-  const handleArticleClick = useCallback((noteId: number) => {
+  const handleArticleClick = useCallback((noteId: string) => {
     router.push(`/notes/${noteId}`);
   }, [router]);
 
@@ -91,6 +91,7 @@ const HomeArticles = () => {
       <article
         key={`${article.noteId}-${article.id}-${index}`}
         onClick={() => article.noteId && handleArticleClick(article.noteId)}
+
         className={`
           group backdrop-blur-sm rounded-lg border transition-all duration-300 cursor-target 
           overflow-hidden hover:scale-102 hover:-translate-y-1 shadow-md hover:shadow-lg
@@ -100,7 +101,7 @@ const HomeArticles = () => {
         <div className="relative h-32 overflow-hidden">
           <Image
             fill
-            src={notesPage.find(n=>n.id===article.noteId)?.titlePicture || "/bg-1.png"}
+            src={notesPage.find(n=>n.id.toString() ===article.noteId)?.titlePicture || "/bg-1.png"}
             alt={article.title}
             className="object-cover group-hover:scale-110 transition-transform duration-300"
             sizes="lg:80vw, md:25vw, 20vw"
