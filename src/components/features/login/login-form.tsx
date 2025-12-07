@@ -63,11 +63,11 @@ export function LoginForm({
                 </div>
               </div>
             </form>
-              <div className="flex flex-col items-center text-center pb-6">
-                <div>
-                  <SignIn />
-                </div>
+            <div className="flex flex-col items-center text-center pb-6">
+              <div>
+                <SignIn />
               </div>
+            </div>
 
           </div>
 
@@ -75,6 +75,8 @@ export function LoginForm({
             <Image
               src='/loginImage/LoginForm.jpg'
               alt="Image"
+              width={500}
+              height={500}
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>
