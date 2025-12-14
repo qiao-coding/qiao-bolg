@@ -115,7 +115,7 @@ const [pageTags, setPageTags] = React.useState<string[]>([]);
   };
 
   // 删除笔记(DELETE)
-  const handleDeleteNotePage = async (pageID: number) => {
+  const handleDeleteNotePage = async (pageID: string) => {
     if (!pageID) return console.error('未提供笔记页面ID');
 
     try {
