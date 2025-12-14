@@ -155,7 +155,7 @@ function createNotes() {
         }
     }
 
-    async function deleteNotePage(pageID: number) {
+    async function deleteNotePage(pageID: string) {
         try {
             const res = await fetch(`/api/notes/page/delete_notesPage`, {
                 method: 'DELETE',

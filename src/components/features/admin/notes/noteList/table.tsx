@@ -53,7 +53,7 @@ interface NoteListTableProps {
   onToggleSelectAll: () => void;
   onToggleSelectItem: (id: number) => void;
   onSortChange: (field: 'title' | 'dateStart' | 'dateEnd') => void;
-  onDeletePage: (pageId: number) => void;
+  onDeletePage: (pageId: string) => void;
   noteId?: number;
 }
 
@@ -191,7 +191,7 @@ export function NoteListTable({
                           <DialogFooter>
                             <Button 
                               variant="destructive" 
-                              onClick={() => onDeletePage(page.id)}
+                              onClick={() => onDeletePage(page?.pageId || '')}
                             >
                               删除
                             </Button>
