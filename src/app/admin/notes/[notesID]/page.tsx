@@ -1,37 +1,210 @@
 'use client';
 
 import React from 'react';
-import { useParams } from 'next/navigation';
+import { Card, CardContent } from '@/components/ui/shadcnComponents/card';
+import { useSession } from 'next-auth/react';
 import { useNotes } from '@/hooks/note/useNotes';
-import { Note } from '@/types/note/type';
-import { NoteListDetail } from '@/components/features/admin/notes/noteList/detail';
+import { Note, NotesPage } from '@/types/note/type';
+import { useParams } from 'next/navigation';
+import { NoteListCardHeader } from '@/components/features/admin/notes/noteList/cardHeader';
+import { NoteListHeader } from '@/components/features/admin/notes/noteList/header';
+import { NoteListSearchFilter } from '@/components/features/admin/notes/noteList/searchFilter';
+import { NoteListTable } from '@/components/features/admin/notes/noteList/table';
 
-const StudyNodes = () => {
+
+function StudyNodes() {
+
+
   const params = useParams();
   const [initialNotes, setInitialNotes] = React.useState<Note | null>(null);
+
+  const notesId = params.notesID as string;
+
+
+  const [notes, setNotes] = React.useState<Note | null>(initialNotes);
+  const [notesPage, setNotesPage] = React.useState<NotesPage[]>(initialNotes?.page || []);
+  const [addNotesPageTitle, setAddNotesPageTitle] = React.useState<string>('');
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [filterTags, setFilterTags] = React.useState<string>('all');
+  const [sortField, setSortField] = React.useState<'title' | 'dateStart' | 'dateEnd' | null>(null);
+  const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
+  const [selectedNotes, setSelectedNotes] = React.useState<number[]>([]);
+  const [isAddNotesDialogOpen, setIsAddNotesDialogOpen] = React.useState<boolean>(false);
+  const { data: session } = useSession();
+  const [pageTags, setPageTags] = React.useState<string[]>([]);
+
+
 
   // 获取notesList(GET)
   React.useEffect(() => {
     const fetchNotes = async () => {
-      const notesId = params.notesID;
       if (!notesId) return console.error('未提供笔记ID');
       try {
         const response = await useNotes.getNoteList(notesId as string);
+        setNotes(response);
+        setNotesPage(response.page || []);
         setInitialNotes(response);
       } catch (error) {
         console.error('获取笔记数据失败:', error);
       }
     };
 
-    fetchNotes();
-  }, [params.notesID]);
+    if (!initialNotes) {
+      fetchNotes();
+    }
+  }, [notesId, initialNotes]);
+
+
+
+
+  // 过滤
+  const filteredNotesPage = notesPage.filter(page => {
+    const matchesSearch = page.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      page.pageTags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const matchesTag = filterTags === 'all' || page.id.toString() === filterTags;
+
+    return matchesSearch && matchesTag;
+  });
+
+  // 排序
+  const sortedPages = [...filteredNotesPage].sort((a, b) => {
+    if (!sortField) return 0;
+
+    let valueA: string | number = '';
+    let valueB: string | number = '';
+
+    if (sortField === 'title') {
+      valueA = a.title.toLowerCase();
+      valueB = b.title.toLowerCase();
+    } else if (sortField === 'dateStart') {
+      valueA = new Date(a.dateStart || '').getTime();
+      valueB = new Date(b.dateStart || '').getTime();
+    } else if (sortField === 'dateEnd') {
+      valueA = new Date(a.dateEnd || '').getTime();
+      valueB = new Date(b.dateEnd || '').getTime();
+    }
+
+    if (valueA < valueB) return sortDirection === 'asc' ? -1 : 1;
+    if (valueA > valueB) return sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  // 全选/取消全选
+  const toggleSelectAll = () => {
+    if (selectedNotes.length === sortedPages.length) {
+      setSelectedNotes([]);
+    } else {
+      setSelectedNotes(sortedPages.map(page => page.id));
+    }
+  };
+
+  // 新建笔记(POST)
+  const submitAddNote = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!notes) return console.error('未提供笔记ID');
+
+    const newNotesPage: NotesPage = {
+      id: new Date().getTime(),
+      uid: crypto.randomUUID() || '',
+      title: addNotesPageTitle,
+      content: '',
+      author: session?.user?.name || '',
+      dateStart: new Date().toLocaleString('sv-SE'),
+      dateEnd: new Date().toLocaleString('sv-SE'),
+      pageTags: pageTags,
+      noteId: notesId || '',
+      pageId: crypto.randomUUID(),
+    };
+
+    try {
+      await useNotes.postNotePage(newNotesPage);
+      setNotesPage(prev => [...prev, newNotesPage]);
+      setAddNotesPageTitle('');
+      setIsAddNotesDialogOpen(false)
+    } catch (error) {
+      console.error('新建笔记失败:', error)
+    }
+  };
+
+  // 删除笔记(DELETE)
+  const handleDeleteNotePage = async (pageID: string) => {
+    if (!pageID) return console.error('未提供笔记页面ID');
+
+    try {
+      await useNotes.deleteNotePage(pageID)
+      setNotesPage(prev => prev.filter(page => page.pageId !== pageID.toString()))
+    } catch (error) {
+      console.error('删除笔记失败:', error);
+    }
+  }
+
+
+  // 排序变更
+  const handleSortChange = (field: 'title' | 'dateStart' | 'dateEnd') => {
+    setSortField(field);
+    setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+  };
+
+  const handleToggleSelectItem = (id: number) => {
+    if (selectedNotes.includes(id)) {
+      setSelectedNotes(selectedNotes.filter(item => item !== id));
+    } else {
+      setSelectedNotes([...selectedNotes, id]);
+    }
+  };
 
   return (
-    <NoteListDetail 
-      initialNotes={initialNotes} 
-      notesId={params.notesID as string} 
-    />
+    <main className="min-h-screen 
+     bg-sky-100/60 dark:bg-slate-600/80
+     text-foreground p-6 lg:pt-16">
+      <NoteListHeader title={notes?.title || ''} />
+
+      <Card className="backdrop-blur-sm bg-card/80 dark:bg-card/80 border border-border/40 shadow-xl hover:shadow-2xl transition-all duration-300">
+        {/* 添加笔记卡片头部组件 */}
+        <NoteListCardHeader
+          title="笔记列表"
+          description="管理和编辑所有学习笔记"
+          isAddNotesDialogOpen={isAddNotesDialogOpen}
+          setIsAddNotesDialogOpen={setIsAddNotesDialogOpen}
+          addNotesPageTitle={addNotesPageTitle}
+          setAddNotesPageTitle={setAddNotesPageTitle}
+          defaultTags={[notes?.title || '']}
+          onTagsChange={setPageTags}
+          onSubmit={submitAddNote}
+        />
+
+        <CardContent className='bg-card/80 dark:bg-card/80'>
+          {/* 添加笔记卡片内容组件 */}
+          <NoteListSearchFilter
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
+
+          {/* 添加笔记卡片表格组件 */}
+          <NoteListTable
+            pages={sortedPages}
+            selectedNotes={selectedNotes}
+            sortField={sortField}
+            sortDirection={sortDirection}
+            onToggleSelectAll={toggleSelectAll}
+            onToggleSelectItem={handleToggleSelectItem}
+            onSortChange={handleSortChange}
+            onDeletePage={handleDeleteNotePage}
+            noteId={notes?.id}
+          />
+          {/* 添加笔记卡片底部组件 */}
+          <div className="flex items-center justify-between mt-6">
+            <div className="text-sm text-muted-foreground bg-gradient-to-r from-primary/10 to-primary/5 px-3 py-2 rounded-lg border border-border/20">
+              共 {notesPage.length} 条 {notes?.title} 笔记
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </main>
   );
 };
 
-export default StudyNodes;
+
+export default StudyNodes

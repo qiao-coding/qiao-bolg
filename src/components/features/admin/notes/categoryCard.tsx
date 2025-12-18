@@ -1,7 +1,7 @@
 'use client'
 import { Card, CardContent, CardFooter } from '@/components/ui/shadcnComponents/card';
 import { Button } from '@/components/ui/shadcnComponents/button';
-import { Eye, FileText, CalendarPlus, LucideCalendarCheck2, MoreVertical, Trash2, Edit } from 'lucide-react';
+import { Eye, CalendarPlus, LucideCalendarCheck2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Note } from '@/types/note/type';
@@ -40,33 +40,37 @@ export function NoteCategoryCard({
   return (
     <motion.div
       key={note.id}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       className="group relative"
     >
-      <Card className="py-0 flex dark:border dark:border-white flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <Card className="py-0 flex cursor-pointer
+       flex-col overflow-hidden backdrop-blur-sm
+        bg-card/80 dark:bg-card/80 border-2 border-sky-400/40 hover:border-pink-400/40 
+        shadow-lg 
+         group
+        ">
         <NoteCategoryCardHeader note={note} />
 
         <CardContent className="flex-1 p-4 pb-0">
           <div className="flex items-center pb-2 text-xs text-muted-foreground gap-2">
-            <CalendarPlus className="h-4 w-4" />
-            <span>{note.createdAt && formatDate(note.createdAt)}</span>
+            <CalendarPlus className="h-3 w-3 text-blue-500" />
+            <span className="font-medium">{note.createdAt && formatDate(note.createdAt)}</span>
           </div>
           <div className="flex items-center text-xs text-muted-foreground gap-2">
-            <LucideCalendarCheck2 className="h-4 w-4" />
-            <span>{note.updatedAt && formatDate(note.updatedAt)}</span>
+            <LucideCalendarCheck2 className="h-3 w-3 text-green-500" />
+            <span className="font-medium">{note.updatedAt && formatDate(note.updatedAt)}</span>
           </div>
         </CardContent>
 
         <CardFooter className="p-4 pt-0 flex items-center justify-between">
           <Link href={`/admin/notes/${note.id}`}>
-            <Button size="sm" variant="ghost" className="gap-1">
+            <Button size="sm" variant="outline" className="gap-1 cursor-pointer border-primary/20 hover:bg-primary/10 hover:border-primary/40 transition-colors">
               <Eye className="h-3 w-3" />
               查看
             </Button>
           </Link>
-
 
           {/* 下拉菜单 ,编辑和删除*/}
           <NoteCategoryCardXiaLa

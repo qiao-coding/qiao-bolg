@@ -29,7 +29,10 @@ export function NoteListCard(
                 <div
                     id={`section-${note.uid}`}
 
-                    className="cursor-target  cursor-pointer  grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 sm:w-[80vw] md:w-[65vw] lg:w-[40vw] m-auto p-4 "
+                    className="cursor-target  cursor-pointer
+                      grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 
+                    sm:w-[80vw] md:w-[65vw] lg:w-[40vw] m-auto p-4 
+                    "
                     key={note.uid}
                     ref={(el) => {
                         if (note.uid) {
@@ -43,13 +46,13 @@ export function NoteListCard(
                     >
                         <div
                             onClick={() => handleUid(note.uid || '')}
-                            className="group bg-white/70 rounded-xl shadow-[0_2px_12px_rgba(59,130,246,0.07)] 
-                    hover:shadow-[0_12px_16px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden
-                     border border-[#EFF6FF] dark:bg-gray-900/60 dark:hover:shadow-white dark:border-white"
+                            className="group bg-card/70 rounded-xl shadow-lg 
+                    hover:shadow-xl transition-all duration-300 overflow-hidden
+                     border border-border/50 hover:border-primary/30"
                         >
                             <div className="p-6 sm:p-7 ">
                                 <h3
-                                    className="text-xl sm:text-2xl font-semibold mb-3 group-hover:text-[#1D4ED8] transition-colors duration-300 leading-tight font-sans text-black dark:text-white"
+                                    className="text-xl sm:text-2xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300 leading-tight font-sans text-card-foreground"
                                 >
                                     {note.title}
                                 </h3>

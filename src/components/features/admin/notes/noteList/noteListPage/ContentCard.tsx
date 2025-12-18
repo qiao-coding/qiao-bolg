@@ -1,21 +1,18 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
+import React, { useEffect, useRef } from "react";
 import { Button } from '@/components/ui/shadcnComponents/button';
 import { Input } from '@/components/ui/shadcnComponents/input';
-import { Badge } from '@/components/ui/shadcnComponents/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/shadcnComponents/alert';
 import { Label } from '@/components/ui/shadcnComponents/label';
 import { Separator } from '@/components/ui/shadcnComponents/separator';
-import { Textarea } from '@/components/ui/shadcnComponents/textarea';
 import { Save, ArrowLeft, Tag, FileText, Calendar } from 'lucide-react';
-import { useNotes } from '@/hooks/note/useNotes';
 import { NotesPage } from '@/types/note/type';
 import { AntTabs } from '@/components/ui/ant/ant_taps';
-import { useSession } from 'next-auth/react';
-
+import ReactSimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+import { useTheme } from "next-themes";
+import './light.css';
+import './dark.css';
 
 export function NoteListPageContentCard(
     {
@@ -25,7 +22,7 @@ export function NoteListPageContentCard(
         handleCancel,
         isSaving,
         handleSave
-    }:{
+    }: {
         notePage: NotesPage | undefined,
         upNoteNotePage: Partial<NotesPage> | undefined,
         setUpdateNotePage: (notePage: NotesPage) => void,
@@ -35,31 +32,63 @@ export function NoteListPageContentCard(
     }
 ) {
 
+    const { resolvedTheme } = useTheme();
+
+    // 根据主题应用CSS类
+    useEffect(() => {
+        const applyTheme = () => {
+            const editorElements = document.querySelectorAll('.EasyMDEContainer .CodeMirror');
+            editorElements.forEach(editorElement => {
+                if (resolvedTheme === 'dark') {
+                    editorElement.classList.remove('light-theme');
+                    editorElement.classList.add('dark-theme');
+                } else {
+                    editorElement.classList.remove('dark-theme');
+                    editorElement.classList.add('light-theme');
+                }
+            });
+        };
+
+        // 立即应用主题
+        applyTheme();
+
+        // 监听 DOM 变化，确保新添加的编辑器也能应用主题
+        const observer = new MutationObserver(applyTheme);
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [resolvedTheme]);
+
+
+
+
     return (
-        <Card className="py-0 shadow-lg border border-border/20 overflow-hidden transition-all duration-500 hover:shadow-xl">
-            <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border/10 pt-5">
-                <CardTitle className="flex items-center gap-2 text-primary text-lg font-bold">
+        <Card className="py-0 shadow-xl border border-border/40 overflow-hidden transition-all duration-500 hover:shadow-2xl backdrop-blur-sm bg-card/80 dark:bg-card/80">
+            <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border/20 pt-6 pb-4 px-6">
+                <CardTitle className="flex items-center gap-3 text-primary text-xl font-bold">
                     <FileText className="h-7 w-7" />
                     笔记详情
                 </CardTitle>
                 {notePage && (
-                    <div>
-                        <p className="text-sm pt-2 text-muted-foreground flex items-center gap-1 mt-1">
-                            <Calendar className="h-3.5 w-3.5" />
+                    <div className="flex flex-wrap gap-4 mt-2">
+                        <p className="text-sm text-primary/70 flex items-center gap-2 bg-gradient-to-r from-primary/5 to-primary/10 px-3 py-1 rounded-lg border border-border/20">
+                            <Calendar className="h-3.5 w-3.5 " />
                             创建时间:  {new Date(notePage.dateStart || '').toLocaleDateString()}
                         </p>
-                        <p className="text-sm pt-2 text-muted-foreground flex items-center gap-1 mt-1">
-                            <Calendar className="h-3.5 w-3.5" />
+                        <p className="text-sm text-primary/70 flex items-center gap-2 bg-gradient-to-r from-primary/5 to-primary/10 px-3 py-1 rounded-lg border border-border/20">
+                            <Calendar className="h-3.5 w-3.5 " />
                             更新时间:  {new Date(notePage.dateEnd || '').toLocaleDateString()}
                         </p>
                     </div>
                 )}
             </CardHeader>
-            <CardContent className="space-y-6 p-6">
+            <CardContent className="space-y-8 p-8">
                 {/* 标题 */}
-                <div className="space-y-2">
-                    <Label htmlFor="title" className="text-base font-medium flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-primary" />
+                <div className="space-y-3">
+                    <Label htmlFor="title" className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
+                        <FileText className="h-5 w-5 text-primary/80" />
                         标题
                     </Label>
                     <Input
@@ -67,49 +96,54 @@ export function NoteListPageContentCard(
                         value={upNoteNotePage?.title || ''}
                         onChange={(e) => setUpdateNotePage({ ...notePage!, title: e.target.value })}
                         placeholder="输入笔记标题"
-                        className="text-lg h-12 border-border/50 focus:border-primary transition-all"
+                        className="text-lg h-14 border-border/40 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl px-4"
                     />
                 </div>
 
                 {/* 标签输入 */}
-                <div className="space-y-2">
-                    <Label htmlFor="title" className="text-base mb-2 font-medium flex items-center gap-2">
-                        <Tag className="h-4 w-4 text-primary" />
+                <div className="space-y-3">
+                    <Label htmlFor="title" className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
+                        <Tag className="h-5 w-5 text-primary/80" />
                         标签
                     </Label>
-                    <AntTabs defaultTags={notePage?.pageTags} onTagsChange={(tags) => setUpdateNotePage({ ...notePage!, pageTags: tags })} />
+                    <div className="border border-border/30 rounded-xl p-4 bg-gradient-to-br from-card/50 to-card/30">
+                        <AntTabs defaultTags={notePage?.pageTags} onTagsChange={(tags) => setUpdateNotePage({ ...notePage!, pageTags: tags })} />
+                    </div>
                 </div>
 
-                <Separator className="border-border/30" />
+                <Separator className="border-border/40" />
 
-                <div className="space-y-2">
-                    <Label className="text-base font-medium">笔记内容 (Markdown格式)</Label>
-                    <Textarea
-                        value={upNoteNotePage?.content || ''}
-                        onChange={(e) => setUpdateNotePage({ ...notePage!, content: e.target.value })}
-                        placeholder="输入笔记内容..."
-                        className={`
-                  min-h-[600px] font-mono text-sm resize-y
-                  border-border/50 focus:border-primary transition-all
-                  dark:bg-muted/50 bg-background
-                `}
-                    />
+                <div className="space-y-3">
+                    <Label className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
+                        笔记内容 (Markdown格式)
+                    </Label>
+                    <div className="max-h-[600px] overflow-auto
+                     bg-sky-100/40 dark:bg-slate-200/20"
+                    >
+                        <ReactSimpleMDE
+                            value={upNoteNotePage?.content || ''}
+                            onChange={(value) => setUpdateNotePage({ ...notePage!, content: value! })}
+                            className="bg-transparent"
+
+                        />
+
+                    </div>
                 </div>
 
                 {/* 操作按钮 */}
-                <div className="flex flex-wrap justify-end gap-3 pt-4">
+                <div className="flex flex-wrap justify-end gap-4 pt-6">
                     <Button
                         variant="ghost"
                         onClick={handleCancel}
                         disabled={isSaving}
-                        className="min-w-[100px] border border-border/30 hover:bg-background/80"
+                        className="min-w-[120px] border border-border/40 hover:bg-background/80 hover:border-primary/30 transition-all duration-300 h-11 rounded-xl"
                     >
                         取消
                     </Button>
                     <Button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="min-w-[100px] bg-primary hover:bg-primary/90 transition-all flex items-center gap-2"
+                        className="min-w-[120px] bg-sky-400/70 dark:bg-slate-400/90 hover:from-primary/90 hover:to-primary transition-all duration-300 flex items-center gap-2 h-11 rounded-xl shadow-lg hover:shadow-xl"
                     >
                         <Save className="h-4 w-4" />
                         {isSaving ? '保存中...' : '保存'}

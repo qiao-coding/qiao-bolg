@@ -1,0 +1,14 @@
+.EasyMDEContainer .CodeMirror.light-theme {
+    background-color: rgba(251, 253, 255, 0.2);
+    /* bg-sky-200/60，60% 透明背景 */
+    color: black;
+}
+
+.EasyMDEContainer .CodeMirror.light-theme .cm-comment {
+    background-color: transparent;
+}
+
+.CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word)  {
+    background-color: transparent;
+
+}

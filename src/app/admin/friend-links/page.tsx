@@ -170,6 +170,7 @@ const FriendLinksManagement= () => {
         }
     };
 
+    // 切换全选
     const toggleSelectAll = () => {
         if (selectedItems.length === filteredAndSearchedItems.length) {
             setSelectedItems([]);
@@ -178,6 +179,7 @@ const FriendLinksManagement= () => {
         }
     };
 
+    // 切换单个友链选择
     const toggleSelectItem = (id: number) => {
         if (selectedItems.includes(id)) {
             setSelectedItems(selectedItems.filter(itemId => itemId !== id));
@@ -245,6 +247,7 @@ const FriendLinksManagement= () => {
         }
     };
 
+    // 删除友链(DELETE)
     const handleDeleteItem = async () => {
         try {
             if (itemToDelete !== null) {
@@ -268,6 +271,7 @@ const FriendLinksManagement= () => {
         }
     };
 
+    // 打开编辑友链弹窗
     const openEditDialog = (friend: FriendType) => {
         setEditItem(friend);
         setEditFriend({
@@ -280,6 +284,7 @@ const FriendLinksManagement= () => {
         setIsEditDialogOpen(true);
     };
 
+    // 打开删除友链弹窗
     const openDeleteDialog = (id: number) => {
         setItemToDelete(id);
         setIsDeleteDialogOpen(true);
@@ -287,7 +292,7 @@ const FriendLinksManagement= () => {
 
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen  bg-sky-100/60 dark:bg-slate-600/80 text-foreground">
             <main className="p-6">
                 <FriendLinksStatsCards friends={friends} />
 
@@ -307,7 +312,10 @@ const FriendLinksManagement= () => {
                             </Link>
                             <Button
                                 size="sm"
-                                className="gap-1 p-4 text-white"
+                                className="gap-1 p-4 text-white
+                                 bg-sky-400/60 dark:bg-slate-500
+                                 hover:bg-sky-400/80 dark:hover:bg-slate-400
+                                 "
                                 onClick={() => setIsAddDialogOpen(true)}
                             >
                                 <Plus className="h-4 w-4" />

@@ -4,13 +4,16 @@ import HomeArticles from "@/components/features/home/homeArticles";
 
 
 
- function Home() {
+function Home() {
   return (
     <>
-      <main className="min-h-screen bg-cover bg-center">
+
+      <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60">
+     
         <NextRouter>
           <HomeZhuyepage />
-          <article id="articles-section" className={`dark:bg-gray-900/60 bg-white/60 backdrop-blur-sm py-16 pb-30`}>
+
+          <article id="articles-section" className={`  backdrop-blur-sm py-16 pb-30`}>
             <HomeArticles />
           </article>
         </NextRouter>

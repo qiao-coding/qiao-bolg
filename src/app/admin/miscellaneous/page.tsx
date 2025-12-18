@@ -10,6 +10,7 @@ import { MiscellaneousTable } from '@/components/features/admin/miscellaneous/Mi
 import { MiscellaneousAddDialog, MiscellaneousEditDialog, MiscellaneousDeleteDialog } from '@/components/features/admin/miscellaneous/MiscellaneousDialogs';
 import { miscellaneousType } from '@/types/miscellaneous/type';
 import { useMiscellaneous } from '@/hooks/miscellaneous/useMiscellaneous';
+import { motion } from 'framer-motion';
 
 interface Miscellaneous {
   id: number;
@@ -85,8 +86,6 @@ const MiscellaneousManagement: React.FC = () => {
     }
   };
 
-
-
   //添加说说
   const handleAddItem = async () => {
     try {
@@ -100,12 +99,9 @@ const MiscellaneousManagement: React.FC = () => {
         setIsAddDialogOpen(false);
         await useMiscellaneous.postMiscellaneous(newItem)
         setNewContent('');
-
       }
-
     } catch (error) {
       return console.error('添加新说说失败:', error);
-
     }
   };
 
@@ -132,11 +128,8 @@ const MiscellaneousManagement: React.FC = () => {
       await useMiscellaneous.putMiscellaneous(newEditItem)
       setEditItem(null);
       setEditContent('');
-
-
     } catch (error) {
       return console.error('编辑说说失败:', error);
-
     }
   };
 
@@ -151,68 +144,77 @@ const MiscellaneousManagement: React.FC = () => {
         await useMiscellaneous.deleteMiscellaneous(itemToDelete)
         setItemToDelete(null);
       }
-
-
     } catch (error) {
-
+      console.error('删除说说失败:', error);
     }
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <motion.div 
+      className="min-h-screen bg-sky-100/60 dark:bg-slate-600/80 text-foreground"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       <main className="p-6">
         <MiscellaneousStatsCards miscellaneous={miscellaneous} />
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <div>
-              <CardTitle>说说列表</CardTitle>
-            </div>
-            <Button
-              size="sm"
-              className="gap-1"
-              onClick={() => setIsAddDialogOpen(true)}
-            >
-              <Plus className="h-4 w-4" />
-              <span>发布说说</span>
-            </Button>
-          </CardHeader>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle>说说列表</CardTitle>
+              </div>
+              <Button
+                size="sm"
+                className="gap-1 hover:shadow-md transition-shadow"
+                onClick={() => setIsAddDialogOpen(true)}
+              >
+                <Plus className="h-4 w-4" />
+                <span>发布说说</span>
+              </Button>
+            </CardHeader>
 
-          <CardContent>
-            <MiscellaneousSearch
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
-            />
+            <CardContent>
+              <MiscellaneousSearch
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+              />
 
-            <MiscellaneousTable
-              items={sortedItems}
-              selectedItems={selectedItems}
-              sortField={sortField}
-              sortDirection={sortDirection}
-              onToggleSelectAll={toggleSelectAll}
-              onToggleSelectItem={(id) => {
-                if (selectedItems.includes(id)) {
-                  setSelectedItems(selectedItems.filter(itemId => itemId !== id));
-                } else {
-                  setSelectedItems([...selectedItems, id]);
-                }
-              }}
-              onEdit={(item) => {
-                setEditItem(item);
-                setEditContent(item.content);
-                setIsEditDialogOpen(true);
-              }}
-              onDelete={(id) => {
-                setItemToDelete(id);
-                setIsDeleteDialogOpen(true);
-              }}
-              onSortChange={() => {
-                setSortField('date');
-                setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-              }}
-            />
-          </CardContent>
-        </Card>
+              <MiscellaneousTable
+                items={sortedItems}
+                selectedItems={selectedItems}
+                sortField={sortField}
+                sortDirection={sortDirection}
+                onToggleSelectAll={toggleSelectAll}
+                onToggleSelectItem={(id) => {
+                  if (selectedItems.includes(id)) {
+                    setSelectedItems(selectedItems.filter(itemId => itemId !== id));
+                  } else {
+                    setSelectedItems([...selectedItems, id]);
+                  }
+                }}
+                onEdit={(item) => {
+                  setEditItem(item);
+                  setEditContent(item.content);
+                  setIsEditDialogOpen(true);
+                }}
+                onDelete={(id) => {
+                  setItemToDelete(id);
+                  setIsDeleteDialogOpen(true);
+                }}
+                onSortChange={() => {
+                  setSortField('date');
+                  setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+                }}
+              />
+            </CardContent>
+          </Card>
+        </motion.div>
       </main>
 
       <MiscellaneousAddDialog
@@ -236,7 +238,7 @@ const MiscellaneousManagement: React.FC = () => {
         onOpenChange={setIsDeleteDialogOpen}
         onConfirm={handleDeleteItem}
       />
-    </div>
+    </motion.div>
   );
 };
 

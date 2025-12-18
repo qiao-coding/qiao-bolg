@@ -3,6 +3,7 @@ import { MoreHorizontal, Edit3, Trash2, Calendar, ChevronUp, ChevronDown } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcnComponents/table';
 import { Button } from '@/components/ui/shadcnComponents/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/dropdown-menu';
+import { motion } from 'framer-motion';
 
 interface Miscellaneous {
   id: number;
@@ -39,14 +40,14 @@ export function MiscellaneousTable({
             <TableHead className="w-[40px]">
               <input
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                 checked={selectedItems.length > 0 && selectedItems.length === items.length}
                 onChange={onToggleSelectAll}
               />
             </TableHead>
             <TableHead className="w-full">内容</TableHead>
             <TableHead
-              className="cursor-pointer"
+              className="cursor-pointer hover:bg-muted/50 transition-colors"
               onClick={onSortChange}
             >
               <div className="flex items-center gap-1">
@@ -71,11 +72,17 @@ export function MiscellaneousTable({
             </TableRow>
           ) : (
             items.map((item) => (
-              <TableRow key={item.id}>
+              <motion.tr 
+                key={item.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="hover:bg-muted/50 transition-colors"
+              >
                 <TableCell>
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                     checked={selectedItems.includes(item.id)}
                     onChange={() => onToggleSelectItem(item.id)}
                   />
@@ -85,20 +92,21 @@ export function MiscellaneousTable({
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
                         <span className="sr-only">打开菜单</span>
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" className="w-24">
                       <DropdownMenuItem
                         onClick={() => onEdit(item)}
+                        className="cursor-pointer hover:bg-muted"
                       >
                         <Edit3 className="h-4 w-4 mr-2" />
                         <span>编辑</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        className="text-red-600 dark:text-red-400"
+                        className="text-red-600 dark:text-red-400 cursor-pointer hover:bg-muted"
                         onClick={() => onDelete(item.id)}
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
@@ -107,7 +115,7 @@ export function MiscellaneousTable({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
-              </TableRow>
+              </motion.tr>
             ))
           )}
         </TableBody>

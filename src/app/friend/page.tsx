@@ -10,6 +10,11 @@ import { Button } from '@/components/ui/shadcnComponents/button';
 import { useTheme } from 'next-themes';
 import { useFriend } from '@/hooks/friend/useFriend';
 import { FriendType } from '@/types/friend/type';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/shadcnComponents/dialog';
+import { Label } from '@radix-ui/react-dropdown-menu';
+import { RotatingCube } from '@/components/features/mol/RotatingCube';
+import { motion } from 'framer-motion';
+
 
 
 const Friend = () => {
@@ -62,8 +67,8 @@ const Friend = () => {
         status: false
       }
 
-      const res=await useFriend.postFriend(newFriend)
-      if(res){
+      const res = await useFriend.postFriend(newFriend)
+      if (res) {
         alert('提交友链成功！');
         setFriendData({
           id: 0,
@@ -75,7 +80,7 @@ const Friend = () => {
           updatedAt: '',
           status: false
         })
-      
+
       }
 
     } catch (error) {
@@ -88,6 +93,7 @@ const Friend = () => {
   return (
     <TechBackgroundNoGrid>
       <NextRouter>
+
         <AnimatedContent
           distance={150}
           direction="vertical"
@@ -102,108 +108,129 @@ const Friend = () => {
             <Title>
               友链
             </Title>
-
-            <div className="mb-8 text-center max-w-2xl mx-auto">
-              <p className="text-[#64748B] text-base">
-                这里是我们的博客链接，欢迎访问交流。
-                也欢迎你前来交换友链，共同进步吧，加油！
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-6 lg:w-[50vw] m-auto p-4 ">
-              {friends.length > 0 ? (
-                friends.map((friend) => (
-                  <Link
-                    key={friend.id}
-                    href={friend.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`group ${theme === 'light' ? 'bg-white' : 'bg-[#1F2937]'} hover:bg-transparent transition-colors rounded-xl shadow-[0_2px_12px_rgba(59,130,246,0.07)] hover:shadow-[0_12px_16px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden border  ${theme === 'light' ? 'border-[#D1D5DB]' : 'border-gray-700'}`}
-                  >
-                    <div className="p-6 sm:p-7 ">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-50 flex items-center justify-center">
-                          {friend.avatar ? (
-                            <img        
-                              src={friend.avatar}
-                              alt={friend.name}
-                              width={40}
-                              height={40}
-                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            {friends.length > 0 ? (
+              <motion.article
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+               className="">
+                <div className="mb-8 text-center max-w-2xl mx-auto">
+                  <p className="text-[#64748B] text-base">
+                    这里是我们的博客链接，欢迎访问交流。
+                    也欢迎你前来交换友链，共同进步吧，加油！
+                  </p>
+                </div>
+                {/* 添加友链弹窗 */}
+                <section className='flex justify-center mb-8'>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className='border border-sky-300/80 bg-sky-300/80 text-white'>添加友链</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <article className="">
+                        <div className=" m-auto  pb-5 ">
+                          <span className="text-2xl font-bold text-[#64748B] flex justify-center p-4">
+                            友友链
+                          </span>
+                          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                            <Input
+                              placeholder="站点名称"
+                              value={friendData.name}
+                              onChange={(e) => setFriendData({ ...friendData, name: e.target.value })}
+                              className="w-full p-3 border border-sky-300 focus:shadow-sky-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
                             />
-                          ) : (
-                            <span className="text-blue-500 font-bold">
-                              {friend.name.charAt(0)}
-                            </span>
-                          )}
+                            <Input
+                              placeholder="站点链接"
+                              value={friendData.url}
+                              onChange={(e) => setFriendData({ ...friendData, url: e.target.value })}
+                              className="w-full p-3 border border-sky-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                            />
+                            <Input
+                              placeholder="站点描述"
+                              value={friendData.bio}
+                              onChange={(e) => setFriendData({ ...friendData, bio: e.target.value })}
+                              className="w-full p-3 border border-sky-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                            />
+                            <Input
+                              placeholder="LOGO (URL)"
+                              value={friendData.avatar}
+                              onChange={(e) => setFriendData({ ...friendData, avatar: e.target.value })}
+                              className="w-full p-3 border border-sky-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                            />
+                            <div className="flex justify-end">
+                              <Button
+                                variant="default"
+                                className="w-20 p-3 text-sky-300 font-bold bg-transparent rounded-md hover:bg-sky-400 hover:text-white transition-colors duration-300 cursor-pointer border border-sky-300"
+                              >
+                                提交
+                              </Button>
+                            </div>
+                          </form>
                         </div>
+                      </article>
+                    </DialogContent>
+                  </Dialog>
+                </section>
 
-                        <h3 className="text-lg font-semibold  transition-colors duration-300">
-                          {friend.name}
-                        </h3>
-                      </div>
 
-                      <p className={`text-[#64748B] mb-5 line-clamp-2 text-sm leading-relaxed ${theme === 'light' ? 'text-[#64748B]' : 'text-[#D1D5DB]'}`}>
-                        {friend.bio || '暂无简介'}
-                      </p>
 
-                      <div className="flex justify-end items-center text-xs pt-3 border-t border-[#EFF6FF]">
-                        <span className=" opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          {friend.name === 'HaoWhite' ? '已经在博客,那... , 你喜欢就好 →' : `前往${friend.name}的基地 →`}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <div className="col-span-full bg-white rounded-xl shadow-[0_2px_12px_rgba(59,130,246,0.07)] p-8 text-center">
-                  <h3 className="text-xl font-semibold text-[#64748B] mb-3">
-                    暂无友链
-                  </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-6 lg:w-[50vw] m-auto p-4 ">
+                  {friends.map((friend) => (
+                      <Link
+                        key={friend.id}
+                        href={friend.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`group ${theme === 'light' ? 'bg-white' : 'bg-[#1F2937]'} hover:bg-transparent transition-colors rounded-xl shadow-[0_2px_12px_rgba(59,130,246,0.07)] hover:shadow-[0_12px_16px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden border  ${theme === 'light' ? 'border-[#D1D5DB]' : 'border-gray-700'}`}
+                      >
+                        <div className="p-6 sm:p-7 ">
+                          <div className="flex items-center gap-4 mb-4">
+                            <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-50 flex items-center justify-center">
+                              {friend.avatar ? (
+                                <img
+                                  src={friend.avatar}
+                                  alt={friend.name}
+                                  width={40}
+                                  height={40}
+                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                />
+                              ) : (
+                                <span className="text-blue-500 font-bold">
+                                  {friend.name.charAt(0)}
+                                </span>
+                              )}
+                            </div>
+
+                            <h3 className="text-lg font-semibold  transition-colors duration-300">
+                              {friend.name}
+                            </h3>
+                          </div>
+
+                          <p className={`text-[#64748B] mb-5 line-clamp-2 text-sm leading-relaxed ${theme === 'light' ? 'text-[#64748B]' : 'text-[#D1D5DB]'}`}>
+                            {friend.bio || '暂无简介'}
+                          </p>
+
+                          <div className="flex justify-end items-center text-xs pt-3 border-t border-[#EFF6FF]">
+                            <span className=" opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              {friend.name === 'HaoWhite' ? '已经在博客,那... , 你喜欢就好 →' : `前往${friend.name}的基地 →`}
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))
+                  }
                 </div>
-              )}
-            </div>
-
+              </motion.article>
+            ) : (
+              <div className="flex flex-col justify-center items-center ">
+                <RotatingCube />
+                <p className="text-3xl text-sky-400 dark:text-white font-bold">正在加载友链...</p>
+              </div>
+            )}
 
           </article>
-          <article className='pb-40'>
-            <div className='w-120 m-auto border pb-5 border-[#D1D5DB] rounded-md p-4 bg-white/60'>
-              <span className='text-2xl font-bold text-[#64748B] flex justify-center p-4'>
-                友友链
-              </span>
-              <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-                <Input
-                  placeholder="站点名称"
-                  onChange={(e)=>friendData?setFriendData({...friendData,name:e.target.value}):''}
-                  
-                  className="w-full p-3 border border-sky-300  focus:shadow-sky-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
-                />
-                <Input
-                  placeholder="站点链接"
-                  onChange={(e)=>friendData?setFriendData({...friendData,url:e.target.value}):''}
-                  className="w-full p-3 border border-sky-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
-                />
-                <Input
-                  placeholder="站点描述"
-                  onChange={(e)=>friendData?setFriendData({...friendData,bio:e.target.value}):''}
-                  className="w-full p-3 border border-sky-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
-                />
-                <Input
-                  placeholder="LOGO (URL)"
-                  onChange={(e)=>friendData?setFriendData({...friendData,avatar:e.target.value}):''}
-                  className="w-full p-3 border border-sky-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
-                />
-                <div className=' flex justify-end'>
-                  <Button variant="default" className="w-20 p-3 text-sky-300 font-bold bg-transparent rounded-md hover:bg-sky-400 hover:text-white transition-colors duration-300 cursor-pointer border border-sky-300">
-                    提交
-                  </Button>
 
-                </div>
-
-              </form>
-
-            </div>
-          </article>
         </AnimatedContent>
       </NextRouter>
     </TechBackgroundNoGrid>

@@ -32,28 +32,34 @@ export function NoteHeaderCard({
     ]
 
     return (
-        <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+        <div
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
         >
             {noteHeaderData.map((item, index) => (
-                <Card key={index}>
+                <Card 
+                    key={index}
+                    className="
+                     bg-white/80 dark:bg-card/80
+                      border border-border/40 shadow-lg 
+                     "
+                >
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-muted-foreground">{item.title}</p>
-                                <h3 className="text-2xl font-bold mt-1">{item.value}</h3>
+                                <p className="text-sm font-medium text-muted-foreground mb-1">{item.title}</p>
+                                <h3 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent group-hover:from-primary/90 group-hover:to-primary transition-all duration-300">
+                                    {item.value}
+                                </h3>
                             </div>
+                            <div className="p-3 rounded-full bg-gradient-to-br from-primary/15 to-primary/10 group-hover:from-primary/20 group-hover:to-primary/15 transition-all duration-300">
                                 {item.icon}
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
 
             ))}
-
-        </motion.div>
+        </div>
     )
 
 }

@@ -52,79 +52,83 @@ export function NoteCategoryCardXiaLa({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                     <MoreVertical className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-40 rounded-lg border border-border bg-popover p-1 shadow-md">
 
-                {/*  编辑 */}
+                {/* 编辑 */}
                 <Dialog open={isPutLoading} onOpenChange={setIsPutLoading}>
                     <DialogTrigger asChild>
                         <span
                             onClick={() => setPutNotesPage({ id: note.id, title: note.title })}
-                            className='flex items-center gap-2 pt-1 px-2 text-sm'>
-                            <Edit className="mr-2 h-4 w-4" />
+                            className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                        >
+                            <Edit className="h-4 w-4" />
                             编辑
                         </span>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className="rounded-lg">
                         <DialogHeader>
                             <DialogTitle>编辑笔记</DialogTitle>
                         </DialogHeader>
-                        <form onSubmit={(e) => {
-                            e.preventDefault();
-                            handleUpdateNote(note.id);
-                        }}>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleUpdateNote(note.id);
+                            }}
+                        >
                             <div className="py-4">
-                                <label htmlFor="title" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                <label
+                                    htmlFor="title"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
                                     标题
                                 </label>
                                 <Input
                                     id="title"
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                     placeholder="请输入笔记标题"
                                     value={putNotesPage?.title || ''}
-                                    onChange={(e) => {
-                                        setPutNotesPage({ ...putNotesPage, title: e.target.value })
-                                    }}
+                                    onChange={(e) => setPutNotesPage({ ...putNotesPage, title: e.target.value })}
+                                    className="mt-2"
                                 />
                             </div>
                             <DialogFooter>
-                                <Button
-                                    type="submit"
-                                >保存</Button>
+                                <Button type="submit">保存</Button>
                             </DialogFooter>
                         </form>
                     </DialogContent>
                 </Dialog>
 
-
                 {/* 删除 */}
                 <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                     <DialogTrigger asChild>
-                        <span
-                            className='flex items-center gap-2 pt-1 px-2 text-sm text-destructive'>
-                            <Trash2 className="mr-2 h-4 w-4" />
+                        <span className="flex cursor-pointer
+                         items-center gap-2 rounded px-2 py-1.5 text-sm
+                          text-destructive hover:bg-destructive 
+                          hover:text-white
+                          ">
+                            <Trash2 className="h-4 w-4" />
                             删除
                         </span>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className="rounded-lg">
                         <DialogHeader>
                             <DialogTitle>确认删除</DialogTitle>
                         </DialogHeader>
-                        <form onSubmit={(e) => {
-                            e.preventDefault();
-                            handleDeleteNote(note.id);
-                        }}>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleDeleteNote(note.id);
+                            }}
+                        >
                             <div className="py-4 text-sm text-muted-foreground">
                                 确定要删除 [ {note.title} ] 笔记分类吗？此操作不可恢复。
                             </div>
                             <DialogFooter>
-                                <Button
-                                    variant="destructive"
-                                >
+                                <Button variant="destructive" type="submit">
                                     删除
                                 </Button>
                             </DialogFooter>

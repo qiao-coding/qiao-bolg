@@ -1,6 +1,8 @@
 'use client'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/shadcnComponents/dialog';
 import { Button } from '@/components/ui/shadcnComponents/button';
+import { Textarea } from '@/components/ui/shadcnComponents/textarea';
+import { motion } from 'framer-motion';
 
 export function MiscellaneousAddDialog({
   open,
@@ -18,25 +20,31 @@ export function MiscellaneousAddDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>发布新说说</DialogTitle>
-        </DialogHeader>
-        <div className="mt-4">
-          <textarea
-            placeholder="请输入说说内容..."
-            className="w-full p-3 border rounded-md resize-none h-32"
-            value={content}
-            onChange={(e) => onContentChange(e.target.value)}
-          />
-        </div>
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            取消
-          </Button>
-          <Button onClick={onSubmit} disabled={!content.trim()}>
-            发布
-          </Button>
-        </DialogFooter>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <DialogHeader>
+            <DialogTitle>发布新说说</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <Textarea
+              placeholder="请输入说说内容..."
+              className="resize-none min-h-[120px]"
+              value={content}
+              onChange={(e) => onContentChange(e.target.value)}
+            />
+          </div>
+          <DialogFooter className="mt-6">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              取消
+            </Button>
+            <Button onClick={onSubmit} disabled={!content.trim()}>
+              发布
+            </Button>
+          </DialogFooter>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );
@@ -58,25 +66,31 @@ export function MiscellaneousEditDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>编辑说说</DialogTitle>
-        </DialogHeader>
-        <div className="mt-4">
-          <textarea
-            placeholder="请输入说说内容..."
-            className="w-full p-3 border rounded-md resize-none h-32"
-            value={content}
-            onChange={(e) => onContentChange(e.target.value)}
-          />
-        </div>
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            取消
-          </Button>
-          <Button onClick={onSubmit} disabled={!content.trim()}>
-            保存
-          </Button>
-        </DialogFooter>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <DialogHeader>
+            <DialogTitle>编辑说说</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <Textarea
+              placeholder="请输入说说内容..."
+              className="resize-none min-h-[120px]"
+              value={content}
+              onChange={(e) => onContentChange(e.target.value)}
+            />
+          </div>
+          <DialogFooter className="mt-6">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              取消
+            </Button>
+            <Button onClick={onSubmit} disabled={!content.trim()}>
+              保存
+            </Button>
+          </DialogFooter>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );
@@ -94,20 +108,26 @@ export function MiscellaneousDeleteDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>确认删除</DialogTitle>
-          <DialogDescription>
-            此操作不可撤销，删除后说说将无法恢复。
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            取消
-          </Button>
-          <Button variant="destructive" onClick={onConfirm}>
-            删除
-          </Button>
-        </DialogFooter>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <DialogHeader>
+            <DialogTitle>确认删除</DialogTitle>
+            <DialogDescription>
+              此操作不可撤销，删除后说说将无法恢复。
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-6">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              取消
+            </Button>
+            <Button variant="destructive" onClick={onConfirm}>
+              删除
+            </Button>
+          </DialogFooter>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );

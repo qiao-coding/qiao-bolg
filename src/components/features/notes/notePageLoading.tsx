@@ -1,6 +1,6 @@
 'use client'
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
-import LoadingPage from '@/components/ui/shadcnComponents/loadingPage';
+import LoadingPage from '@/components/ui/public/loadingPage';
 
 export function NotePageLoading() {
   return (

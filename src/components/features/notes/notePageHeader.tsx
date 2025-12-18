@@ -1,21 +1,45 @@
 'use client'
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Image, Palette } from 'lucide-react';
 import ThemePage from '@/components/ui/public/themePage';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/dropdown-menu';
+import { Button } from '@/components/ui/shadcnComponents/button';
+import { Printer, Share2, MoreHorizontal } from 'lucide-react';
 
-export function NotePageHeader({ notesID }: { notesID: string }) {
+
+
+export function NotePageHeader({ setIsImageBackground }: { setIsImageBackground: (isImageBackground: boolean) => void }) {
   return (
-    <header className="sticky top-0 z-30 border-b shadow-sm backdrop-blur-sm transition-all duration-300 bg-white/90 border-[#EDEFF2] dark:bg-gray-900/90 dark:border-gray-800">
+    <header className="sticky top-0 z-30 border-b shadow-sm
+     backdrop-blur-sm transition-all duration-300 
+     bg-sky-50 dark:bg-slate-700/80 border-border">
       <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
         <Link
-          href={`/notes/${notesID}`}
-          className="flex items-center transition-colors text-[#8A94A6] hover:text-[#4A6FA5] dark:text-gray-400 dark:hover:text-blue-400"
+          href="#" onClick={(e) => { e.preventDefault(); window.history.back(); }}
+          className="flex items-center transition-colors text-muted-foreground hover:text-primary"
         >
           <ArrowLeft className="mr-2 w-5 h-5" />
           <span>返回列表</span>
         </Link>
 
         <div className="flex items-center gap-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="px-2">
+              切换背景
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setIsImageBackground(false)}>
+              <Palette className="mr-2 w-4 h-4" />
+              纯色背景
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setIsImageBackground(true)}>
+              <Image className="mr-2 w-4 h-4" />
+              图片背景
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
           <ThemePage />
         </div>
       </div>

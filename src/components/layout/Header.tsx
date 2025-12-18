@@ -79,10 +79,10 @@ const Header = () => {
 
   return (
     <div
-      className={`w-full fixed z-50 mr-5 duration-700
+      className={` fixed z-50 mr-5 duration-700 mx-auto rounded-full left-1/2 -translate-x-1/2
         ${HeaderStyle
-          ? "h-15 bottom-[94vh] header-scrolled"
-          : "h-18 bottom-[92vh] header-normal"
+          ? "h-18 top-2 header-scrolled bg-sky-300/80 dark:bg-gray-700/80 w-[98vw]"
+          : "h-18  top-0 header-normal w-full"
         }`}
     >
       <div
@@ -91,12 +91,13 @@ const Header = () => {
      
     `}
       >
-        <div className="navbar-start relative">
+        <div className={`navbar-start relative mx-auto duration-700 ${!HeaderStyle ? "ml-0" : "ml-5"}`}>
           <div className="dropdown">
             <div
               tabIndex={0}
               role="button"
-              className="cursor-target btn btn-ghost lg:hidden "
+              className="cursor-target btn btn-ghost 
+              hover:bg-sky-300/80 hover:dark:bg-gray-700/80 lg:hidden "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +117,7 @@ const Header = () => {
             </div>
             <ul
               tabIndex={0}
-              className={`${isDark ? 'bg-gray-700/80' : 'bg-white-700/80'} menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52  shadow bg-base-100 mt-4`}
+              className={`bg-white dark:bg-gray-700/80 menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52  shadow bg-base-100 mt-4`}
             >
               {HbtnStyle.map((item) => (
                 <li key={item.id}>
@@ -127,7 +128,7 @@ const Header = () => {
               ))}
             </ul>
           </div>
-          <a className={`p-2 font-bold text-xl cursor-target `}>
+          <a className={`p-2 font-bold text-xl cursor-target ${!HeaderStyle ? "text-[20px]" : "text-[19px]"}`}>
             HaoWhite
           </a>
         </div>
@@ -181,7 +182,7 @@ const Header = () => {
             ))}
           </ul>
         </div>
-        <div className="navbar-end flex items-center gap-4">
+        <div className={`navbar-end flex items-center gap-4 duration-700 ${!HeaderStyle ? "mr-0" : "mr-5"}`}>
           <label className="swap swap-rotate mr-2 cursor-target ">
             <input
               type="checkbox"
@@ -210,11 +211,17 @@ const Header = () => {
           <div>
             {session ? (
               <span>
-                <div className="dropdown dropdown-start p-2 ">
+                <div className="dropdown dropdown-start p-2">
                   <div
                     tabIndex={0}
                     role="button"
-                    className="btn btn-circle relativep-0 cursor-target"
+                    className="btn btn-circle cursor-target 
+                    border-2
+                     border-sky-400 
+                     dark:border-slate-600
+                     hover:dark:border-sky-500 
+                     hover:border-slate-600/40 
+                     dark:hover:border-sky-500 transition-all duration-300 avatar"
                   >
                     <Image
                       src={session.user?.image || '/default-avatar.png'}
@@ -225,18 +232,26 @@ const Header = () => {
                     />
                   </div>
 
-                  <div className="relative right-20 ">
+                  <div className="relative right-20">
                     <ul
                       tabIndex={0}
-                      className="dropdown-content  menu bg-base-100 rounded-box z-1 w-28  shadow-sm mt-2"
+                      style={{
+                        backgroundColor: !isDark ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)',
+                        backdropFilter: 'blur(10px)',
+                      }}
+                      className="dropdown-content menu z-1 w-28 shadow-sm mt-2 rounded-box border border-sky-200 dark:border-sky-800"
                     >
-                      <li >
-                        <Link href="/adminLogin" className="cursor-target">后台管理</Link>
+                      <li>
+                        <Link href="/adminLogin" className="cursor-target hover:bg-gray-100 dark:hover:bg-gray-700">
+                          后台管理
+                        </Link>
                       </li>
                       <li>
                         <button
-                        onClick={() => signOut()}
-                          type="submit" className="text-red-500 cursor-target">
+                          onClick={() => signOut()}
+                          type="submit"
+                          className="text-red-500 dark:text-red-400 cursor-target hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                        >
                           退出登录？
                         </button>
                       </li>

@@ -74,15 +74,7 @@ export function FriendLinksTable({
             <TableHead className="w-[150px]">友链名称</TableHead>
             <TableHead className="hidden md:table-cell">URL</TableHead>
             <TableHead className="hidden lg:table-cell max-w-[200px]">简介</TableHead>
-            <TableHead
-              className="w-[100px] cursor-pointer"
-              onClick={() => onSortChange('status')}
-            >
-              <div className="flex items-center gap-1">
-                {renderSortIcon('status')}
-                状态
-              </div>
-            </TableHead>
+
             <TableHead
               className="w-[150px] cursor-pointer"
               onClick={() => onSortChange('createdAt')}
@@ -139,21 +131,6 @@ export function FriendLinksTable({
               <TableCell className="hidden lg:table-cell text-slate-500 dark:text-slate-400 line-clamp-2">
                 {friend.bio || '暂无简介'}
               </TableCell>
-              <TableCell>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id={`status-${friend.id}`}
-                    checked={friend.status}
-                    onCheckedChange={() => onToggleStatus(friend.id)}
-                  />
-                  <label
-                    htmlFor={`status-${friend.id}`}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-slate-600 dark:text-slate-400"
-                  >
-                    {friend.status ? '激活' : '停用'}
-                  </label>
-                </div>
-              </TableCell>
               <TableCell className="text-slate-500 dark:text-slate-400 text-sm">
                 {formatDate(friend.createdAt)}
               </TableCell>
@@ -176,16 +153,6 @@ export function FriendLinksTable({
                     >
                       <Edit3 className="h-4 w-4 mr-2" />
                       <span>编辑</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => onToggleStatus(friend.id)}
-                      className="cursor-pointer"
-                    >
-                      {friend.status ? (
-                        <> <Circle className="h-4 w-4 mr-2" /> <span>停用</span> </>
-                      ) : (
-                        <> <CheckCircle2 className="h-4 w-4 mr-2" /> <span>激活</span> </>
-                      )}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => onDelete(friend.id)}

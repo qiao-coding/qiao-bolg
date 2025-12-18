@@ -22,7 +22,10 @@ export default function NotesSideber() {
   ]
 
   return (
-    <div className="hidden lg:block lg:w-[200px] xl:w-[250px] bg-white dark:bg-gray-800/90 rounded-2xl shadow-sm dark:shadow-lg dark:shadow-gray-900/20 p-6 sticky top-24 self-start dark:border dark:border-gray-700">
+    <div className="hidden lg:block 
+    lg:w-[200px] xl:w-[250px] 
+    bg-white dark:bg-gray-800/90
+     rounded-2xl shadow-sm dark:shadow-lg dark:shadow-gray-900/20 p-6 sticky top-24 self-start dark:border dark:border-gray-700">
       <div className="flex flex-col items-center mb-6">
         <div className="relative mb-5">
           <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg dark:shadow-gray-900/50">

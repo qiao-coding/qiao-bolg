@@ -5,12 +5,11 @@ import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/shadcnComponents/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/shadcnComponents/alert';
-import {  ArrowLeft, FileText } from 'lucide-react';
+import { ArrowLeft, FileText } from 'lucide-react';
 import { useNotes } from '@/hooks/note/useNotes';
 import { NotesPage } from '@/types/note/type';
 import { useSession } from 'next-auth/react';
 import { NoteListPageContentCard } from '@/components/features/admin/notes/noteList/noteListPage/ContentCard';
-import LoadingPage from '@/components/ui/shadcnComponents/loadingPage';
 
 
 const NoteEditPage = () => {
@@ -24,7 +23,7 @@ const NoteEditPage = () => {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
 
   const [upNoteNotePage, setUpdateNotePage] = useState<NotesPage | null>(null);
-  const {data:session}=useSession()
+  const { data: session } = useSession()
 
 
 
@@ -85,7 +84,7 @@ const NoteEditPage = () => {
       if (!notePage) return;
       const res = await useNotes.putNotePage(newNotePage);
 
-      
+
       if (!res) {
         return
       }
@@ -112,7 +111,9 @@ const NoteEditPage = () => {
   // 加载状态
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6 flex flex-col items-center justify-center">
+      <div className="min-h-screen      
+      bg-sky-200/60 dark:bg-slate-600/80
+      p-6 flex flex-col items-center justify-center">
         <Card className="w-full py-0 max-w-4xl shadow-lg border border-border/20 overflow-hidden transition-all duration-500 hover:shadow-xl">
           <CardHeader className="bg-gradient-to-r py-6 from-primary/10 to-primary/5 border-b border-border/10">
             <CardTitle className="flex items-center gap-2 text-primary">
@@ -150,52 +151,51 @@ const NoteEditPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6 transition-colors duration-300 max-w-6xl mx-auto">
-        {/* 页面标题栏 */}
-        <header className="flex items-center  mb-6">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleCancel}
-              className="rounded-full hover:bg-background/80 hover:text-primary
-              ml-12"
-            >
-              <ArrowLeft className="h-5 w-5" />
-              <h1 className="text-2xl font-bold text-primary">编辑笔记</h1>
-            </Button>
-          </div>
+    <div className="min-h-screen      bg-sky-200/60 dark:bg-slate-600/80
+ backdrop-blur-sm text-foreground p-4 sm:p-6 transition-colors duration-300  mx-auto">
+      {/* 页面标题栏 */}
+      <header className="flex items-center mb-8">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleCancel}
+            className="rounded-full w-full p-2 hover:bg-primary/10 hover:text-primary transition-colors duration-300 group"
+          >
+            <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform duration-300" />
+            <h1 className="text-3xl cursor-pointer font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">返回列表</h1>
+          </Button>
+        </div>
+      </header>
 
-        </header>
+      {/* 主内容卡片 */}
+      <NoteListPageContentCard
+        notePage={notePage as NotesPage}
+        upNoteNotePage={upNoteNotePage as NotesPage}
+        setUpdateNotePage={setUpdateNotePage}
+        handleCancel={handleCancel}
+        isSaving={isSaving}
+        handleSave={handleSave}
+      />
 
-        {/* 主内容卡片 */}
-        <NoteListPageContentCard
-          notePage={notePage  as NotesPage}
-          upNoteNotePage={upNoteNotePage as NotesPage}
-          setUpdateNotePage={setUpdateNotePage}
-          handleCancel={handleCancel}
-          isSaving={isSaving}
-          handleSave={handleSave}
-        />
-
-        {/* 保存成功提示 */}
-        {showSuccessToast && (
-          <div className={`
+      {/* 保存成功提示 */}
+      {showSuccessToast && (
+        <div className={`
             fixed bottom-6 right-6 max-w-xs p-4 rounded-lg shadow-lg z-50
             ${theme === 'light' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-green-900/80 text-green-100 border border-green-800'}
             backdrop-blur-sm animate-slide-up
             transition-all duration-300
           `}>
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <p className="font-medium">笔记保存成功！</p>
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
+            <p className="font-medium">笔记保存成功！</p>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

@@ -66,17 +66,20 @@ export function DashboardNavCards() {
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 px-4">
       {statCards.map((card, index) => (
-        <Card key={index} className="hover:shadow-md transition-shadow">
+        <Card key={index} className="hover:shadow-lg transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-slate-700 dark:text-slate-200">
               {card.title}
             </CardTitle>
             {card.icon}
           </CardHeader>
           <CardFooter className="flex-col items-start gap-1.5">
-            <div className="text-2xl font-bold">{card.value}</div>
+            <div className="text-2xl font-bold text-slate-800 dark:text-white">{card.value}</div>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              总数
+            </p>
           </CardFooter>
         </Card>
       ))}

@@ -43,19 +43,21 @@ export function NoteListCardHeader({
   onSubmit,
 }: NoteListCardHeaderProps) {
   return (
-    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-6 pt-6">
       <div>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">{title}</CardTitle>
+        <CardDescription className="text-muted-foreground/80">{description}</CardDescription>
       </div>
       <Dialog open={isAddNotesDialogOpen} onOpenChange={setIsAddNotesDialogOpen}>
         <DialogTrigger asChild>
-          <Button size="sm" className="gap-1 cursor-pointer">
+          <Button size="sm" className="gap-1 cursor-pointer
+           bg-sky-400/80 dark:bg-slate-600 dark:text-white
+            hover:bg-sky-600 transition-all duration-300 shadow-lg hover:shadow-xl">
             <Plus className="h-4 w-4" />
             <span>新建笔记</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] backdrop-blur-sm bg-card/90 dark:bg-card/90 border border-border/40 shadow-2xl">
           <form onSubmit={onSubmit}>
             <DialogHeader>
               <DialogTitle>新建笔记</DialogTitle>

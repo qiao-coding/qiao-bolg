@@ -43,10 +43,10 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
 
   
   return (
-    <SidebarProvider>
+    <SidebarProvider className="bg-sky-100/40  dark:bg-slate-600/40">
       <AppSidebar />
-      <SidebarInset className="bg-background text-foreground">
-        <header className="flex h-16 justify-between  shrink-0 items-center gap-2 border-b border-border">
+      <SidebarInset className=" text-foreground">
+        <header className="flex h-16 justify-between bg-sky-200/40  dark:bg-slate-600/40 shrink-0 items-center gap-2 border-b border-border">
           <div className="flex items-center flex-2 px-4  justify-between">
             <SidebarTrigger className="-ml-1" />
             <Separator

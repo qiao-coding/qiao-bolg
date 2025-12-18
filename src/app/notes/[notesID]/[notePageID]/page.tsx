@@ -9,11 +9,16 @@ import { NotePageMeta } from '@/components/features/notes/notePageMeta';
 import { NotePageContent } from '@/components/features/notes/notePageContent';
 import { NotePageTags } from '@/components/features/notes/notePageTags';
 import { NotePageLoading } from '@/components/features/notes/notePageLoading';
+import { useTheme } from 'next-themes';
 const NotePage = () => {
   const { notesID, notePageID } = useParams();
   const [note, setNote] = useState<Note | null>(null);
   const [notesPage, setNotesPage] = useState<NotesPage | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isImageBackground, setIsImageBackground] = useState(false);
+  const { theme } = useTheme();
+
+
 
 
 
@@ -49,18 +54,35 @@ const NotePage = () => {
 
 
   return (
-    <div className="font-sans transition-colors duration-300 bg-[#FAFAFA] dark:bg-gray-900">
-      <NextRouter showHeader={false}>
-        <NotePageHeader notesID={notesID as string} />
-        <main
-          className="min-h-screen container mx-auto px-4 sm:px-6 py-8 max-w-3xl"
-          key={notesPage.uid}
-        >
-          <NotePageMeta notesPage={notesPage} />
-          <NotePageContent content={notesPage.content} />
-          <NotePageTags tags={notesPage.pageTags} />
-        </main>
-      </NextRouter>
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundImage: isImageBackground
+          ? theme === 'dark'
+            ? 'url(/NotesImage/page/notepage_dark.jpeg)'
+            : 'url(/NotesImage/page/notepage_light.jpeg)'
+          : undefined,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      <div className="font-sans transition-colors duration-300 bg-sky-50/90 dark:bg-slate-700/80"
+      >
+
+        <NextRouter showHeader={false}>
+          <NotePageHeader setIsImageBackground={setIsImageBackground} />
+          <main
+            className="min-h-screen container mx-auto px-4 sm:px-6 py-8 max-w-3xl"
+            key={notesPage.uid}
+          >
+            <NotePageMeta notesPage={notesPage} />
+            <NotePageContent content={notesPage.content} />
+            <NotePageTags tags={notesPage.pageTags} />
+          </main>
+
+        </NextRouter>
+      </div>
     </div>
   );
 };

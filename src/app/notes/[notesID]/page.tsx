@@ -2,9 +2,9 @@
 import NextRouter from "@/components/layout/NextRouter";
 import AnimatedContent from "@/components/ui/shadcnComponents/AnimatedContent";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect,  useState } from "react";
-import PageNavigation from "@/components/ui/shadcnComponents/PageNavigation";
-import LoadingPage from "@/components/ui/shadcnComponents/loadingPage";
+import { useEffect, useState } from "react";
+import PageNavigation from "@/components/features/notes/PageNavigation";
+import LoadingPage from "@/components/ui/public/loadingPage";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import { useNotes } from "@/hooks/note/useNotes";
@@ -72,7 +72,7 @@ const Notestitle = () => {
 
     <div className="">
       <TechBackgroundNoGrid>
-        <NextRouter showHeader={false}>
+        <NextRouter showHeader={false} >
           <NoteListHeader />
           <AnimatedContent
             distance={150}
@@ -83,14 +83,19 @@ const Notestitle = () => {
             animateOpacity
             scale={1}
             threshold={0.1}
+
+
           >
 
             <Title>{note && note.title}</Title>
 
-            {note && <NoteListCard
-              note={note}
-              handleUid={handleUid}
-            />}
+            <section className="min-h-screen">
+              {note && <NoteListCard
+                note={note}
+                handleUid={handleUid}
+              />}
+            </section>
+
           </AnimatedContent>
 
         </NextRouter>
@@ -99,7 +104,7 @@ const Notestitle = () => {
 
 
 
-      <aside className="cs1  n z-50 flex flex-col fixed right-[5%] lg:right-[15%] top-[30%]  md:right-[-20%] sm:right-[-20%] ">
+      <aside className="cs1 hidden lg:flex  z-50 flex flex-col fixed right-[5%] lg:right-[15%] top-[25%]  md:right-[-20%] sm:right-[-20%] ">
         {note &&
           <PageNavigation
             notesValue={note.page as NotesPage[]}

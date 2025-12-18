@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { useNotes } from "@/hooks/note/useNotes";
 import { Note } from "@/types/note/type";
 import NotesCard from "@/components/features/notes/noteCard";
+import { RotatingCube } from "@/components/features/mol/RotatingCube";
 
 
 
@@ -27,8 +28,7 @@ const Article = () => {
     fetchNotes();
   }, []);
 
-  console.log(notes);
-  
+
 
 
 
@@ -47,26 +47,41 @@ const Article = () => {
           scale={1}
           threshold={0.1}
         >
-            <main className="py-12 px-4 sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28">
+          <main className="py-12 px-4 
+           sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28">
+            <article>
               <Title>学习笔记</Title>
               <div className="flex justify-center w-full">
-                <section className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 sm:w-[80vw] md:w-[65vw] lg:w-[50vw] gap-6 m-auto">
-                  {notes.map((note) => (
-                    <article key={note.id} className="cursor-pointer">
-                      <motion.div
-                        whileHover={{ transition: { duration: 0.3 }, translateY: -15 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <NotesCard id={note.id} title={note.title} tags={note.tags ||[]} titlePicture={note.titlePicture || ""} />
-                      </motion.div>
-                    </article>
-                  ))}
-                </section>
-                <aside className="hidden lg:block lg:w-[200px] xl:w-[250px] px-0 ml-8">
-                  {notes.length > 0 && <NotesSideber />}
-                </aside>
+                {notes.length > 0 ? (
+                  <motion.section
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                   className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 sm:w-[80vw] md:w-[65vw] lg:w-[50vw] gap-6 m-auto">
+                    {notes.map((note) => (
+                      <article key={note.id} className="cursor-pointer">
+                        <motion.div
+                          whileHover={{ transition: { duration: 0.3 }, translateY: -15 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <NotesCard id={note.id} title={note.title} tags={note.tags || []} titlePicture={note.titlePicture || ""} />
+                        </motion.div>
+                      </article>
+                    ))}
+                  </motion.section>
+                ) : (
+                  <div className="flex flex-col justify-center items-center ">
+                    <RotatingCube />
+                    <p className="text-3xl text-sky-400 dark:text-white font-bold">正在加载笔记...</p>
+                  </div>
+                )}
+               {notes.length > 0 &&  <aside className="hidden lg:block lg:w-[200px] xl:w-[250px] px-0 ml-8">
+                  <NotesSideber />
+                </aside>}
               </div>
-            </main>
+            </article>
+
+          </main>
         </AnimatedContent>
       </NextRouter>
     </TechBackgroundNoGrid>

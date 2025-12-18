@@ -15,8 +15,9 @@ const HomeArticles = () => {
   const [isDark, setIsDark] = useState(false);
   const [notesPage, setNotesPage] = useState<Note[]>([]);  
 
-  const handleArticleClick = useCallback((noteId: string) => {
-    router.push(`/notes/${noteId}`);
+  const handleArticleClick = useCallback((noteId: string,pageId?:string) => {
+    const pageIdList=
+    router.push(`/notes/${noteId}/${pageId}`);
   }, [router]);
 
 
@@ -90,12 +91,12 @@ const HomeArticles = () => {
     return articles.map((article, index) => (
       <article
         key={`${article.noteId}-${article.id}-${index}`}
-        onClick={() => article.noteId && handleArticleClick(article.noteId)}
+        onClick={() => article.noteId && handleArticleClick(article.noteId,article?.uid)}
 
         className={`
           group backdrop-blur-sm rounded-lg border transition-all duration-300 cursor-target 
           overflow-hidden hover:scale-102 hover:-translate-y-1 shadow-md hover:shadow-lg
-   
+          bg-white/60 dark:bg-gray-800/60
         `}
       >
         <div className="relative h-32 overflow-hidden">
@@ -122,13 +123,11 @@ const HomeArticles = () => {
 
 
           <div className="flex flex-wrap gap-1 mb-2">
-            <span className={`text-xs px-2 py-1 rounded-full font-medium  text-white  ${isDark ? 'bg-blue-900/60 ' : 'bg-blue-900 '}`}>
-              {article.pageTags[0]}
-            </span>
+      
             {(article.pageTags || []).map((tag: string, tagIndex: number) => (
               <span
                 key={`${article.id}-tag-${tagIndex}`}
-                className={`text-xs px-2 py-1 rounded-full font-medium bg-gray-700/60 text-white ${isDark ? 'bg-blue-900/60' : 'bg-blue-900'} `}
+                className={`text-xs px-2 py-1 rounded-full font-medium bg-gray-700/60 text-white bg-sky-400/60 dark:bg-sky-700 `}
               >
                 {tag}
               </span>
