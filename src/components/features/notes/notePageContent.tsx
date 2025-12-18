@@ -86,7 +86,7 @@ export function NotePageContent({ content }: { content: string }) {
         </div>
         <div className={`
         rounded-b-lg
-           bg-muted dark:bg-muted
+           bg-muted dark:bg-muted/70
             border border-border overflow-hidden my-0`}>
           {/* 代码内容 */}
           <pre className={`p-5 m-0 !bg-transparent hljs ${className || ''}`}>

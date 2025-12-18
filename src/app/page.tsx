@@ -8,7 +8,7 @@ function Home() {
   return (
     <>
 
-      <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60">
+      <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-700/60">
      
         <NextRouter>
           <HomeZhuyepage />

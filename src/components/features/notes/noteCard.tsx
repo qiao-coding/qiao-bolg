@@ -42,7 +42,7 @@ const NotesCard = ({
       "
     >
       <div className="flex gap-4">
-        <div className="p-6 flex-1">
+        <div className="p-6 flex-1 ">
           <div className="flex justify-between items-start mb-4">
             <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
               {title}
@@ -60,7 +60,7 @@ const NotesCard = ({
             ))}
           </div>
         </div>
-        <div className="relative flex-shrink-0 w-90 h-45 sm:w-100 md:w-90 lg:w-90 xl:w-100 2xl:w-120">
+        <div className="relative flex-shrink-0 w-60 h-45 sm:w-80 md:w-70 lg:w-90 xl:w-100 2xl:w-120">
           {titlePicture ? <Image
             fill
             src={titlePicture}

@@ -14,34 +14,41 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/shadcnComponents/sidebar"
+import { getSession } from "next-auth/react";
 import React from "react";
+import { auth } from "../../../auth";
+import { RotatingCube } from "@/components/features/mol/RotatingCube";
+import Link from "next/link";
 
-// 面包屑导航数据
-// const getBreadcrumbs = (pathname: string) => {
-//   const segments = pathname.split('/').filter(Boolean);
-//   const breadcrumbs = [{ label: '首页', href: '/' }];
-  
-//   if (segments.length > 0) {
-//     breadcrumbs.push({ label: '管理后台', href: '/admin' });
-//   }
-  
-//   if (segments.length > 1) {
-//     let currentPath = '/admin';
-//     for (let i = 1; i < segments.length; i++) {
-//       currentPath += `/${segments[i]}`;
-//       breadcrumbs.push({
-//         label: segments[i].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-//         href: currentPath
-//       });
-//     }
-//   }
-  
-//   return breadcrumbs;
-// };
 
-export default function AdminLayout({children}: {children: React.ReactNode}) {
 
-  
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+
+  const session = await auth(); // 服务端获取当前登录用户信息
+
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-slate-100 dark:bg-slate-800">
+        <div className="flex flex-col justify-center items-center ">
+          <RotatingCube />
+          <p className="text-3xl text-sky-400 dark:text-white font-bold">
+            可能是权限不足或者网络波动，请返回主页重试！
+          </p>
+          <div className="flex mt-7 justify-center items-center gap-5">
+            <Link
+              href="/"
+              className="text-sky-400 dark:text-white font-bold mt-4
+              hover:text-sky-600 dark:hover:text-sky-300"
+            >返回主页</Link>
+          </div>
+
+        </div>
+      </div>
+    )
+
+  }
+
+
   return (
     <SidebarProvider className="bg-sky-100/40  dark:bg-slate-600/40">
       <AppSidebar />
@@ -53,19 +60,19 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4 "
             />
-            
+
             {/* 面包屑导航 */}
             <Breadcrumb>
               <BreadcrumbList>
-              <div className="">
-              <ThemePage/>
-              </div>
+                <div className="">
+                  <ThemePage />
+                </div>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
         </header>
         <main className="min-h-screen">
-         {children}
+          {children}
         </main>
       </SidebarInset>
     </SidebarProvider>

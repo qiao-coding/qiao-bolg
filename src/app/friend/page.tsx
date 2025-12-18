@@ -115,7 +115,7 @@ const Friend = () => {
                 transition={{ duration: 0.5, ease: "easeOut" }}
                className="">
                 <div className="mb-8 text-center max-w-2xl mx-auto">
-                  <p className="text-[#64748B] text-base">
+                  <p className="text-[#64748B] dark:text-[#94A3B8] text-base">
                     这里是我们的博客链接，欢迎访问交流。
                     也欢迎你前来交换友链，共同进步吧，加油！
                   </p>
@@ -175,7 +175,9 @@ const Friend = () => {
 
 
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-6 lg:w-[50vw] m-auto p-4 ">
+                <div className="grid 
+                grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-6
+                 lg:w-[50vw] m-auto p-4 ">
                   {friends.map((friend) => (
                       <Link
                         key={friend.id}

@@ -96,7 +96,7 @@ const HomeArticles = () => {
         className={`
           group backdrop-blur-sm rounded-lg border transition-all duration-300 cursor-target 
           overflow-hidden hover:scale-102 hover:-translate-y-1 shadow-md hover:shadow-lg
-          bg-white/60 dark:bg-gray-800/60
+          bg-white/60 dark:bg-gray-500/60 cursor-pointer
         `}
       >
         <div className="relative h-32 overflow-hidden">
@@ -107,6 +107,7 @@ const HomeArticles = () => {
             className="object-cover group-hover:scale-110 transition-transform duration-300"
             sizes="lg:80vw, md:25vw, 20vw"
             priority={index < 3} 
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>

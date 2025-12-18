@@ -2,9 +2,12 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/shadcnComponents/badge";
 import { SiGitee } from "react-icons/si";
 import { ExternalLink, Github } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 
 export default function NotesSideber() {
+
+  const{ data:session }=useSession();
 
   const badgeTags = ["React", "JavaScript", "Next.js", "TypeScript", "Tailwind CSS"];
 
@@ -30,17 +33,18 @@ export default function NotesSideber() {
         <div className="relative mb-5">
           <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg dark:shadow-gray-900/50">
             <Image
-              src="/UserImage/up.jpg"
+              src={session?.user?.image || "/UserImage/up.jpg"}
               alt="个人头像"
               width={128}
               height={128}
+              loading="lazy"
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
             />
           </div>
           <div className="absolute -inset-1 rounded-full border-2 border-dashed border-primary/30 animate-spin-slow"></div>
         </div>
 
-        <h1 className="text-xl font-bold mb-1 text-gray-800 dark:text-white">昊小白</h1>
+        <h1 className="text-xl font-bold mb-1 text-gray-800 dark:text-white">{session?.user?.name || "昊小白"}</h1>
 
         <div className="flex flex-wrap justify-center gap-1.5 mb-6">
           {badgeTags.map((tag) => (

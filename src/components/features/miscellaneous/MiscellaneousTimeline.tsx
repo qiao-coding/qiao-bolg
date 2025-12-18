@@ -37,7 +37,7 @@ function TimelineItem({ item }: { item: miscellaneousType }) {
       <Card className="overflow-hidden h-full border
        border-gray-200 dark:border-gray-700 shadow-sm  
        hover:shadow-md
-        bg-sky-100/60 dark:bg-slate-600/80
+       bg-card/70
         dark:bg-gray-800 rounded-xl"
       >
         <CardContent className="p-6 md:p-8">
@@ -101,7 +101,7 @@ export function MiscellaneousTimeline({
 }) {
   return (
     <section >
-      <div className="max-w-4xl mx-4  bg-sky-100/60 dark:bg-slate-600/80  lg:mx-0 lg:mx-[calc(50%-18rem)] lg:max-w-3xl">
+      <div className="max-w-4xl mx-4   lg:mx-0 lg:mx-[calc(50%-18rem)] lg:max-w-3xl">
         {items.map((item) => (
           <TimelineItem key={item.id} item={item} />
         ))}
