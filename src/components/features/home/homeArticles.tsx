@@ -13,11 +13,11 @@ const HomeArticles = () => {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
-  const [notesPage, setNotesPage] = useState<Note[]>([]);  
+  const [notesPage, setNotesPage] = useState<Note[]>([]);
 
-  const handleArticleClick = useCallback((noteId: string,pageId?:string) => {
-    const pageIdList=
-    router.push(`/notes/${noteId}/${pageId}`);
+  const handleArticleClick = useCallback((noteId: string, pageId?: string) => {
+    const pageIdList =
+      router.push(`/notes/${noteId}/${pageId}`);
   }, [router]);
 
 
@@ -37,15 +37,15 @@ const HomeArticles = () => {
 
         if (response.ok) {
           const data = await response.json();
-          
-    
-          const page:Note[]=data
-          setNotesPage(page)
-          
-         
-          const resData=page.map(n=>n.page).flat()
 
-          
+
+          const page: Note[] = data
+          setNotesPage(page)
+
+
+          const resData = page.map(n => n.page).flat()
+
+
 
           const allArticles: NotesPage[] = [...(resData as NotesPage[]).map((note: NotesPage) => ({
             id: note.id,
@@ -62,11 +62,11 @@ const HomeArticles = () => {
             pageId: note.pageId,
           }))]
 
-          
 
-          
 
-          allArticles.sort((a, b) => new Date(b.dateStart||'').getTime() - new Date(a.dateStart||'').getTime());
+
+
+          allArticles.sort((a, b) => new Date(b.dateStart || '').getTime() - new Date(a.dateStart || '').getTime());
 
           setArticles(allArticles.slice(0, 6));
         } else {
@@ -82,8 +82,8 @@ const HomeArticles = () => {
     fetchArticles();
   }, []);
 
-  
-  
+
+
 
 
 
@@ -91,7 +91,7 @@ const HomeArticles = () => {
     return articles.map((article, index) => (
       <article
         key={`${article.noteId}-${article.id}-${index}`}
-        onClick={() => article.noteId && handleArticleClick(article.noteId,article?.uid)}
+        onClick={() => article.noteId && handleArticleClick(article.noteId, article?.uid)}
 
         className={`
           group backdrop-blur-sm rounded-lg border transition-all duration-300 cursor-target 
@@ -102,7 +102,7 @@ const HomeArticles = () => {
         <div className="relative h-32 overflow-hidden">
           <Image
             fill
-            src={notesPage.find(n=>n.id.toString() ===article.noteId)?.titlePicture || "/bg-1.png"}
+            src={notesPage.find(n => n.id.toString() === article.noteId)?.titlePicture || "/bg-1.png"}
             alt={article.title}
             className="object-cover group-hover:scale-110 transition-transform duration-300"
             sizes="lg:80vw, md:25vw, 20vw"
@@ -111,10 +111,10 @@ const HomeArticles = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
 
-        <div className="p-4">
+        <div className="p-4 flex flex-col justify-between">
           <div className="flex justify-between items-start mb-2">
-            <h3 className={`text-lg font-semibold transition-colors line-clamp-2  group-hover:text-blue-400 `}>
-              {article.title}
+            <h3 className={`text-lg  font-semibold transition-colors line-clamp-2  group-hover:text-blue-400 `}>
+              {article.title.length > 10 ? article.title.substring(0, 10) + '...' : article.title}
             </h3>
             <span className={`text-xs flex-shrink-0 ml-2 `}>
               {article.dateStart}
@@ -123,7 +123,7 @@ const HomeArticles = () => {
 
 
           <div className="flex flex-wrap gap-1 mb-2">
-      
+
             {(article.pageTags || []).map((tag: string, tagIndex: number) => (
               <span
                 key={`${article.id}-tag-${tagIndex}`}
