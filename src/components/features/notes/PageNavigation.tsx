@@ -1,7 +1,6 @@
 'use client'
 import { ScrollArea } from "@/components/ui/shadcnComponents/scroll-area";
 import { Note, NotesPage } from "@/types/note/type";
-import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 

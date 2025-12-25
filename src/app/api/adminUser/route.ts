@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { adminUser } from '@/types/user/type';
+import bcrypt from 'bcryptjs';
 
 export async function GET() {
   try {
@@ -37,6 +38,9 @@ export async function POST(request: Request) {
       );
     }
 
+    // 对密码进行哈希加密
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     // 检查是否存在该用户
     const existingUser = await prisma.adminUser.findFirst({
       where: { username }
@@ -46,7 +50,7 @@ export async function POST(request: Request) {
       // 存在则更新密码或 isDynamicEmail 状态
       await prisma.adminUser.update({
         where: { id: existingUser.id },
-        data: { password, isDynamicEmail }
+        data: { password: hashedPassword, isDynamicEmail }
       });
       return NextResponse.json({ message: '更新成功' });
     } else {
@@ -54,7 +58,7 @@ export async function POST(request: Request) {
       await prisma.adminUser.create({
         data: {
           username,
-          password,
+          password: hashedPassword,
           isDynamicEmail: isDynamicEmail || false
         }
       });

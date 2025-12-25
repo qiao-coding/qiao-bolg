@@ -187,6 +187,7 @@ export default function AdminUsersPage() {
                     id="enhancedProtection"
                     type="checkbox"
                     className="w-4 h-4 accent-blue-600"
+                    defaultChecked={adminSettings.enhancedProtection}
                     checked={adminSettings.enhancedProtection}
                     onChange={(e) => setAdminSettings({...adminSettings, enhancedProtection: e.target.checked})}
                   />
