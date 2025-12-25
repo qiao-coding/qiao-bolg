@@ -136,6 +136,7 @@ export function NoteListPageContentCard(
                     <Label className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
                         笔记内容 (Markdown格式)
                     </Label>
+                    
                     <div className="max-h-[600px] overflow-auto
                       text-black dark:text-white
                       bg-sky-200/10 dark:bg-slate-800/10
@@ -143,6 +144,7 @@ export function NoteListPageContentCard(
                       
                       "
                     >
+
                         <ReactSimpleMDE
                             value={upNoteNotePage?.content || ''}
                             onChange={(value) => setUpdateNotePage({ ...notePage!, content: value! })}
