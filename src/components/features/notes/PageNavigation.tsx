@@ -7,15 +7,17 @@ import { useEffect, useState } from "react";
 
 
 
-export default function PageNavigation({ notesValue, pageStyle, activeStyle }: { notesValue: NotesPage[] | Note[], pageStyle: string, activeStyle: string }) {
+export default function PageNavigation({ notesPage, pageStyle, activeStyle }:
+   { notesPage: NotesPage[] , pageStyle: string, activeStyle: string }) {
 
   const [activeSection, setActiveSection] = useState<number | null>(1)
 
 
+  
 
 
   useEffect(() => {
-    if (!notesValue) return
+    if (!notesPage) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -33,7 +35,7 @@ export default function PageNavigation({ notesValue, pageStyle, activeStyle }: {
       threshold: [0.1, 0.5, 0.9]
     }
     )
-    notesValue.forEach(page => {
+    notesPage.forEach(page => {
       if ('uid' in page) {
         const section = document.getElementById(`section-${page.uid}`);
         if (section) observer.observe(section);
@@ -44,7 +46,7 @@ export default function PageNavigation({ notesValue, pageStyle, activeStyle }: {
     });
 
     return () => observer.disconnect();
-  }, [notesValue])
+  }, [notesPage])
 
   const handleMenuClick = (uid: string) => {
     const element = document.getElementById(`section-${uid}`);
@@ -60,6 +62,12 @@ export default function PageNavigation({ notesValue, pageStyle, activeStyle }: {
     }
   }
 
+      const sort_notes = notesPage && notesPage.sort((a, b) => {
+        const aDate = new Date(a.dateStart || '');
+        const bDate = new Date(b.dateStart || '');
+        return bDate.getTime() - aDate.getTime();
+    });
+
 
   return (
 
@@ -68,8 +76,8 @@ export default function PageNavigation({ notesValue, pageStyle, activeStyle }: {
       border border-border/40
       rounded-lg
        transition-all duration-300">
-        {notesValue
-          && notesValue.map((n) => (
+        {sort_notes
+          && sort_notes.map((n) => (
             <div key={'uid' in n ? n.uid : n.id} className="group mx-4 my-2">
               <button
                 onClick={() => handleMenuClick(('uid' in n ? n.uid : n.id) as string)}

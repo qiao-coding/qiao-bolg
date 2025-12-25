@@ -122,7 +122,7 @@ const Notestitle = () => {
         </span>
         {note &&
           <PageNavigation
-            notesValue={note.page as NotesPage[]}
+            notesPage={note.page as NotesPage[]}
             pageStyle='text-amber-50 opacity-70'
             activeStyle='text-blue-400 font-bold' />
         }
