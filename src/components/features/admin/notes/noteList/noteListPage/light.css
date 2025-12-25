@@ -1,5 +1,5 @@
 .EasyMDEContainer .CodeMirror.light-theme {
-    background-color: rgb(225, 234, 243);
+    background: linear-gradient(to bottom, rgb(224, 242, 254), white);
     /* bg-sky-200/60，60% 透明背景 */
     color: black;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
