@@ -139,7 +139,7 @@ export function NoteListPageContentCard(
                     
                     <div className="max-h-[600px] overflow-auto
                       text-black dark:text-white
-                      bg-sky-200/10 dark:bg-slate-800/10
+                      bg-sky-100 dark:bg-slate-600
 
                       
                       "
