@@ -28,7 +28,9 @@ const Header = () => {
 
   const { resolvedTheme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
-   const { data: session } = useSession()
+  const { data: session } = useSession()
+  const [title, setTitle] = useState('HaoWhite');
+
 
 
 
@@ -54,11 +56,20 @@ const Header = () => {
 
   const scrollRef = useRef(null);
 
+  const gettitle = async () => {
+
+    const res = await fetch('/api/blog');
+    const data = await res.json();
+    setTitle(data.blogName);
+
+  }
 
 
 
   //滚动监听
   useEffect(() => {
+    gettitle();
+
     const handleScroll = throttle(() => {
       {
 
@@ -117,7 +128,7 @@ const Header = () => {
             </div>
             <ul
               tabIndex={0}
-              className={`bg-white dark:bg-gray-700/80 menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52  shadow bg-base-100 mt-4`}
+              className={`bg-white z-10 dark:bg-gray-700/80 menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52  shadow bg-base-100 mt-4`}
             >
               {HbtnStyle.map((item) => (
                 <li key={item.id}>
@@ -129,7 +140,7 @@ const Header = () => {
             </ul>
           </div>
           <a className={`p-2 font-bold text-xl cursor-target ${!HeaderStyle ? "text-[20px]" : "text-[19px]"}`}>
-            HaoWhite
+            {title}
           </a>
         </div>
         <div className="navbar-center hidden lg:flex">

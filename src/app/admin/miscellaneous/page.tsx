@@ -12,14 +12,9 @@ import { miscellaneousType } from '@/types/miscellaneous/type';
 import { useMiscellaneous } from '@/hooks/miscellaneous/useMiscellaneous';
 import { motion } from 'framer-motion';
 
-interface Miscellaneous {
-  id: number;
-  content: string;
-  date: string;
-}
 
 const MiscellaneousManagement: React.FC = () => {
-  const [miscellaneous, setMiscellaneous] = useState<Miscellaneous[]>([]);
+  const [miscellaneous, setMiscellaneous] = useState<miscellaneousType[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortField, setSortField] = useState<'date' | null>('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -29,7 +24,7 @@ const MiscellaneousManagement: React.FC = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const [newContent, setNewContent] = useState<string>('');
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
-  const [editItem, setEditItem] = useState<Miscellaneous | null>(null);
+  const [editItem, setEditItem] = useState<miscellaneousType | null>(null);
   const [editContent, setEditContent] = useState<string>('');
 
   const filteredAndSearchedItems = miscellaneous.filter(item =>
@@ -41,7 +36,7 @@ const MiscellaneousManagement: React.FC = () => {
     const fetchMiscellaneous = async () => {
       try {
         const response = await useMiscellaneous.getMiscellaneousList()
-        const formattedItems: Miscellaneous[] = response.map((item: Miscellaneous) => ({
+        const formattedItems: miscellaneousType[] = response.map((item: miscellaneousType) => ({
           id: item.id,
           content: item.content,
           date: item.date
@@ -49,7 +44,7 @@ const MiscellaneousManagement: React.FC = () => {
         setMiscellaneous(formattedItems);
       } catch (error) {
         console.error('获取说说数据失败:', error);
-        const mockData: Miscellaneous[] = [
+        const mockData: miscellaneousType[] = [
           {
             id: 1,
             content: '加载失败',
@@ -112,7 +107,7 @@ const MiscellaneousManagement: React.FC = () => {
         return console.error('编辑说说失败: 缺少必要字段');
       }
 
-      const newEditItem: Miscellaneous = {
+      const newEditItem: miscellaneousType = {
         id: editItem.id,
         content: editContent,
         date: new Date().toISOString().slice(0, 10)

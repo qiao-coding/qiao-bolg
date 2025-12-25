@@ -36,7 +36,7 @@ const NoteEditPage = () => {
         let foundPage: NotesPage | null = null;
 
         for (const note of notesResponse) {
-          const page = note.page.find((p: NotesPage) => p.id.toString() === pageId);
+          const page = note.page.find((p: NotesPage) => p.pageId=== pageId);
           if (page) {
             foundPage = page;
             break;

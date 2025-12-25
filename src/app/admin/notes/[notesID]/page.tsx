@@ -52,7 +52,7 @@ function StudyNodes() {
     if (!initialNotes) {
       fetchNotes();
     }
-  }, [notesId, initialNotes]);
+  }, [notesId, initialNotes, notesPage.length]);
 
 
 

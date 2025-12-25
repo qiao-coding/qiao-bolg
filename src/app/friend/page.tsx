@@ -10,8 +10,7 @@ import { Button } from '@/components/ui/shadcnComponents/button';
 import { useTheme } from 'next-themes';
 import { useFriend } from '@/hooks/friend/useFriend';
 import { FriendType } from '@/types/friend/type';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/shadcnComponents/dialog';
-import { Label } from '@radix-ui/react-dropdown-menu';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/shadcnComponents/dialog';
 import { RotatingCube } from '@/components/features/mol/RotatingCube';
 import { motion } from 'framer-motion';
 
@@ -113,7 +112,7 @@ const Friend = () => {
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-               className="">
+                className="">
                 <div className="mb-8 text-center max-w-2xl mx-auto">
                   <p className="text-[#64748B] dark:text-[#94A3B8] text-base">
                     这里是我们的博客链接，欢迎访问交流。
@@ -179,48 +178,48 @@ const Friend = () => {
                 grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-6
                  lg:w-[50vw] m-auto p-4 ">
                   {friends.map((friend) => (
-                      <Link
-                        key={friend.id}
-                        href={friend.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`group ${theme === 'light' ? 'bg-white' : 'bg-[#1F2937]'} hover:bg-transparent transition-colors rounded-xl shadow-[0_2px_12px_rgba(59,130,246,0.07)] hover:shadow-[0_12px_16px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden border  ${theme === 'light' ? 'border-[#D1D5DB]' : 'border-gray-700'}`}
-                      >
-                        <div className="p-6 sm:p-7 ">
-                          <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-50 flex items-center justify-center">
-                              {friend.avatar ? (
-                                <img
-                                  src={friend.avatar}
-                                  alt={friend.name}
-                                  width={40}
-                                  height={40}
-                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                />
-                              ) : (
-                                <span className="text-blue-500 font-bold">
-                                  {friend.name.charAt(0)}
-                                </span>
-                              )}
-                            </div>
-
-                            <h3 className="text-lg font-semibold  transition-colors duration-300">
-                              {friend.name}
-                            </h3>
+                    <Link
+                      key={friend.id}
+                      href={friend.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`group ${theme === 'light' ? 'bg-white' : 'bg-[#1F2937]'} hover:bg-transparent transition-colors rounded-xl shadow-[0_2px_12px_rgba(59,130,246,0.07)] hover:shadow-[0_12px_16px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden border  ${theme === 'light' ? 'border-[#D1D5DB]' : 'border-gray-700'}`}
+                    >
+                      <div className="p-6 sm:p-7 ">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-50 flex items-center justify-center">
+                            {friend.avatar ? (
+                              <img
+                                src={friend.avatar}
+                                alt={friend.name}
+                                width={40}
+                                height={40}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                              />
+                            ) : (
+                              <span className="text-blue-500 font-bold">
+                                {friend.name.charAt(0)}
+                              </span>
+                            )}
                           </div>
 
-                          <p className={`text-[#64748B] mb-5 line-clamp-2 text-sm leading-relaxed ${theme === 'light' ? 'text-[#64748B]' : 'text-[#D1D5DB]'}`}>
-                            {friend.bio || '暂无简介'}
-                          </p>
-
-                          <div className="flex justify-end items-center text-xs pt-3 border-t border-[#EFF6FF]">
-                            <span className=" opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              {friend.name === 'HaoWhite' ? '已经在博客,那... , 你喜欢就好 →' : `前往${friend.name}的基地 →`}
-                            </span>
-                          </div>
+                          <h3 className="text-lg font-semibold  transition-colors duration-300">
+                            {friend.name}
+                          </h3>
                         </div>
-                      </Link>
-                    ))
+
+                        <p className={`text-[#64748B] mb-5 line-clamp-2 text-sm leading-relaxed ${theme === 'light' ? 'text-[#64748B]' : 'text-[#D1D5DB]'}`}>
+                          {friend.bio || '暂无简介'}
+                        </p>
+
+                        <div className="flex justify-end items-center text-xs pt-3 border-t border-[#EFF6FF]">
+                          <span className=" opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {friend.name === 'HaoWhite' ? '已经在博客,那... , 你喜欢就好 →' : `前往${friend.name}的基地 →`}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))
                   }
                 </div>
               </motion.article>

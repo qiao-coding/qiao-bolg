@@ -10,6 +10,7 @@ import { useNotes } from "@/hooks/note/useNotes";
 import { Note } from "@/types/note/type";
 import NotesCard from "@/components/features/notes/noteCard";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
+import { useSession } from "next-auth/react";
 
 
 
@@ -27,6 +28,8 @@ const Article = () => {
     };
     fetchNotes();
   }, []);
+
+  const {data:session} = useSession()
 
 
 
@@ -57,7 +60,8 @@ const Article = () => {
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                   className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 sm:w-[80vw] md:w-[65vw] lg:w-[50vw] gap-6 m-auto">
+                   className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 
+                   sm:w-[80vw] md:w-[65vw] lg:w-[50vw] gap-6 m-auto">
                     {notes.map((note) => (
                       <article key={note.id} className="cursor-pointer">
                         <motion.div
@@ -75,7 +79,7 @@ const Article = () => {
                     <p className="text-3xl text-sky-400 dark:text-white font-bold">正在加载笔记...</p>
                   </div>
                 )}
-               {notes.length > 0 &&  <aside className="hidden lg:block lg:w-[200px] xl:w-[250px] px-0 ml-8">
+               {notes.length > 0 && session &&  <aside className="hidden lg:block lg:w-[200px] xl:w-[250px] px-0 ml-8">
                   <NotesSideber />
                 </aside>}
               </div>

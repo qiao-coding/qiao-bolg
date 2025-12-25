@@ -1,4 +1,5 @@
 'use client'
+import { ScrollArea } from "@/components/ui/shadcnComponents/scroll-area";
 import { Note, NotesPage } from "@/types/note/type";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -61,22 +62,28 @@ export default function PageNavigation({ notesValue, pageStyle, activeStyle }: {
 
 
   return (
-    <nav className="space-y-1 max-h-[60vh] ">
-      {notesValue
-        && notesValue.map((n) => (
-          <div key={'uid' in n ? n.uid : n.id} className="group">
-            <button
-              onClick={() => handleMenuClick(('uid' in n ? n.uid : n.id) as string)}
-              className={`w-full text-left px-3 py-2 rounded-md transition-all duration-300 transform outline-none focus:outline-none focus:ring-2 focus:ring-sky-300
+
+    <nav className="space-y-1">
+      <ScrollArea className="h-[70vh] w-[240px] bg-card/40 
+      border border-border/40
+      rounded-lg
+       transition-all duration-300">
+        {notesValue
+          && notesValue.map((n) => (
+            <div key={'uid' in n ? n.uid : n.id} className="group mx-4 my-2">
+              <button
+                onClick={() => handleMenuClick(('uid' in n ? n.uid : n.id) as string)}
+                className={`w-full text-left px-3 py-2 rounded-md transition-all duration-300 transform outline-none focus:outline-none focus:ring-2 focus:ring-sky-300
                 ${activeSection === ('uid' in n ? n.uid : n.id)
-                  ? `${activeStyle} shadow-md scale-105`
-                  : `${pageStyle} hover:bg-sky-300/40 hover:scale-[1.02]`
-                } text-amber-50 cursor-pointer`}
-            >
-              <span className="block truncate">{n.title}</span>
-            </button>
-          </div>
-        ))}
+                    ? `${activeStyle} shadow-md scale-105`
+                    : `${pageStyle} hover:bg-sky-300/40 hover:scale-[1.02]`
+                  } text-amber-50 cursor-pointer`}
+              >
+                <span className=" text-black/60 dark:text-white">{n.title.length > 10 ? n.title.slice(0, 10) + '...' : n.title}</span>
+              </button>
+            </div>
+          ))}
+      </ScrollArea>
     </nav>
 
   )

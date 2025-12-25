@@ -11,7 +11,7 @@ import { NoteHeaderCard } from '@/components/features/admin/notes/headerCard';
 import { NoteCardHeader } from '@/components/features/admin/notes/cardHeader';
 import { NoteCategoryCard } from '@/components/features/admin/notes/categoryCard';
 
-const StudyNodes: React.FC = () => {
+const StudyNodes= () => {
   // 笔记列表状态
   const [notes, setNotes] = useState<Note[]>([]);
   // 新建笔记分类的标题输入
@@ -30,30 +30,32 @@ const StudyNodes: React.FC = () => {
     notes.flatMap(note => [...(note.tags || []), ...(note.page || []).flatMap(page => page.pageTags || [])])
   ));
 
+  const getNotes = async () => {
+    try {
+      const response = await useNotes.getNote({
+        credentials: 'include'
+      });
+      // 格式化后端返回的笔记数据
+      const formattedNotes: Note[] = response.map((note: Note) => ({
+        id: note.id,
+        title: note.title,
+        tags: note.tags || [],
+        titlePicture: note.titlePicture,
+        createdAt: note.createdAt,
+        updatedAt: note.updatedAt,
+        page: note.page || []
+      }));
+      setNotes(formattedNotes);
+    } catch (error) {
+      console.error('获取笔记数据失败:', error);
+    }
+  };
+
+
   // 组件挂载时拉取笔记数据
   useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        const response = await useNotes.getNote({
-          credentials: 'include'
-        });
-        // 格式化后端返回的笔记数据
-        const formattedNotes: Note[] = response.map((note: Note) => ({
-          id: note.id,
-          title: note.title,
-          tags: note.tags || [],
-          titlePicture: note.titlePicture,
-          createdAt: note.createdAt,
-          updatedAt: note.updatedAt,
-          page: note.page || []
-        }));
-        setNotes(formattedNotes);
-      } catch (error) {
-        console.error('获取笔记数据失败:', error);
-      }
-    };
-    fetchNotes();
-  }, []);
+    getNotes();
+  }, [notes.length]);
 
   // 日期格式化工具函数
   const formatDate = (dateString: string) => {

@@ -10,6 +10,8 @@ import {
   GalleryVerticalEnd,
   Map,
   PieChart,
+  User,
+  UserCog2,
 } from "lucide-react"
 
 import {
@@ -125,12 +127,27 @@ const data = {
       url: '/admin/friend-links',
       icon: Map,
     },
+    {
+      name: '个人设置',
+      url: '/admin/about',
+      icon: User,
+    },
+    {
+      name: '博客设置',
+      url: '/admin/blog',
+      icon: Command,
+    },
+    {
+      name:'管理员设置',
+      url:'/admin/admin-settings',
+      icon:UserCog2,
+    }
 
   ],
 }
 
 // AppSidebar 组件定义
-function AppSidebar() {
+export default function AppAdminSidebar() {
   const [userData, setUserData] = React.useState<{
     name: string;
     username: string;
@@ -175,4 +192,3 @@ function AppSidebar() {
   );
 }
 
-export { AppSidebar }

@@ -170,7 +170,7 @@ export function NoteListTable({
                     <DropdownMenuContent align="end" className="backdrop-blur-sm bg-card/90 dark:bg-card/90 border border-border/40 shadow-lg">
                       <DropdownMenuItem className="hover:bg-primary/10 transition-colors duration-200">
                         <Edit3 className="h-4 w-4 mr-2 text-primary/80" />
-                        <Link href={`/admin/notes/${noteId}/edit/${page.id}`} className="w-full text-left">
+                        <Link href={`/admin/notes/${noteId}/edit/${page.pageId}`} className="w-full text-left">
                           编辑
                         </Link>
                       </DropdownMenuItem>

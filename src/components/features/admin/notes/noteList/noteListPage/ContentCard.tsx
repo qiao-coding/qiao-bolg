@@ -11,8 +11,10 @@ import { AntTabs } from '@/components/ui/ant/ant_taps';
 import ReactSimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useTheme } from "next-themes";
-import './light.css';
-import './dark.css';
+import './light.css'
+import './dark.css'
+
+
 
 export function NoteListPageContentCard(
     {
@@ -34,19 +36,29 @@ export function NoteListPageContentCard(
 
     const { resolvedTheme } = useTheme();
 
-    // 根据主题应用CSS类
+    // // 根据主题应用CSS类,markdown编辑器嵌套过深，无奈之举，这已经很尽力去优化性能了，添加了防抖，
+    // 对dom的引用进行了优化，,减少到只对2个dom引用，通过父元素来引用，分发样式
     useEffect(() => {
+        let timer: NodeJS.Timeout | null = null;
+
         const applyTheme = () => {
-            const editorElements = document.querySelectorAll('.EasyMDEContainer .CodeMirror');
-            editorElements.forEach(editorElement => {
-                if (resolvedTheme === 'dark') {
-                    editorElement.classList.remove('light-theme');
-                    editorElement.classList.add('dark-theme');
-                } else {
-                    editorElement.classList.remove('dark-theme');
-                    editorElement.classList.add('light-theme');
-                }
-            });
+            // 防抖：清除之前的定时器
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => {
+                // 获取所有需要应用主题的元素
+                const editorElements = document.querySelectorAll('.EasyMDEContainer .CodeMirror')
+                const toolbarElements = document.querySelectorAll('.EasyMDEContainer .editor-toolbar')
+                // 清除现有的主题类
+                const allElements = [
+                    ...editorElements,
+                    ...toolbarElements
+                ];
+
+                allElements.forEach(element => {
+                    element.classList.remove('light-theme', 'dark-theme');
+                    element.classList.add(`${resolvedTheme}-theme`);
+                });
+            }, 250); // 250ms 防抖延迟
         };
 
         // 立即应用主题
@@ -57,6 +69,7 @@ export function NoteListPageContentCard(
         observer.observe(document.body, { childList: true, subtree: true });
 
         return () => {
+            if (timer) clearTimeout(timer);
             observer.disconnect();
         };
     }, [resolvedTheme]);
@@ -65,26 +78,13 @@ export function NoteListPageContentCard(
 
 
     return (
-        <Card className="py-0 shadow-xl border border-border/40 overflow-hidden transition-all duration-500 hover:shadow-2xl backdrop-blur-sm bg-card/80 dark:bg-card/80">
-            <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border/20 pt-6 pb-4 px-6">
-                <CardTitle className="flex items-center gap-3 text-primary text-xl font-bold">
-                    <FileText className="h-7 w-7" />
-                    笔记详情
-                </CardTitle>
-                {notePage && (
-                    <div className="flex flex-wrap gap-4 mt-2">
-                        <p className="text-sm text-primary/70 flex items-center gap-2 bg-gradient-to-r from-primary/5 to-primary/10 px-3 py-1 rounded-lg border border-border/20">
-                            <Calendar className="h-3.5 w-3.5 " />
-                            创建时间:  {new Date(notePage.dateStart || '').toLocaleDateString()}
-                        </p>
-                        <p className="text-sm text-primary/70 flex items-center gap-2 bg-gradient-to-r from-primary/5 to-primary/10 px-3 py-1 rounded-lg border border-border/20">
-                            <Calendar className="h-3.5 w-3.5 " />
-                            更新时间:  {new Date(notePage.dateEnd || '').toLocaleDateString()}
-                        </p>
-                    </div>
-                )}
-            </CardHeader>
+        <Card className="py-0 shadow-xl border border-border/40
+         overflow-hidden 
+         transition-all duration-500 hover:shadow-2xl 
+         backdrop-blur-sm bg-card/80 dark:bg-card/80">
+
             <CardContent className="space-y-8 p-8">
+
                 {/* 标题 */}
                 <div className="space-y-3">
                     <Label htmlFor="title" className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
@@ -110,6 +110,25 @@ export function NoteListPageContentCard(
                         <AntTabs defaultTags={notePage?.pageTags} onTagsChange={(tags) => setUpdateNotePage({ ...notePage!, pageTags: tags })} />
                     </div>
                 </div>
+                <CardHeader className="
+            border-b border-border/20
+             pt-4 pb-4 mb-4 px-6">
+                    {notePage && (
+                        <div className="flex gap-4 mt-2">
+                            <p className="text-sm text-primary/70 flex items-center gap-2 bg-gradient-to-r from-primary/5 to-primary/10 px-3 py-1 rounded-lg border border-border/20">
+                                <Calendar className="h-3.5 w-3.5 " />
+                                创建时间:  {new Date(notePage.dateStart || '').toLocaleDateString()}
+                            </p>
+                            <p className="text-sm text-primary/70 
+                        flex items-center gap-2 
+                        bg-gradient-to-r from-primary/5 to-primary/10
+                         px-3 py-1 rounded-lg border border-border/20">
+                                <Calendar className="h-3.5 w-3.5 " />
+                                更新时间:  {new Date(notePage.dateEnd || '').toLocaleDateString()}
+                            </p>
+                        </div>
+                    )}
+                </CardHeader>
 
                 <Separator className="border-border/40" />
 
@@ -118,13 +137,15 @@ export function NoteListPageContentCard(
                         笔记内容 (Markdown格式)
                     </Label>
                     <div className="max-h-[600px] overflow-auto
-                     bg-sky-100/40 dark:bg-slate-200/20"
+                      text-black dark:text-white
+                      bg-sky-200/10 dark:bg-slate-800/10
+
+                      
+                      "
                     >
                         <ReactSimpleMDE
                             value={upNoteNotePage?.content || ''}
                             onChange={(value) => setUpdateNotePage({ ...notePage!, content: value! })}
-                            className="bg-transparent"
-
                         />
 
                     </div>

@@ -22,10 +22,17 @@ export function NoteListCard(
     const cardRefs = useRef<{ [key: string]: HTMLSpanElement | null }>({});
 
 
+    const sort_notes = note.page && note.page.sort((a, b) => {
+        const aDate = new Date(a.dateEnd || '');
+        const bDate = new Date(b.dateEnd || '');
+        return bDate.getTime() - aDate.getTime();
+    });
+
+
 
     return (
         <div className="flex flex-col ">
-            {note.page && note.page.map((note) => (
+            {sort_notes && sort_notes.map((note) => (
                 <div
                     id={`section-${note.uid}`}
 

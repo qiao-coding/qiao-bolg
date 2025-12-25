@@ -1,12 +1,8 @@
-import { AppSidebar } from "@/components/features/admin/app-sidebar";
 import ThemePage from "@/components/ui/public/themePage";
 import {
   Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
+
 } from "@/components/ui/shadcnComponents/breadcrumb"
 import { Separator } from "@/components/ui/shadcnComponents/separator"
 import {
@@ -14,19 +10,56 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/shadcnComponents/sidebar"
-import { getSession } from "next-auth/react";
 import React from "react";
 import { auth } from "../../../auth";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import AppAdminSidebar from "@/components/features/admin/appAdmin_Sidebar";
 
 
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
 
-  const session = await auth(); // 服务端获取当前登录用户信息
+  const session = await auth();
 
-  if (!session) {
+  const adminInfo = await (async () => {
+    try {
+      if (!session?.user?.email) {
+        return null;
+      }
+
+      const adminUser = await prisma.adminUser.findUnique({
+        where: {
+          username: session.user.email
+        }
+      });
+
+
+
+      if (adminUser) {
+
+        return true;
+      }
+      return null
+    } catch (err) {
+      return null;
+    }
+  })();
+
+
+  const adminUserCheck = await prisma.adminUser.findUnique({
+    where: {
+      username: session?.user?.email ?? undefined
+    }
+  })
+
+  const yanzheng = adminUserCheck?.isDynamicEmail
+    ? !session || !adminInfo : !session
+
+
+
+  if (yanzheng) {
     return (
       <div className="flex justify-center items-center h-screen bg-slate-100 dark:bg-slate-800">
         <div className="flex flex-col justify-center items-center ">
@@ -51,7 +84,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <SidebarProvider className="bg-sky-100/40  dark:bg-slate-600/40">
-      <AppSidebar />
+      <AppAdminSidebar />
       <SidebarInset className=" text-foreground">
         <header className="flex h-16 justify-between bg-sky-200/40  dark:bg-slate-600/40 shrink-0 items-center gap-2 border-b border-border">
           <div className="flex items-center flex-2 px-4  justify-between">

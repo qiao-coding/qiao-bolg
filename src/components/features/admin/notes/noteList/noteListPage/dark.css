@@ -1,13 +1,35 @@
 .EasyMDEContainer .CodeMirror.dark-theme {
-  background-color: rgba(255, 255, 255, 0); /* 50% 透明背景 */
+  background-color: rgba(41, 51, 65); /* bg-slate-600 with opacity */
   color: white;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.EasyMDEContainer .CodeMirror-cursor.dark-theme {
+    border-left: 2px solid white; /* 光标颜色 */
+}
+
+.EasyMDEContainer .CodeMirror-selected.dark-theme {
+    background: rgba(255, 255, 255, 0.1); /* 选中文字背景颜色 */
+}
+
+.EasyMDEContainer .editor-toolbar.dark-theme button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.EasyMDEContainer .editor-toolbar.dark-theme {
+    background-color: rgba(41, 51, 65); /* bg-slate-600 with opacity */
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.EasyMDEContainer .editor-toolbar.dark-theme .active {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .EasyMDEContainer .CodeMirror.dark-theme .cm-comment {
     background-color: transparent;
 }
 
-.CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word)  {
+.CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
     background-color: transparent;
-
 }

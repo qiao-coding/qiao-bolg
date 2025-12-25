@@ -11,6 +11,8 @@ import { useNotes } from "@/hooks/note/useNotes";
 import { Note, NotesPage } from "@/types/note/type";
 import { NoteListCard } from "@/components/features/notes/noteListCard";
 import { NoteListHeader } from "@/components/features/notes/noteListHeader";
+import { Button } from "@/components/ui/shadcnComponents/button";
+import { ArrowUpIcon } from "lucide-react";
 
 
 
@@ -96,6 +98,9 @@ const Notestitle = () => {
               />}
             </section>
 
+
+
+
           </AnimatedContent>
 
         </NextRouter>
@@ -104,7 +109,17 @@ const Notestitle = () => {
 
 
 
-      <aside className="cs1 hidden lg:flex  z-50 flex flex-col fixed right-[5%] lg:right-[15%] top-[25%]  md:right-[-20%] sm:right-[-20%] ">
+
+      <aside className=" hidden lg:flex  z-50
+       flex flex-col  
+       fixed right-[5%] lg:right-[10%] top-[15%]
+         md:right-[-20%] sm:right-[-20%]
+         h-50 
+          ">
+        <span className="text-amber-50 text-base my-4 opacity-70 ">
+          <p className="mx-1 text-sky-500 dark:text-slate-300 text-3xl font-bold">笔记目录</p>
+
+        </span>
         {note &&
           <PageNavigation
             notesValue={note.page as NotesPage[]}
@@ -112,6 +127,22 @@ const Notestitle = () => {
             activeStyle='text-blue-400 font-bold' />
         }
       </aside>
+
+      <footer
+        className="fixed bottom-[3%] left-[3%] "
+      >
+        <Button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          variant="outline"
+          aria-label="Submit"
+          className="bg-card/60"
+
+        >
+          <span className="hidden md:inline-block">返回上级</span>
+
+          <ArrowUpIcon />
+        </Button>
+      </footer>
 
     </div>
   );

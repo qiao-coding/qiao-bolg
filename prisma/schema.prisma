@@ -64,6 +64,7 @@ model AdminUser {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
+  isDynamicEmail   Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   role      String   @default("user")
@@ -181,3 +182,103 @@ model Friend {
   @@map("friend")
 }
 
+// 关于页面数据模型
+model AboutPage {
+  id          Int              @id @default(autoincrement())
+  description String
+  details     AboutPageDetail[]
+
+  @@map("about_page")
+}
+
+model AboutPageDetail {
+  id       Int    @id @default(autoincrement())
+  label    String
+  value    String
+  order    Int    @default(0)
+  aboutPageId Int
+  aboutPage   AboutPage @relation(fields: [aboutPageId], references: [id], onDelete: Cascade)
+
+  @@map("about_page_details")
+  @@index([aboutPageId])
+}
+
+// 博客设置数据模型
+model BlogSetting {
+  id          Int          @id @default(autoincrement())
+  blogName    String
+  homePage    HomePage?
+  homeIcons   HomeIcon[]
+  notesSidebar NotesSidebar?
+
+  @@map("blog_settings")
+}
+
+// 主页信息嵌入模型
+model HomePage {
+  id          Int    @id @default(autoincrement())
+  mainTitle   String
+  subTitle    String
+  isDynamicTitle  Boolean @default(true)
+  isDynamicTiltCard  Boolean @default(true)
+  blogSettingId Int    @unique
+  blogSetting   BlogSetting @relation(fields: [blogSettingId], references: [id])
+
+  @@map("home_pages")
+  @@index([blogSettingId])
+}
+
+// 主页图标链接模型
+model HomeIcon {
+  id     Int    @id @default(autoincrement())
+  name   String
+  link   String
+  order  Int    @default(0)
+  blogSettingId Int
+  blogSetting   BlogSetting @relation(fields: [blogSettingId], references: [id])
+
+  @@map("home_icons")
+  @@index([blogSettingId])
+}
+
+// Notes侧边栏设置模型
+model NotesSidebar {
+  id          Int         @id @default(autoincrement())
+  name        String
+  email       String
+  socialLinks SocialLink[]
+  contacts    SidebarContact[]
+  isDynamicEmail    Boolean @default(true)
+  isDynamicName     Boolean @default(true)
+  blogSettingId Int       @unique
+  blogSetting   BlogSetting @relation(fields: [blogSettingId], references: [id])
+
+  @@map("notes_sidebars")
+  @@index([blogSettingId])
+}
+
+model SocialLink {
+  id       Int    @id @default(autoincrement())
+  name     String  // 社交平台名称（如：GitHub、微博等）
+  link     String  // 社交链接URL
+  order    Int    @default(0)  // 显示顺序
+  sidebarId Int   // 外键，关联到NotesSidebar
+  sidebar   NotesSidebar @relation(fields: [sidebarId], references: [id], map: "social_link_notes_sidebar_fkey")
+
+  @@map("social_links")
+  @@index([sidebarId])
+}
+
+
+// 侧边栏联系信息模型
+model SidebarContact {
+  id       Int    @id @default(autoincrement())
+  name     String
+  link     String
+  order    Int    @default(0)
+  sidebarId Int
+  sidebar   NotesSidebar @relation(fields: [sidebarId], references: [id], map: "sidebar_contact_notes_sidebar_fkey")
+
+  @@map("sidebar_contacts")
+  @@index([sidebarId])
+}
