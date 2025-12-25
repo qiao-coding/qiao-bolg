@@ -37,7 +37,7 @@ export function NoteListPageContentCard(
     const { resolvedTheme } = useTheme();
 
     // // 根据主题应用CSS类,markdown编辑器嵌套过深，无奈之举，这已经很尽力去优化性能了，添加了防抖，
-    // 对dom的引用进行了优化，,减少到只对2个dom引用，通过父元素来引用，分发样式
+    // 对dom的引用进行了优化，,通过父元素来引用，分发主题类名，从而修改样式
     useEffect(() => {
         let timer: NodeJS.Timeout | null = null;
 
@@ -45,20 +45,13 @@ export function NoteListPageContentCard(
             // 防抖：清除之前的定时器
             if (timer) clearTimeout(timer);
             timer = setTimeout(() => {
-                // 获取所有需要应用主题的元素
-                const editorElements = document.querySelectorAll('.EasyMDEContainer .CodeMirror')
-                const toolbarElements = document.querySelectorAll('.EasyMDEContainer .editor-toolbar')
+                const containerElements = document.querySelectorAll('.EasyMDEContainer');
                 // 清除现有的主题类
-                const allElements = [
-                    ...editorElements,
-                    ...toolbarElements
-                ];
-
-                allElements.forEach(element => {
+                containerElements.forEach(element => {
                     element.classList.remove('light-theme', 'dark-theme');
                     element.classList.add(`${resolvedTheme}-theme`);
                 });
-            }, 250); // 250ms 防抖延迟
+            }, 100); // 100ms 防抖延迟
         };
 
         // 立即应用主题
@@ -148,7 +141,9 @@ export function NoteListPageContentCard(
                         <ReactSimpleMDE
                             value={upNoteNotePage?.content || ''}
                             onChange={(value) => setUpdateNotePage({ ...notePage!, content: value! })}
-                        />
+                            
+                           
+                       />
 
                     </div>
                 </div>

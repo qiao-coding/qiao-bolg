@@ -44,6 +44,7 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import { NotesPage } from '@/types/note/type';
+import { useRouter } from 'next/navigation';
 
 interface NoteListTableProps {
   pages: NotesPage[];
@@ -75,6 +76,8 @@ export function NoteListTable({
       return dateString;
     }
   };
+
+  const router = useRouter();
 
   const renderSortIcon = (field: 'title' | 'dateStart' | 'dateEnd') => {
     if (sortField !== field) {
@@ -143,12 +146,16 @@ export function NoteListTable({
                 <TableCell className="border-r border-border/30">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-border/60 text-primary focus:ring-primary/50 focus:border-primary/50 transition-colors"
+                    className="h-4 w-4
+                     rounded border-border/60 text-primary
+                      cursor-pointer focus:ring-primary/50 focus:border-primary/50 transition-colors"
                     checked={selectedNotes.includes(page.id)}
                     onChange={() => onToggleSelectItem(page.id)}
                   />
                 </TableCell>
-                <TableCell className="font-medium border-r border-border/30">{page.title}</TableCell>
+                <TableCell 
+                onClick={()=>router.push(`/admin/notes/${noteId}/edit/${page.pageId}`)}
+                className="font-medium cursor-pointer border-r border-border/30">{page.title}</TableCell>
                 <TableCell className="border-r border-border/30">
                   <div className="flex flex-wrap gap-1">
                     {page.pageTags.map((tag: string) => (

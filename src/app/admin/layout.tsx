@@ -86,8 +86,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <SidebarProvider className="bg-sky-100/40  dark:bg-slate-600/40">
       <AppAdminSidebar />
       <SidebarInset className=" text-foreground">
-        <header className="flex h-16 justify-between bg-sky-200/40  dark:bg-slate-600/40 shrink-0 items-center gap-2 border-b border-border">
-          <div className="flex items-center flex-2 px-4  justify-between">
+        <header className="flex absolute  justify-between  items-center gap-2 border-b border-border">
+          <div className="flex  shrink-0 top-0 fixed w-full h-16 z-2 
+          items-center flex-2 px-4 bg-sky-200/60 
+           dark:bg-slate-600/40  ">
             <SidebarTrigger className="-ml-1" />
             <Separator
               orientation="vertical"
@@ -95,7 +97,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             />
 
             {/* 面包屑导航 */}
-            <Breadcrumb>
+            <Breadcrumb className="fixed top-5 right-10">
               <BreadcrumbList>
                 <div className="">
                   <ThemePage />
@@ -104,7 +106,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </Breadcrumb>
           </div>
         </header>
-        <main className="min-h-screen">
+        <main className="min-h-screen mt-15">
           {children}
         </main>
       </SidebarInset>
