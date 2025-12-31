@@ -12,3 +12,14 @@ export interface MarkdownEditorLayoutProps {
   initialMode?: EditorMode;
   theme?: 'light' | 'dark';
 }
+
+export interface insertTextAtCursorType {
+  (prefix: string, suffix: string, defaultText: string): void;
+}
+
+// 工具栏项目接口
+export interface ToolbarItem {
+  icon: React.ReactNode;
+  title: string;
+  action: () => void;
+}

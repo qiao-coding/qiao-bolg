@@ -5,25 +5,25 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import {
+  Eye,
+  Columns,
+  Type,
   Bold,
   Italic,
   Heading,
   List,
   ListOrdered,
-  Code,
   Quote,
+  Code,
   Link,
   Minus,
-  Eye,
-  Columns,
-  Type,
 } from 'lucide-react';
 
-import { MarkdownEditorLayoutProps, EditorMode } from './type';
-import { calculateWordCount, calculateCharCount, getLanguageFromExtension } from './utils';
+import { MarkdownEditorLayoutProps, EditorMode, insertTextAtCursorType } from './type';
+import { calculateWordCount, calculateCharCount, getLanguageFromExtension, MarkdownStyle } from './utils';
 import StatusBar from './components/StatusBar';
 import { ShowToolbar } from './components/showToolbar';
-import { MarkdownStyle } from '@/lib/store/cdn/markdown/markdown_style';
+import { CodeBlock } from './components/CodeBlock';
 
 export default function MarkdownEditor({
   initialContent = "开始你的写作吧...",
@@ -63,14 +63,30 @@ export default function MarkdownEditor({
   const isUndoingOrRedoingRef = useRef<boolean>(false);
 
   const markdownComponents = useMemo(() => ({
-    h1: ({ ...props }) => <h1 {...props} className="text-2xl font-bold" />,
-    h2: ({ ...props }) => <h2 {...props} className="text-xl font-semibold" />,
-    h3: ({ ...props }) => <h3 {...props} className="text-lg font-medium" />,
-    h4: ({ ...props }) => <h4 {...props} className="text-md font-medium" />,
-    h5: ({ ...props }) => <h5 {...props} className="text-sm font-medium" />,
-    strong: ({ ...props }) => <strong {...props} className="font-bold" />,
-    em: ({ ...props }) => <em {...props} className="italic" />,
-  }), []);
+            p: ({ className = '', ...props }) => <p className={`my-4 leading-relaxed ${className || ''}`} {...props} />,
+            h1: ({ className = '', ...props }) => <h1 className={`text-3xl font-bold mt-8 mb-4 ${className || ''}`} {...props} />,
+            h2: ({ className = '', ...props }) => <h2 className={`text-2xl font-bold mt-8 mb-3 ${className || ''}`} {...props} />,
+            h3: ({ className = '', ...props }) => <h3 className={`text-xl font-bold mt-6 mb-2 ${className || ''}`} {...props} />,
+            code: ({ className = '', ...props }) => {
+              const isInlineCode = !className?.includes('language');
+
+              return (
+                <code
+                  className={`font-mono ${isInlineCode
+                    ? 'px-1.5 py-0.5 rounded text-sm font-medium bg-muted/80 dark:bg-muted/40'
+                    : className}`}
+                  {...props}
+                />
+              );
+            },
+            pre: ({ className = '', ...props }) => {
+              const children = props.children;
+              return <CodeBlock className={className}>{children}</CodeBlock>;
+            },
+            a: ({ ...props }) => <a
+              className="text-[#4A6FA5] hover:text-[#3A5F95] underline decoration-1 underline-offset-2 dark:text-blue-400 dark:hover:text-blue-300"
+              {...props} />
+          }), []);
 
   // 处理内容更新并维护历史记录
   const handleContentChange = useCallback((newContent: string) => {
@@ -195,54 +211,23 @@ export default function MarkdownEditor({
     });
   }, [content, handleContentChange]);
 
+  // 工具栏项目
+  const toolbarItems = useCallback((insertTextAtCursor: insertTextAtCursorType) => {
+    return [
+      { icon: <Bold size={18} />, title: '粗体', action: () => insertTextAtCursor('**', '**', '粗体文字') },
+      { icon: <Italic size={18} />, title: '斜体', action: () => insertTextAtCursor('*', '*', '斜体文字') },
+      { icon: <Heading size={18} />, title: '标题', action: () => insertTextAtCursor('# ', '', '标题') },
+      { icon: <List size={18} />, title: '无序列表', action: () => insertTextAtCursor('- ', '', '列表项') },
+      { icon: <ListOrdered size={18} />, title: '有序列表', action: () => insertTextAtCursor('1. ', '', '列表项') },
+      { icon: <Quote size={18} />, title: '引用', action: () => insertTextAtCursor('> ', '', '引用文字') },
+      { icon: <Code size={18} />, title: '代码块', action: () => insertTextAtCursor('```\n', '\n```', 'const code = "example";') },
+      { icon: <Link size={18} />, title: '链接', action: () => insertTextAtCursor('[', '](https://example.com)', '链接文字') },
+      { icon: <Minus size={18} />, title: '分割线', action: () => insertTextAtCursor('\n---\n', '', '') },
+    ];
+  }, []);
+
   // 预定义的工具栏动作
-  const toolbarActions = useMemo(() => [
-    {
-      icon: <Bold size={18} />,
-      title: '粗体',
-      action: () => insertTextAtCursor('**', '**', '粗体文字')
-    },
-    {
-      icon: <Italic size={18} />,
-      title: '斜体',
-      action: () => insertTextAtCursor('*', '*', '斜体文字')
-    },
-    {
-      icon: <Heading size={18} />,
-      title: '标题',
-      action: () => insertTextAtCursor('# ', '', '标题')
-    },
-    {
-      icon: <List size={18} />,
-      title: '无序列表',
-      action: () => insertTextAtCursor('- ', '', '列表项')
-    },
-    {
-      icon: <ListOrdered size={18} />,
-      title: '有序列表',
-      action: () => insertTextAtCursor('1. ', '', '列表项')
-    },
-    {
-      icon: <Quote size={18} />,
-      title: '引用',
-      action: () => insertTextAtCursor('> ', '', '引用文字')
-    },
-    {
-      icon: <Code size={18} />,
-      title: '代码块',
-      action: () => insertTextAtCursor('```\n', '\n```', 'const code = "example";')
-    },
-    {
-      icon: <Link size={18} />,
-      title: '链接',
-      action: () => insertTextAtCursor('[', '](https://example.com)', '链接文字')
-    },
-    {
-      icon: <Minus size={18} />,
-      title: '分割线',
-      action: () => insertTextAtCursor('\n---\n')
-    }
-  ], [insertTextAtCursor]);
+  const toolbarActions = useMemo(() => toolbarItems(insertTextAtCursor), [insertTextAtCursor, toolbarItems]);
 
   // 模式切换按钮
   const modeButtons = useMemo(() => [
