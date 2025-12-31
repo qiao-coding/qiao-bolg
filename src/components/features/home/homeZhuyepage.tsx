@@ -71,7 +71,6 @@ export function HomeZhuyepage() {
         return  '/UserImage/up.jpg';
     }
 
-    console.log(blogData.homePage.isDynamicTitle);
     
 
     

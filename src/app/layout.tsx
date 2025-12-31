@@ -37,13 +37,14 @@ export default async function RootLayout({
 
   return (
     <html
-      lang="en"
+      // lang="en"
       data-theme="dark"
+      suppressHydrationWarning
     >
       <body
         className={` antialiased bg-image-[url('/bg.webp')]`}
+        suppressHydrationWarning
       >
-
         <SessionProvider>
           <ClientProviders>
             {children}

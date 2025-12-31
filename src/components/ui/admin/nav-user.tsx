@@ -117,7 +117,7 @@ export function NavUser({
             <Link href="/" className="text-red-500">
               <DropdownMenuItem className="text-red-500">
                 <LogOut className="text-red-500" />
-                退出登录
+                返回主页
               </DropdownMenuItem>
             </Link>
           </DropdownMenuContent>

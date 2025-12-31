@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Button } from '@/components/ui/shadcnComponents/button';
 import { Input } from '@/components/ui/shadcnComponents/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/card';
@@ -11,8 +11,11 @@ import { AntTabs } from '@/components/ui/ant/ant_taps';
 import ReactSimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useTheme } from "next-themes";
-import './light.css'
-import './dark.css'
+import MarkdownEditor from "@/components/features/editor/markdown/markdownEditor";
+// import './light.css'
+// import './dark.css'
+// import 'highlight.js/styles/atom-one-dark.css';
+
 
 
 
@@ -36,42 +39,20 @@ export function NoteListPageContentCard(
 
     const { resolvedTheme } = useTheme();
 
-    // // 根据主题应用CSS类,markdown编辑器嵌套过深，无奈之举，这已经很尽力去优化性能了，添加了防抖，
-    // 对dom的引用进行了优化，,通过父元素来引用，分发主题类名，从而修改样式
-    useEffect(() => {
-        let timer: NodeJS.Timeout | null = null;
+    const [editorTitle, setEditorTitle] = useState(notePage?.title || '');
 
-        const applyTheme = () => {
-            // 防抖：清除之前的定时器
-            if (timer) clearTimeout(timer);
-            timer = setTimeout(() => {
-                const containerElements = document.querySelectorAll('.EasyMDEContainer');
-                // 清除现有的主题类
-                containerElements.forEach(element => {
-                    element.classList.remove('light-theme', 'dark-theme');
-                    element.classList.add(`${resolvedTheme}-theme`);
-                });
-            }, 100); // 100ms 防抖延迟
-        };
+    const handleEditorChange = (value: string) => {
+        setEditorTitle(value);
+        upNoteNotePage!.title = value;
+    };
 
-        // 立即应用主题
-        applyTheme();
 
-        // 监听 DOM 变化，确保新添加的编辑器也能应用主题
-        const observer = new MutationObserver(applyTheme);
-        observer.observe(document.body, { childList: true, subtree: true });
-
-        return () => {
-            if (timer) clearTimeout(timer);
-            observer.disconnect();
-        };
-    }, [resolvedTheme]);
 
 
 
 
     return (
-        <Card className="py-0 shadow-xl border border-border/40
+        <Card className="py-0 border border-border/40
          overflow-hidden 
          transition-all duration-500 hover:shadow-2xl 
          backdrop-blur-sm bg-card/80 dark:bg-card/80">
@@ -86,10 +67,12 @@ export function NoteListPageContentCard(
                     </Label>
                     <Input
                         id="title"
-                        value={upNoteNotePage?.title || ''}
-                        onChange={(e) => setUpdateNotePage({ ...notePage!, title: e.target.value })}
+                        value={editorTitle}
+                        onChange={(e) => handleEditorChange(e.target.value)}
                         placeholder="输入笔记标题"
-                        className="text-lg h-14 border-border/40 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl px-4"
+                        className="text-lg h-14 border-border/40 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 
+                        transition-all duration-300 rounded-xl px-4 bg-gradient-to-br from-card/50 to-card/30
+"
                     />
                 </div>
 
@@ -129,21 +112,20 @@ export function NoteListPageContentCard(
                     <Label className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
                         笔记内容 (Markdown格式)
                     </Label>
-                    
-                    <div className="max-h-[600px] overflow-auto
-                      text-black dark:text-white
-                      bg-sky-100 dark:bg-slate-600
 
-                      
+                    <div className="h-170 rounded-xl border border-border/40
                       "
                     >
-
-                        <ReactSimpleMDE
+                        <MarkdownEditor
+                            key={notePage?.uid}
                             value={upNoteNotePage?.content || ''}
-                            onChange={(value) => setUpdateNotePage({ ...notePage!, content: value! })}
-                            
-                           
-                       />
+                            onSave={handleSave}
+                            onChange={(content: string) => setUpdateNotePage({ ...notePage!, content: content || '' })}
+                            showToolbar={true}
+                            showStatusBar={true}
+                            initialMode="split"
+                            theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+                        />
 
                     </div>
                 </div>

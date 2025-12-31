@@ -61,7 +61,8 @@ const NotesCard = ({
           </div>
         </div>
         <div className="relative flex-shrink-0 w-60 h-45 sm:w-80 md:w-70 lg:w-90 xl:w-100 2xl:w-120">
-          {titlePicture ? <Image
+          {titlePicture ?
+           <Image
             fill
             src={titlePicture}
             alt={title}

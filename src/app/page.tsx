@@ -12,7 +12,6 @@ function Home() {
      
         <NextRouter>
           <HomeZhuyepage />
-
           <article id="articles-section" className={`  backdrop-blur-sm py-16 pb-30`}>
             <HomeArticles />
           </article>

@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 @plugin "daisyui";
 
-.homebg{
+.homebg {
   background-image: url(../../public/UserImage/bg.webp);
   background-attachment: fixed;
 }
@@ -13,11 +13,31 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
 html {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
+
+/*  代码块主题样式 */
+.dark .hljs {
+  background: #282c34;
+  color: #abb2bf;
+}
+
+.light .hljs {
+  background: #fafafa;
+  color: #383a42;
+}
+
+.light code {
+  background-color: transparent; /* 对应 Tailwind 的 bg-sky-100 */
+}
+
+.dark code {
+  background-color: #282c34;
+}
 
 
 @theme inline {
@@ -133,6 +153,7 @@ html {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

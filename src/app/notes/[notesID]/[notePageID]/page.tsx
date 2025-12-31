@@ -20,8 +20,6 @@ const NotePage = () => {
 
 
 
-
-
   // 获取数据(GET)
   useEffect(() => {
     const fetchNotes = async () => {
@@ -77,7 +75,7 @@ const NotePage = () => {
             key={notesPage.uid}
           >
             <NotePageMeta notesPage={notesPage} />
-            <NotePageContent content={notesPage.content} />
+            <NotePageContent content={notesPage.content} theme={theme as 'light' | 'dark'} />
             <NotePageTags tags={notesPage.pageTags} />
           </main>
 

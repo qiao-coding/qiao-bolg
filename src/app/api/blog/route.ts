@@ -1,12 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { NextRequest } from "next/server";
+import { cookies } from "next/headers";
 
 // 获取博客设置数据
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     // 默认使用ID为1的记录
     const blogId = 1;
+
+    // 从 cookies 获取语言设置
+    const cookieStore = await cookies();
+    const locale = cookieStore.get('preferred-locale')?.value || 'zh';
 
     // 获取博客设置数据
     const blogSetting = await prisma.blogSetting.findUnique({
@@ -31,13 +36,38 @@ export async function GET() {
       }
     });
 
+    // 多语言默认数据
+    const getDefaultData = (lang: string) => {
+      const defaultTexts = {
+        zh: {
+          blogName: "HaoWhiteの小站",
+          mainTitle: "Hi! HaoWhite 🥰",
+          subTitle: "愿生活的每一天，都有惊喜!",
+        },
+        en: {
+          blogName: "HaoWhite's Blog",
+          mainTitle: "Hi! HaoWhite 🥰",
+          subTitle: "May every day of life bring surprises!",
+        },
+        jp: {
+          blogName: "HaoWhiteのブログ",
+          mainTitle: "こんにちは！HaoWhite 🥰",
+          subTitle: "生活の毎日に驚きがありますように！",
+        }
+      };
+
+      return defaultTexts[lang as keyof typeof defaultTexts] || defaultTexts.zh;
+    };
+
+    const defaultData = getDefaultData(locale);
+
     // 如果没有找到数据，返回默认结构
     if (!blogSetting) {
       return Response.json({
-        blogName: "HaoWhiteの小站",
+        blogName: defaultData.blogName,
         homePage: {
-          mainTitle: "Hi! HaoWhite 🥰",
-          subTitle: "愿生活的每一天，都有惊喜!",
+          mainTitle: defaultData.mainTitle,
+          subTitle: defaultData.subTitle,
           isDynamicTitle: true,
           isDynamicTiltCard: true,
         },
@@ -84,7 +114,40 @@ export async function GET() {
       });
     }
 
-    return Response.json(blogSetting);
+    // 如果找到数据，但需要根据语言返回相应内容
+    const response = {
+      blogName: blogSetting.blogName || defaultData.blogName,
+      homePage: blogSetting.homePage ? {
+        mainTitle: blogSetting.homePage.mainTitle || defaultData.mainTitle,
+        subTitle: blogSetting.homePage.subTitle || defaultData.subTitle,
+        isDynamicTitle: blogSetting.homePage.isDynamicTitle,
+        isDynamicTiltCard: blogSetting.homePage.isDynamicTiltCard,
+      } : {
+        mainTitle: defaultData.mainTitle,
+        subTitle: defaultData.subTitle,
+        isDynamicTitle: true,
+        isDynamicTiltCard: true,
+      },
+      homeIcons: blogSetting.homeIcons.map(icon => ({
+        id: icon.id,
+        name: icon.name,
+        link: icon.link,
+      })),
+      notesSidebar: blogSetting.notesSidebar ? {
+        name: blogSetting.notesSidebar.name,
+        email: blogSetting.notesSidebar.email,
+        isDynamicEmail: blogSetting.notesSidebar.isDynamicEmail,
+        isDynamicName: blogSetting.notesSidebar.isDynamicName,
+        
+        socialLinks: blogSetting.notesSidebar.socialLinks ? blogSetting.notesSidebar.socialLinks.map(socialLink => ({
+          id: socialLink.id,
+          name: socialLink.name,
+          link: socialLink.link,
+        })) : []
+      } : null
+    };
+
+    return Response.json(response);
   } catch (error) {
     console.error("获取博客设置数据失败:", error);
     return Response.json({ error: "获取数据失败" }, { status: 500 });

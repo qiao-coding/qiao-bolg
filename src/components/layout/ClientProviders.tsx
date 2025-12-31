@@ -14,9 +14,10 @@ export function ClientProviders({ children }: ClientProvidersProps) {
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
+        storageKey="theme"
+        themes={['light', 'dark']}
       >
           {children}
-  
       </ThemeProvider>
     </ReduxProvider>
   )
