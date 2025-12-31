@@ -96,7 +96,7 @@ const Header = () => {
             </div>
             <ul
               tabIndex={0}
-              className={`bg-white z-10 dark:bg-gray-700/80 menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52  shadow bg-base-100 mt-4`}
+              className={`bg-white z-30 dark:bg-gray-700/80 menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52  shadow bg-base-100 mt-4`}
             >
               {HbtnStyle.map((item) => (
                 <li key={item.id}>
