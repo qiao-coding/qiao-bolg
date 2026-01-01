@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/shadcnComponents/calendar-17/input";
+import { Input } from "@/components/ui/shadcnComponents/forms/input";
 import React from "react";
 import { Save, Minimize, Maximize, Download, Upload } from "lucide-react";
 import { EditorMode } from "../type";

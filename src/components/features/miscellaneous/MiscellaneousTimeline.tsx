@@ -2,7 +2,7 @@
 import { miscellaneousType } from '@/types/miscellaneous/type';
 import Image from 'next/image';
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/shadcnComponents/card";
+import { Card, CardContent } from "@/components/ui/shadcnComponents/data-display/card";
 import { useEffect, useState } from "react";
 import NotesSideber from '@/components/ui/notes/noteSideber';
 import PageNavigation from '../notes/PageNavigation';
@@ -11,7 +11,6 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import 'highlight.js/styles/github.css';
-import { Button } from '@/components/ui/shadcnComponents/button';
 import { ArrowUpIcon } from 'lucide-react';
 
 // 创建单独的TimelineItem组件以支持独立的动画延迟

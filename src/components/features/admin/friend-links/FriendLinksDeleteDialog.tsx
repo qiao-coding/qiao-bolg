@@ -1,6 +1,6 @@
 'use client'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/shadcnComponents/dialog';
-import { Button } from '@/components/ui/shadcnComponents/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/shadcnComponents/overlay/dialog';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
 
 export function FriendLinksDeleteDialog({
   open,

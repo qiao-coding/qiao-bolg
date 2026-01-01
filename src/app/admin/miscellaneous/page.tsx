@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/card';
-import { Button } from '@/components/ui/shadcnComponents/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/data-display/card';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { MiscellaneousStatsCards } from '@/components/features/admin/miscellaneous/MiscellaneousStatsCards';
 import { MiscellaneousSearch } from '@/components/features/admin/miscellaneous/MiscellaneousSearch';
 import { MiscellaneousTable } from '@/components/features/admin/miscellaneous/MiscellaneousTable';

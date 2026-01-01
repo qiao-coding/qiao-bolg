@@ -1,5 +1,5 @@
 import { signIn } from 'next-auth/react';
-import { Button } from '@/components/ui/shadcnComponents/button';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { FaGithub } from 'react-icons/fa';
 
 const GitHubLoginButton = () => {

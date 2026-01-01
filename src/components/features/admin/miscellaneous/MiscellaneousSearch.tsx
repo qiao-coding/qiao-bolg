@@ -1,6 +1,6 @@
 'use client'
 import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/shadcnComponents/input';
+import { Input } from '@/components/ui/shadcnComponents/forms/input';
 import { motion } from 'framer-motion';
 
 export function MiscellaneousSearch({

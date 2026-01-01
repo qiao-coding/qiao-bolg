@@ -1,5 +1,4 @@
 import type React from "react"
-import type { Children } from "./background_img"
 
 
 const Title = ({children,className}:{children:React.ReactNode,className?:string}) => {

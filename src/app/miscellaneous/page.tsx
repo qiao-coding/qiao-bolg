@@ -2,14 +2,13 @@
 import NextRouter from "@/components/layout/NextRouter";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
-import AnimatedContent from "@/components/ui/shadcnComponents/AnimatedContent";
+import AnimatedContent from "@/components/ui/animation/AnimatedContent";
 import { useMiscellaneous } from "@/hooks/miscellaneous/useMiscellaneous";
 import { miscellaneousType } from "@/types/miscellaneous/type";
 import React, { useEffect, useState } from "react";
 import { MiscellaneousTimeline } from "@/components/features/miscellaneous/MiscellaneousTimeline";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
-import PageNavigation from "@/components/features/notes/PageNavigation";
-import { Button } from "@/components/ui/shadcnComponents/button";
+import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 
 
@@ -30,7 +29,7 @@ const Miscellaneous = () => {
       }
     }
     fetchMiscellaneous()
-  }, [])
+  }, [miscellaneous.length])
 
 
 

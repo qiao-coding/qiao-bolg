@@ -9,13 +9,11 @@ import leaf from "../../../public/titleImage/leaf.svg";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { throttle } from "lodash";
-import { UserAvatar } from "../features/login/UserAvatar";
 import { signOut, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { ThemeSwitcher } from "../features/theme/ThemeSwitcher";
 import { SearchBox } from "../features/search/SearchBox";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/shadcnComponents/dropdown-menu";
-import { Button } from "../ui/shadcnComponents/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/shadcnComponents/overlay/dropdown-menu";
 
 const Header = () => {
 

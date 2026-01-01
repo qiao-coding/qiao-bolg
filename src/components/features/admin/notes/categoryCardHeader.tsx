@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/shadcnComponents/badge";
+import { Badge } from "@/components/ui/shadcnComponents/data-display/badge";
 import { Note } from "@/types/note/type";
 import { FileText } from "lucide-react";
 import Image from "next/image";

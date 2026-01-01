@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/shadcnComponents/card';
+import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { useSession } from 'next-auth/react';
 import { useNotes } from '@/hooks/note/useNotes';
 import { Note, NotesPage } from '@/types/note/type';
 import { useParams } from 'next/navigation';
 import { NoteListCardHeader } from '@/components/features/admin/notes/noteList/cardHeader';
 import { NoteListHeader } from '@/components/features/admin/notes/noteList/header';
-import { NoteListSearchFilter } from '@/components/features/admin/notes/noteList/searchFilter';
 import { NoteListTable } from '@/components/features/admin/notes/noteList/table';
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/shadcnComponents/forms/input';
 
 
 function StudyNodes() {
@@ -177,10 +178,18 @@ function StudyNodes() {
 
         <CardContent className='bg-card/80 dark:bg-card/80'>
           {/* 添加笔记卡片内容组件 */}
-          <NoteListSearchFilter
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-          />
+          <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6 p-4">
+            <div className="relative flex-grow">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="搜索笔记标题或标签..."
+                className="pl-10 border-border/40 focus:border-primary/50 transition-colors"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
 
           {/* 添加笔记卡片表格组件 */}
           <NoteListTable

@@ -18,19 +18,19 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '@/components/ui/shadcnComponents/table';
+} from '@/components/ui/shadcnComponents/data-display/table';
 import {
   Badge
-} from '@/components/ui/shadcnComponents/badge';
+} from '@/components/ui/shadcnComponents/data-display/badge';
 import {
   Button
-} from '@/components/ui/shadcnComponents/button';
+} from '@/components/ui/shadcnComponents/forms/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
-} from '@/components/ui/shadcnComponents/dropdown-menu';
+} from '@/components/ui/shadcnComponents/overlay/dropdown-menu';
 import {
   Dialog,
   DialogContent,
@@ -39,7 +39,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger
-} from '@/components/ui/shadcnComponents/dialog';
+} from '@/components/ui/shadcnComponents/overlay/dialog';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';

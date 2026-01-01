@@ -4,14 +4,14 @@ import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import { useEffect, useState } from "react";
 import NotesSideber from "@/components/ui/notes/noteSideber";
-import AnimatedContent from "@/components/ui/shadcnComponents/AnimatedContent";
+import AnimatedContent from "@/components/ui/animation/AnimatedContent";
 import { motion } from "framer-motion";
 import { useNotes } from "@/hooks/note/useNotes";
 import { Note } from "@/types/note/type";
 import NotesCard from "@/components/features/notes/noteCard";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
 import { useSession } from "next-auth/react";
-import { Button } from "@/components/ui/shadcnComponents/button";
+import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 
 

@@ -1,5 +1,5 @@
 'use client'
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/card"
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/data-display/card"
 import { useFriend } from "@/hooks/friend/useFriend";
 import { useMiscellaneous } from "@/hooks/miscellaneous/useMiscellaneous";
 import { useNotes } from "@/hooks/note/useNotes";

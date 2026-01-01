@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/card";
-import { Input } from "@/components/ui/shadcnComponents/input";
-import { Label } from "@/components/ui/shadcnComponents/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/data-display/card";
+import { Input } from "@/components/ui/shadcnComponents/forms/input";
+import { Label } from "@/components/ui/shadcnComponents/forms/label";
 import { User } from 'lucide-react';
 import type { BlogData } from '@/types/blog/type';
 

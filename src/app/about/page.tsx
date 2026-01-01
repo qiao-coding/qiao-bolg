@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import NextRouter from '@/components/layout/NextRouter';
-import AnimatedContent from '@/components/ui/shadcnComponents/AnimatedContent';
+import AnimatedContent from '@/components/ui/animation/AnimatedContent';
 
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import NotesSideber from '@/components/ui/notes/noteSideber';

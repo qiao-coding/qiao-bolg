@@ -1,34 +1,25 @@
 "use client"
 
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react"
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/shadcnComponents/avatar"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/shadcnComponents/dropdown-menu"
+} from "@/components/ui/shadcnComponents/overlay/dropdown-menu"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/shadcnComponents/sidebar"
+} from "@/components/ui/shadcnComponents/navigation/sidebar"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import Image from "next/image"

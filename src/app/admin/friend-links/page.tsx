@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, Trash2, Globe } from 'lucide-react';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/shadcnComponents/card';
-import { Button } from '@/components/ui/shadcnComponents/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/shadcnComponents/data-display/card';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { FriendLinksStatsCards } from '@/components/features/admin/friend-links/FriendLinksStatsCards';
 import { FriendLinksSearch } from '@/components/features/admin/friend-links/FriendLinksSearch';
 import { FriendLinksTable } from '@/components/features/admin/friend-links/FriendLinksTable';

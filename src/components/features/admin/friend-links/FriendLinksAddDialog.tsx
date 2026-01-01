@@ -1,16 +1,11 @@
 'use client'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/shadcnComponents/dialog';
-import { Input } from '@/components/ui/shadcnComponents/input';
-import { Button } from '@/components/ui/shadcnComponents/button';
-import { Switch } from '@/components/ui/shadcnComponents/switch';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/shadcnComponents/overlay/dialog';
+import { Input } from '@/components/ui/shadcnComponents/forms/input';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
+import { Switch } from '@/components/ui/shadcnComponents/forms/switch';
+import { FriendForm } from '@/types/friend/type';
 
-interface FriendForm {
-  name: string;
-  url: string;
-  avatar?: string;
-  bio?: string;
-  status: boolean;
-}
+
 
 export function FriendLinksAddDialog({
   open,

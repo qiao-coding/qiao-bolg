@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/shadcnComponents/button";
+import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { Save } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { BlogBasicInfo } from '@/components/features/admin/blog/BlogBasicInfo';
 import { HomeIcons } from '@/components/features/admin/blog/HomeIcons';
 import { SidebarSettings } from '@/components/features/admin/blog/SidebarSettings';
-import type { BlogData, HomeIcon, SocialLink } from '@/types/blog/type';
+import type { BlogData } from '@/types/blog/type';
 
 export default function AdminBlogPage() {
   const { data: session } = useSession();

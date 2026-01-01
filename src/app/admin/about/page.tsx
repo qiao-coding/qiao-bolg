@@ -1,10 +1,10 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/card";
-import { Button } from "@/components/ui/shadcnComponents/button";
-import { Input } from "@/components/ui/shadcnComponents/input";
-import { Textarea } from "@/components/ui/shadcnComponents/textarea";
-import { Label } from "@/components/ui/shadcnComponents/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/data-display/card";
+import { Button } from "@/components/ui/shadcnComponents/forms/button";
+import { Input } from "@/components/ui/shadcnComponents/forms/input";
+import { Textarea } from "@/components/ui/shadcnComponents/forms/textarea";
+import { Label } from "@/components/ui/shadcnComponents/forms/label";
 import { Save, } from 'lucide-react';
 import { motion } from "framer-motion";
 

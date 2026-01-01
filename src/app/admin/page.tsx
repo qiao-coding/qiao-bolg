@@ -1,6 +1,5 @@
 import DashboardContentN1 from "@/components/features/admin/dashboard/dashboardContentN1";
 import { DashboardContentChart } from "@/components/features/admin/dashboard/dashboardContentN2";
-import { DashboardHeader } from "@/components/features/admin/dashboard/dashboardHeader";
 import { DashboardNavCards } from "@/components/features/admin/dashboard/dashboardNavCards";
 
 export default function AdminPage() {

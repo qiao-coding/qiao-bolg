@@ -2,15 +2,15 @@
 import NextRouter from '@/components/layout/NextRouter';
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import Title from '@/components/ui/public/title';
-import AnimatedContent from '@/components/ui/shadcnComponents/AnimatedContent';
+import AnimatedContent from '@/components/ui/animation/AnimatedContent';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Input } from '@/components/ui/shadcnComponents/input';
-import { Button } from '@/components/ui/shadcnComponents/button';
+import { Input } from '@/components/ui/shadcnComponents/forms/input';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { useTheme } from 'next-themes';
 import { useFriend } from '@/hooks/friend/useFriend';
 import { FriendType } from '@/types/friend/type';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/shadcnComponents/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/shadcnComponents/overlay/dialog';
 import { RotatingCube } from '@/components/features/mol/RotatingCube';
 import { motion } from 'framer-motion';
 

@@ -9,4 +9,12 @@ interface FriendType {
   status: boolean;
 }
 
-export type { FriendType };
+interface FriendForm {
+  name: string;
+  url: string;
+  avatar?: string;
+  bio?: string;
+  status: boolean;
+}
+
+export type { FriendType, FriendForm };

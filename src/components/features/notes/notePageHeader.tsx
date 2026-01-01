@@ -2,9 +2,8 @@
 import Link from 'next/link';
 import { ArrowLeft, Image, Palette } from 'lucide-react';
 import ThemePage from '@/components/ui/public/themePage';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/dropdown-menu';
-import { Button } from '@/components/ui/shadcnComponents/button';
-import { Printer, Share2, MoreHorizontal } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/overlay/dropdown-menu';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
 
 
 

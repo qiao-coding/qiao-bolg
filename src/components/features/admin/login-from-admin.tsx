@@ -1,14 +1,14 @@
 'use client'
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/shadcnComponents/button"
+import { Button } from "@/components/ui/shadcnComponents/forms/button"
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/shadcnComponents/card"
-import { Input } from "@/components/ui/shadcnComponents/input"
-import { Label } from "@/components/ui/shadcnComponents/label"
+} from "@/components/ui/shadcnComponents/data-display/card"
+import { Input } from "@/components/ui/shadcnComponents/forms/input"
+import { Label } from "@/components/ui/shadcnComponents/forms/label"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 

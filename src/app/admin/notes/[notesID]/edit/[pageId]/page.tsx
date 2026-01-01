@@ -2,9 +2,9 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { Button } from '@/components/ui/shadcnComponents/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/shadcnComponents/alert';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/data-display/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/shadcnComponents/feedback/alert';
 import { ArrowLeft, FileText } from 'lucide-react';
 import { useNotes } from '@/hooks/note/useNotes';
 import { NotesPage } from '@/types/note/type';

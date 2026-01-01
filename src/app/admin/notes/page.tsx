@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/shadcnComponents/card';
+import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { FileText } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
@@ -13,7 +13,7 @@ import { Plus } from 'lucide-react';
 import {
   CardHeader,
   CardTitle
-} from '@/components/ui/shadcnComponents/card';
+} from '@/components/ui/shadcnComponents/data-display/card';
 import {
   Dialog,
   DialogContent,
@@ -21,10 +21,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger
-} from '@/components/ui/shadcnComponents/dialog';
-import { Button } from '@/components/ui/shadcnComponents/button';
-import { Input } from '@/components/ui/shadcnComponents/input';
-import { Label } from '@/components/ui/shadcnComponents/label';
+} from '@/components/ui/shadcnComponents/overlay/dialog';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
+import { Input } from '@/components/ui/shadcnComponents/forms/input';
+import { Label } from '@/components/ui/shadcnComponents/forms/label';
 
 
 const StudyNodes = () => {
@@ -256,4 +256,4 @@ const StudyNodes = () => {
   );
 };
 
-export default StudyNodes;
+export default StudyNodes; 

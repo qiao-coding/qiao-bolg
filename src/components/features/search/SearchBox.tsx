@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Button } from '../../ui/shadcnComponents/button';
-import { Search } from 'lucide-react';
+import { Button } from '../../ui/shadcnComponents/forms/button';
 import { SearchResult, SearchBoxProps } from '../../../types/components/features/search/SearchBox.type';
 import { NoteSearchResponse } from '../../../types/note/type';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Input } from '@/components/ui/shadcnComponents/input';
 
 export function SearchBox({ className }: SearchBoxProps) {
     const [searchQuery, setSearchQuery] = useState('');

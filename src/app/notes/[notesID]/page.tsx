@@ -1,6 +1,6 @@
 "use client";
 import NextRouter from "@/components/layout/NextRouter";
-import AnimatedContent from "@/components/ui/shadcnComponents/AnimatedContent";
+import AnimatedContent from "@/components/ui/animation/AnimatedContent";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PageNavigation from "@/components/features/notes/PageNavigation";
@@ -11,7 +11,7 @@ import { useNotes } from "@/hooks/note/useNotes";
 import { Note, NotesPage } from "@/types/note/type";
 import { NoteListCard } from "@/components/features/notes/noteListCard";
 import { NoteListHeader } from "@/components/features/notes/noteListHeader";
-import { Button } from "@/components/ui/shadcnComponents/button";
+import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 
 

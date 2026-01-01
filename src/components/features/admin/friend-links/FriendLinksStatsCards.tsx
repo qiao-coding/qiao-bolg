@@ -1,22 +1,14 @@
 'use client'
-import { Card, CardContent } from '@/components/ui/shadcnComponents/card';
+import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { Globe, CheckCircle2, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
+import { FriendType } from '@/types/friend/type';
 
-interface Friend {
-  id: number;
-  name: string;
-  url: string;
-  avatar?: string;
-  bio?: string;
-  status: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
 
-export function FriendLinksStatsCards({ friends }: { friends: Friend[] }) {
+
+export function FriendLinksStatsCards({ friends }: { friends: FriendType[] }) {
   const formatDate = (dateString: string) => {
     try {
       return format(new Date(dateString), 'yyyy-MM-dd HH:mm', { locale: zhCN });

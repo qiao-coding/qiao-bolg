@@ -1,6 +1,6 @@
 'use client'
-import { Card, CardContent, CardFooter } from '@/components/ui/shadcnComponents/card';
-import { Button } from '@/components/ui/shadcnComponents/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/shadcnComponents/data-display/card';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { Eye, CalendarPlus, LucideCalendarCheck2, Edit, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';

@@ -10,7 +10,7 @@ import { NotePageContent } from '@/components/features/notes/notePageContent';
 import { NotePageTags } from '@/components/features/notes/notePageTags';
 import { NotePageLoading } from '@/components/features/notes/notePageLoading';
 import { useTheme } from 'next-themes';
-import { Button } from '@/components/ui/shadcnComponents/button';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { ArrowUpIcon } from 'lucide-react';
 const NotePage = () => {
   const { notesID, notePageID } = useParams();

@@ -1,22 +1,12 @@
 'use client'
 import { MoreHorizontal, Edit3, Trash2, ChevronDown, ChevronUp, Clock, User, CheckCircle2, Circle } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcnComponents/table';
-import { Button } from '@/components/ui/shadcnComponents/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/dropdown-menu';
-import { Switch } from '@/components/ui/shadcnComponents/switch';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcnComponents/data-display/table';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/overlay/dropdown-menu';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
+import { FriendType } from '@/types/friend/type';
 
-interface Friend {
-  id: number;
-  name: string;
-  url: string;
-  avatar?: string;
-  bio?: string;
-  status: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export function FriendLinksTable({
   friends,
@@ -25,19 +15,18 @@ export function FriendLinksTable({
   sortDirection,
   onToggleSelectAll,
   onToggleSelectItem,
-  onToggleStatus,
   onEdit,
   onDelete,
   onSortChange,
 }: {
-  friends: Friend[];
+  friends: FriendType[];
   selectedItems: number[];
   sortField: 'createdAt' | 'name' | 'status' | null;
   sortDirection: 'asc' | 'desc';
   onToggleSelectAll: () => void;
   onToggleSelectItem: (id: number) => void;
   onToggleStatus: (id: number) => void;
-  onEdit: (friend: Friend) => void;
+  onEdit: (friend: FriendType) => void;
   onDelete: (id: number) => void;
   onSortChange: (field: 'createdAt' | 'name' | 'status') => void;
 }) {

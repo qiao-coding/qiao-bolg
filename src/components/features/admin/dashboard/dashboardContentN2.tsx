@@ -9,7 +9,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/shadcnComponents/card"
+} from "@/components/ui/shadcnComponents/data-display/card"
 import {
   ChartConfig,
   ChartContainer,

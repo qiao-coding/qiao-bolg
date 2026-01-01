@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/components/ui/shadcnComponents/card';
+} from '@/components/ui/shadcnComponents/data-display/card';
 import {
   Dialog,
   DialogContent,
@@ -13,10 +13,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger
-} from '@/components/ui/shadcnComponents/dialog';
-import { Button } from '@/components/ui/shadcnComponents/button';
-import { Input } from '@/components/ui/shadcnComponents/input';
-import { Label } from '@/components/ui/shadcnComponents/label';
+} from '@/components/ui/shadcnComponents/overlay/dialog';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
+import { Input } from '@/components/ui/shadcnComponents/forms/input';
+import { Label } from '@/components/ui/shadcnComponents/forms/label';
 import { AntTabs } from '@/components/ui/ant/ant_taps';
 
 interface NoteListCardHeaderProps {

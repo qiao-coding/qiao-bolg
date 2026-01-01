@@ -1,10 +1,10 @@
 'use client'
 import React, { useState } from "react";
-import { Button } from '@/components/ui/shadcnComponents/button';
-import { Input } from '@/components/ui/shadcnComponents/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/card';
-import { Label } from '@/components/ui/shadcnComponents/label';
-import { Separator } from '@/components/ui/shadcnComponents/separator';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
+import { Input } from '@/components/ui/shadcnComponents/forms/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/data-display/card';
+import { Label } from '@/components/ui/shadcnComponents/forms/label';
+import { Separator } from '@/components/ui/shadcnComponents/navigation/separator';
 import { Save, ArrowLeft, Tag, FileText, Calendar } from 'lucide-react';
 import { NotesPage } from '@/types/note/type';
 import { AntTabs } from '@/components/ui/ant/ant_taps';

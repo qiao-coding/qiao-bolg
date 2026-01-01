@@ -1,12 +1,12 @@
 'use client';
 
 import { MoreVertical } from 'lucide-react';
-import { Button } from '../shadcnComponents/button';
+import { Button } from '../shadcnComponents/forms/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '../shadcnComponents/dropdown-menu';
+} from '../shadcnComponents/overlay/dropdown-menu';
 import {
   Dialog,
   DialogContent,
@@ -14,8 +14,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../shadcnComponents/dialog';
-import { Input } from '../shadcnComponents/input';
+} from '../shadcnComponents/overlay/dialog';
+import { Input } from '../shadcnComponents/forms/input';
 import { useState, useCallback, useEffect } from 'react';
 import { GenericDropdownMenuProps } from '../../../types/components/ui/public/GenericDropdownMenu.type';
 

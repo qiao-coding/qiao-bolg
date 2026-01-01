@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/card";
-import { Input } from "@/components/ui/shadcnComponents/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/data-display/card";
+import { Input } from "@/components/ui/shadcnComponents/forms/input";
 import { Link } from 'lucide-react';
 import type { HomeIcon } from '@/types/blog/type';
 

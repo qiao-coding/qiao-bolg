@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link";
-import { Button } from "../shadcnComponents/button";
+import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { Shield, User } from "lucide-react";
 
 

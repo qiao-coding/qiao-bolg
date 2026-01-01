@@ -1,5 +1,5 @@
 'use client'
-import { Card, CardContent } from '@/components/ui/shadcnComponents/card';
+import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { MessageCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';

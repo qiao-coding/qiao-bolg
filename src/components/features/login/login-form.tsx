@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { Card, CardContent } from "@/components/ui/shadcnComponents/card"
+import { Card, CardContent } from "@/components/ui/shadcnComponents/data-display/card"
 
 import Image from 'next/image'
 import { useState } from "react"

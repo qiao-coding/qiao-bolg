@@ -1,7 +1,7 @@
 'use client'
 import { FaAngleDoubleDown } from "react-icons/fa";
 import { motion } from "framer-motion";
-import TiltedCard from "@/components/ui/shadcnComponents/TiltedCard";
+import TiltedCard from "@/components/features/home/TiltedCard";
 import { useSession } from "next-auth/react";
 import { SiGitee, SiGithub } from "react-icons/si";
 import { SiTiktok } from "react-icons/si";

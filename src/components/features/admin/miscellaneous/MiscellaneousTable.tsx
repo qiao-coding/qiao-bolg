@@ -1,15 +1,10 @@
 'use client'
 import { MoreHorizontal, Edit3, Trash2, Calendar, ChevronUp, ChevronDown } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcnComponents/table';
-import { Button } from '@/components/ui/shadcnComponents/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/dropdown-menu';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcnComponents/data-display/table';
+import { Button } from '@/components/ui/shadcnComponents/forms/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/overlay/dropdown-menu';
 import { motion } from 'framer-motion';
-
-interface Miscellaneous {
-  id: number;
-  content: string;
-  date: string;
-}
+import { Miscellaneous } from '@/types/miscellaneous/type';
 
 export function MiscellaneousTable({
   items,

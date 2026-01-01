@@ -3,13 +3,13 @@ import {
   Breadcrumb,
   BreadcrumbList,
 
-} from "@/components/ui/shadcnComponents/breadcrumb"
-import { Separator } from "@/components/ui/shadcnComponents/separator"
+} from "@/components/ui/shadcnComponents/navigation/breadcrumb"
+import { Separator } from "@/components/ui/shadcnComponents/navigation/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/shadcnComponents/sidebar"
+} from "@/components/ui/shadcnComponents/navigation/sidebar"
 import React from "react";
 import { auth } from "../../../auth";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";

@@ -1,9 +1,8 @@
 'use client'
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
-import { Check, Copy, ChevronRight } from 'lucide-react';
 import { MarkdownStyle } from '../editor/markdown/utils';
 import { CodeBlock } from '../editor/markdown/components/CodeBlock';
 

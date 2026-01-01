@@ -1,7 +1,7 @@
 'use client'
 import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/shadcnComponents/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/shadcnComponents/select';
+import { Input } from '@/components/ui/shadcnComponents/forms/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/shadcnComponents/forms/select';
 
 export function FriendLinksSearch({
   searchTerm,
