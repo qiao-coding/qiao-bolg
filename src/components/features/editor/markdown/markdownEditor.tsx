@@ -53,6 +53,7 @@ export default function MarkdownEditor({
 
   // 撤销/重做状态
   const [historyIndex, setHistoryIndex] = useState<number>(0);
+  const [history, setHistory] = useState<string[]>([value || initialContent]);
 
   // Refs
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -97,7 +98,15 @@ export default function MarkdownEditor({
 
     setContent(newContent);
 
-    setHistoryIndex((prevIndex) => prevIndex + 1);
+    // 更新历史记录
+    setHistory(prevHistory => {
+      // 截断历史记录到当前索引位置（防止在撤销后进行编辑时保留未来状态）
+      const newHistory = prevHistory.slice(0, historyIndex + 1);
+      // 添加新内容
+      newHistory.push(newContent);
+      return newHistory;
+    });
+    setHistoryIndex(prevIndex => prevIndex + 1);
   }, [historyIndex]);
 
   // 切换编辑器模式
@@ -181,10 +190,6 @@ export default function MarkdownEditor({
     }
   }, [editorMode]);
 
-  // 监听编辑器模式变化，重置滚动状态
-  useEffect(() => {
-    isScrollingRef.current = false;
-  }, [editorMode]);
 
   // 优化的插入文本函数
   const insertTextAtCursor = useCallback((prefix: string, suffix: string = '', defaultText: string = '') => {
@@ -196,20 +201,97 @@ export default function MarkdownEditor({
     const selectedText = content.substring(start, end);
     const newText = selectedText || defaultText;
 
-    const newContent =
-      content.substring(0, start) +
-      prefix + newText + suffix +
-      content.substring(end);
+    // 检查是否已经应用了相同的格式，如果是则移除格式
+    let newContent, newCursorPos;
+    if (selectedText.startsWith(prefix) && selectedText.endsWith(suffix) && 
+        selectedText.length >= prefix.length + suffix.length) {
+      // 移除已有的格式
+      const innerText = selectedText.substring(prefix.length, selectedText.length - suffix.length);
+      newContent = 
+        content.substring(0, start) +
+        innerText +
+        content.substring(end);
+      // 光标位置：起始位置 + 内部文本长度
+      newCursorPos = start + innerText.length;
+    } else {
+      // 添加新的格式
+      newContent =
+        content.substring(0, start) +
+        prefix + newText + suffix +
+        content.substring(end);
+      // 光标位置：起始位置 + 前缀长度 + 新文本长度 + 后缀长度
+      newCursorPos = start + prefix.length + newText.length + suffix.length;
+    }
 
     handleContentChange(newContent);
 
     // 延迟设置光标位置，确保 DOM 已更新
     requestAnimationFrame(() => {
-      textarea.focus();
-      const newCursorPos = start + prefix.length + newText.length + suffix.length;
       textarea.setSelectionRange(newCursorPos, newCursorPos);
     });
   }, [content, handleContentChange]);
+
+  // 撤销
+  const undo = useCallback(() => {
+    if (historyIndex <= 0) return;
+
+    const newIndex = historyIndex - 1;
+    const previousContent = history[newIndex];
+    
+    isUndoingOrRedoingRef.current = true;
+    setContent(previousContent);
+    setHistoryIndex(newIndex);
+    
+    setTimeout(() => {
+      isUndoingOrRedoingRef.current = false;
+    }, 100);
+  }, [history, historyIndex]);
+
+  // 重做
+  const redo = useCallback(() => {
+    if (historyIndex >= history.length - 1) return;
+
+    const newIndex = historyIndex + 1;
+    const nextContent = history[newIndex];
+    
+    isUndoingOrRedoingRef.current = true;
+    setContent(nextContent);
+    setHistoryIndex(newIndex);
+    
+    setTimeout(() => {
+      isUndoingOrRedoingRef.current = false;
+    }, 100);
+  }, [history, historyIndex]);
+
+  // 键盘快捷键处理
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 检查是否按下了 Ctrl+Z (或 Cmd+Z)
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        e.preventDefault(); // 阻止浏览器默认的撤销操作
+        
+        if (e.shiftKey) {
+          //重做
+          redo();
+        } else {
+          //撤销
+          undo();
+        }
+      }
+    };
+
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.addEventListener('keydown', handleKeyDown);
+    }
+
+    // 清理事件监听器
+    return () => {
+      if (textarea) {
+        textarea.removeEventListener('keydown', handleKeyDown);
+      }
+    };
+  }, [undo, redo]);
 
   // 工具栏项目
   const toolbarItems = useCallback((insertTextAtCursor: insertTextAtCursorType) => {
@@ -360,7 +442,8 @@ export default function MarkdownEditor({
               value={content}
               onChange={(e) => handleContentChange(e.target.value)}
               onScroll={handleEditorScroll}
-              className={`w-full h-[97%] p-6 resize-none outline-none font-mono text-base leading-relaxed ${theme === 'dark'
+              className={`w-full h-[97%] p-6 resize-none outline-none
+                 font-mono text-sm leading-relaxed ${theme === 'dark'
                 ? 'bg-gray-900 text-gray-100 placeholder-gray-500'
                 : 'bg-gray-50 text-gray-800 placeholder-gray-400'
                 }`}
