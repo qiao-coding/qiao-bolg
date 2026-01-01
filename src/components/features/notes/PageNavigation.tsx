@@ -70,6 +70,7 @@ export default function PageNavigation({ notesPage, pageStyle, activeStyle }:
 
   return (
 
+    
     <nav className="space-y-1">
       <ScrollArea className="h-[70vh] w-[240px] bg-card/40 
       border border-border/40

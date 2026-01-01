@@ -120,12 +120,10 @@ const Notestitle = () => {
           <p className="mx-1 text-sky-500 dark:text-slate-300 text-3xl font-bold">笔记目录</p>
 
         </span>
-        {note &&
           <PageNavigation
-            notesPage={note.page as NotesPage[]}
+            notesPage={note?.page as NotesPage[]}
             pageStyle='text-amber-50 opacity-70'
             activeStyle='text-blue-400 font-bold' />
-        }
       </aside>
 
       <footer

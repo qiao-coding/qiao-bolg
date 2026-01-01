@@ -11,6 +11,8 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import 'highlight.js/styles/github.css';
+import { Button } from '@/components/ui/shadcnComponents/button';
+import { ArrowUpIcon } from 'lucide-react';
 
 // 创建单独的TimelineItem组件以支持独立的动画延迟
 function TimelineItem({ item }: { item: miscellaneousType }) {
@@ -106,6 +108,8 @@ export function MiscellaneousTimeline({
           <TimelineItem key={item.id} item={item} />
         ))}
       </div>
+
+
     </section>
   );
 }

@@ -11,6 +11,8 @@ import { Note } from "@/types/note/type";
 import NotesCard from "@/components/features/notes/noteCard";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
 import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/shadcnComponents/button";
+import { ArrowUpIcon } from "lucide-react";
 
 
 
@@ -88,6 +90,21 @@ const Article = () => {
           </main>
         </AnimatedContent>
       </NextRouter>
+          <footer
+        className="fixed bottom-[3%] left-[3%] "
+      >
+        <Button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          variant="outline"
+          aria-label="Submit"
+          className="bg-card/60"
+
+        >
+          <span className="hidden md:inline-block">返回上级</span>
+
+          <ArrowUpIcon />
+        </Button>
+      </footer>
     </TechBackgroundNoGrid>
 
 

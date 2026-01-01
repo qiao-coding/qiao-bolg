@@ -13,6 +13,7 @@ import { UserAvatar } from "../features/login/UserAvatar";
 import { signOut, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { ThemeSwitcher } from "../features/theme/ThemeSwitcher";
+import { SearchBox } from "../features/search/SearchBox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/shadcnComponents/dropdown-menu";
 import { Button } from "../ui/shadcnComponents/button";
 
@@ -22,7 +23,7 @@ const Header = () => {
     { id: 1, title: '主页', href: "/", icons: zhuye },
     { id: 2, title: '笔记', href: "/notes", icons: bijiben },
     { id: 3, title: '友链', href: "/friend", icons: youlian },
-    { id: 4, title: '关于', href: "/miscellaneous", icons: shuoshuo },
+    { id: 4, title: '说说', href: "/miscellaneous", icons: shuoshuo },
     { id: 5, title: '关于', href: "/about", icons: leaf },
   ]
 
@@ -162,8 +163,10 @@ const Header = () => {
           </ul>
         </div>
         <div className={`navbar-end pr-4 flex items-center gap-4 duration-700 ${!HeaderStyle ? "mr-0" : "mr-5"}`}>
+          <div className="hidden md:block">
+            <SearchBox />
+          </div>
           <ThemeSwitcher />
-          {/* <LanguageSwitcher /> */}
           <DropdownMenu>
             <DropdownMenuTrigger>
               {session ? (

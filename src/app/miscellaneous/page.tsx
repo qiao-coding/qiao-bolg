@@ -8,6 +8,9 @@ import { miscellaneousType } from "@/types/miscellaneous/type";
 import React, { useEffect, useState } from "react";
 import { MiscellaneousTimeline } from "@/components/features/miscellaneous/MiscellaneousTimeline";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
+import PageNavigation from "@/components/features/notes/PageNavigation";
+import { Button } from "@/components/ui/shadcnComponents/button";
+import { ArrowUpIcon } from "lucide-react";
 
 
 
@@ -44,6 +47,7 @@ const Miscellaneous = () => {
           scale={1}
           threshold={0.1}
         >
+
           <article className="pt-18 min-h-screen">
             <Title>说说</Title>
             {miscellaneous.length > 0 ? (
@@ -55,9 +59,26 @@ const Miscellaneous = () => {
               </div>
             )}
 
+
           </article>
+
         </AnimatedContent>
       </NextRouter>
+      <footer
+        className="fixed bottom-[3%] left-[3%] "
+      >
+        <Button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          variant="outline"
+          aria-label="Submit"
+          className="bg-card/60"
+
+        >
+          <span className="hidden md:inline-block">返回上级</span>
+
+          <ArrowUpIcon />
+        </Button>
+      </footer>
     </TechBackgroundNoGrid>
   );
 };

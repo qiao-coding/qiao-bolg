@@ -10,6 +10,8 @@ import { NotePageContent } from '@/components/features/notes/notePageContent';
 import { NotePageTags } from '@/components/features/notes/notePageTags';
 import { NotePageLoading } from '@/components/features/notes/notePageLoading';
 import { useTheme } from 'next-themes';
+import { Button } from '@/components/ui/shadcnComponents/button';
+import { ArrowUpIcon } from 'lucide-react';
 const NotePage = () => {
   const { notesID, notePageID } = useParams();
   const [note, setNote] = useState<Note | null>(null);
@@ -80,6 +82,21 @@ const NotePage = () => {
           </main>
 
         </NextRouter>
+              <footer
+        className="fixed bottom-[3%] left-[3%] "
+      >
+        <Button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          variant="outline"
+          aria-label="Submit"
+          className="bg-card/60"
+
+        >
+          <span className="hidden md:inline-block">返回上级</span>
+
+          <ArrowUpIcon />
+        </Button>
+      </footer>
       </div>
     </div>
   );

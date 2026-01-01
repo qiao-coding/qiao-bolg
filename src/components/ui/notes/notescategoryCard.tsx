@@ -1,27 +1,22 @@
 'use client'
 import { Card, CardContent, CardFooter } from '@/components/ui/shadcnComponents/card';
 import { Button } from '@/components/ui/shadcnComponents/button';
-import { Eye, CalendarPlus, LucideCalendarCheck2 } from 'lucide-react';
+import { Eye, CalendarPlus, LucideCalendarCheck2, Edit, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Note } from '@/types/note/type';
 
-
-import { NoteCategoryCardXiaLa } from './categoryCard_xiaLa';
-import { NoteCategoryCardHeader } from './categoryCardHeader';
+import { NoteCategoryCardHeader } from '../../features/admin/notes/categoryCardHeader';
+import { MenuItem } from '@/types/components/ui/public/GenericDropdownMenu.type';
+import { GenericDropdownMenu } from '../public/GenericDropdownMenu';
 
 export function NoteCategoryCard({
-
   note,
   formatDate,
   handleUpdateNote,
   handleDeleteNote,
   setPutNotesPage,
-  putNotesPage,
-  isPutLoading,
-  setIsPutLoading,
-  isDeleteDialogOpen,
-  setIsDeleteDialogOpen
+  putNotesPage
 
 }: {
   note: Note
@@ -30,11 +25,40 @@ export function NoteCategoryCard({
   handleDeleteNote: (id: number) => void
   setPutNotesPage: (notes: Note) => void
   putNotesPage: Note
-  isPutLoading: boolean
-  setIsPutLoading: (isLoading: boolean) => void
-  isDeleteDialogOpen: boolean
-  setIsDeleteDialogOpen: (isOpen: boolean) => void
 }) {
+
+  // 定义菜单项
+  const menuItems: MenuItem[] = [
+    // 编辑项 - 带输入对话框
+    {
+      label: '编辑',
+      icon: <Edit className="h-4 w-4" />,
+      inputDialog: {
+        title: '编辑笔记',
+        label: '标题',
+        placeholder: '请输入笔记标题',
+        value: putNotesPage?.title || '',
+        onChange: (value: string) => setPutNotesPage({ ...putNotesPage, title: value }),
+        confirmText: '保存',
+        onConfirm: (value: string) => {
+          setPutNotesPage({ ...putNotesPage, title: value });
+          handleUpdateNote(note.id);
+        }
+      }
+    },
+    // 删除项 - 带确认对话框
+    {
+      label: '删除',
+      icon: <Trash2 className="h-4 w-4" />,
+      variant: 'destructive',
+      dialog: {
+        title: '确认删除',
+        content: `确定要删除 [ ${note.title} ] 笔记分类吗？此操作不可恢复。`,
+        confirmText: '删除',
+        onConfirm: () => handleDeleteNote(note.id)
+      }
+    }
+  ];
 
 
   return (
@@ -73,20 +97,13 @@ export function NoteCategoryCard({
           </Link>
 
           {/* 下拉菜单 ,编辑和删除*/}
-          <NoteCategoryCardXiaLa
-            note={note}
-            handleDeleteNote={handleDeleteNote}
-            handleUpdateNote={handleUpdateNote}
-            setPutNotesPage={setPutNotesPage}
-            putNotesPage={putNotesPage}
-            isPutLoading={isPutLoading}
-            setIsPutLoading={setIsPutLoading}
-            isDeleteDialogOpen={isDeleteDialogOpen}
-            setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+          <GenericDropdownMenu 
+            items={menuItems}
+            triggerButtonVariant="ghost"
+            triggerButtonSize="icon"
           />
         </CardFooter>
       </Card>
     </motion.div>
   );
 }
-

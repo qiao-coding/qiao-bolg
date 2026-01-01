@@ -40,9 +40,21 @@ interface Comment {
   replies?: ReplyComment[];
 }
 
-// 模拟评论数据
+ interface NoteSearchResponse {
+  id: number;
+  title: string;
+  tags?: string[];
+  titlePicture?: string | null;
+  createdAt?: string|Date;
+  updatedAt?: string|Date;
+  page: NotesPage[];
+}
+
+interface NoteSearchParams {
+  q: string;
+}
 
 
 
 
-export type{ Note, NotesPage , Comment }
+export type{ Note, NotesPage , Comment , NoteSearchResponse , NoteSearchParams }
