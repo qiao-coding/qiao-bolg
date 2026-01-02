@@ -35,7 +35,6 @@ export function LoginFormAdmin({
       })
       const data = await res.json()
       if(res.ok&& data.success){
-        console.log('登录成功', data)
         window.dispatchEvent(new Event('authChange'))
         
         const urlParams = new URLSearchParams(window.location.search)

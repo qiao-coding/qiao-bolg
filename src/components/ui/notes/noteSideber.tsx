@@ -32,8 +32,6 @@ export default function NotesSideber() {
         const response = await fetch('/api/blog');
         const data = await response.json();
 
-        console.log(data);
-
         if (!response.ok) {
           throw new Error(data.error || '获取数据失败');
         }

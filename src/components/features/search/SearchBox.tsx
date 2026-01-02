@@ -26,11 +26,9 @@ export function SearchBox({ className }: SearchBoxProps) {
         setIsLoading(true);
         try {
             const response = await fetch(`/api/notes/search?q=${encodeURIComponent(query.trim())}`);
-            console.log('搜索响应状态:', response.status);
 
             if (response.ok) {
                 const data: NoteSearchResponse[] = await response.json();
-                console.log('搜索原始数据:', data);
 
                 // 将API返回的数据转换为SearchResult格式
                 const results: SearchResult[] = data.flatMap(note => {

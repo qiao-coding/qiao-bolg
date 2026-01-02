@@ -23,7 +23,7 @@ export default function MiscellaneousPage() {
         const data = res.reverse()
         setMiscellaneous(data)
       } catch (error) {
-        console.log(error)
+        throw error
       }
     }
     fetchMiscellaneous()

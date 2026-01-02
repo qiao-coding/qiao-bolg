@@ -42,13 +42,7 @@ model NotesPage {
   @@map("notes_pages")
 }
 
-model Technology {
-  id      Int    @id @default(autoincrement())
-  content String
-  period  String
 
-  @@map("technologies")
-}
 
 model Miscellaneous {
   id      Int    @id @default(autoincrement())

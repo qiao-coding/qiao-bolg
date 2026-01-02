@@ -7,7 +7,6 @@ export async function PUT(req: NextRequest) {
         const body = await req.json();
         const { id, title} = body;
 
-        console.log('更新笔记:', id, title);
         
 
         
