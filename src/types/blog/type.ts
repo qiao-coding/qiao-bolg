@@ -28,6 +28,19 @@ interface BlogData {
   };
 }
 
+interface BlogDataStruct {
+  blogName?: string;
+  homePage: {
+    mainTitle: string;
+    subTitle: string;
+    isDynamicTitle: boolean;
+    isDynamicTiltCard: boolean;
+  };
+  homeIcons: Array<{
+    name: string;
+    link: string;
+  }>;
+};
 
 
-export type { HomeIcon, SocialLink, BlogData };
+export type { HomeIcon, SocialLink, BlogData ,BlogDataStruct};

@@ -4,7 +4,6 @@ import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import { useEffect, useState } from "react";
 import NotesSideber from "@/components/ui/notes/noteSideber";
-import AnimatedContent from "@/components/ui/animation/AnimatedContent";
 import { motion } from "framer-motion";
 import { useNotes } from "@/hooks/note/useNotes";
 import { Note } from "@/types/note/type";
@@ -42,15 +41,10 @@ const Article = () => {
   return (
     <TechBackgroundNoGrid>
       <NextRouter>
-        <AnimatedContent
-          distance={150}
-          direction="vertical"
-          duration={0.8}
-          ease="power3.out"
-          initialOpacity={0}
-          animateOpacity
-          scale={1}
-          threshold={0.1}
+        <motion.div
+          initial={{ opacity: 0, y: 150, scale: 1 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <main className="py-12 px-4 
            sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28">
@@ -88,7 +82,7 @@ const Article = () => {
             </article>
 
           </main>
-        </AnimatedContent>
+        </motion.div>
       </NextRouter>
           <footer
         className="fixed bottom-[3%] left-[3%] "

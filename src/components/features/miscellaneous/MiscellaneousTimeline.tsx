@@ -12,11 +12,14 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import 'highlight.js/styles/github.css';
 import { ArrowUpIcon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 // 创建单独的TimelineItem组件以支持独立的动画延迟
 function TimelineItem({ item }: { item: miscellaneousType }) {
   // 为每个卡片生成随机的延迟时间，实现错位动画效果
   const [delay, setDelay] = useState(0);
+
+  const { data: session } = useSession()
 
   useEffect(() => {
     setDelay(Math.random() * 0.5);
@@ -46,10 +49,11 @@ function TimelineItem({ item }: { item: miscellaneousType }) {
             <div className="relative">
               <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-blue-500/30  group-hover:ring-blue-500/50">
                 <Image
-                  src="/UserImage/up.jpg"
+                  src={session?.user?.image || "/user_img/up.jpg"}
                   alt="User Image"
                   fill
                   className="object-cover"
+                  loading="lazy"
                 />
               </div>
             </div>

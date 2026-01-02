@@ -59,12 +59,13 @@ const NotePage = () => {
       style={{
         backgroundImage: isImageBackground
           ? theme === 'dark'
-            ? 'url(/NotesImage/page/notepage_dark.jpeg)'
-            : 'url(/NotesImage/page/notepage_light.jpeg)'
+            ? 'url(/note_img/page/notepage_dark.jpeg)'
+            : 'url(/note_img/page/notepage_light.jpeg)'
           : undefined,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
+        backgroundAttachment: 'fixed',
+        
       }}
     >
       <div className="font-sans transition-colors duration-300 bg-sky-50/90 dark:bg-slate-700/80"

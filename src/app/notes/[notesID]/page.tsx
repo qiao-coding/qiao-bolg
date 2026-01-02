@@ -1,6 +1,5 @@
 "use client";
 import NextRouter from "@/components/layout/NextRouter";
-import AnimatedContent from "@/components/ui/animation/AnimatedContent";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PageNavigation from "@/components/features/notes/PageNavigation";
@@ -13,6 +12,7 @@ import { NoteListCard } from "@/components/features/notes/noteListCard";
 import { NoteListHeader } from "@/components/features/notes/noteListHeader";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
+import { motion } from "framer-motion";
 
 
 
@@ -76,17 +76,10 @@ const Notestitle = () => {
       <TechBackgroundNoGrid>
         <NextRouter showHeader={false} >
           <NoteListHeader />
-          <AnimatedContent
-            distance={150}
-            direction="vertical"
-            reverse={false}
-            duration={1.2}
-            ease="power3.out"
-            animateOpacity
-            scale={1}
-            threshold={0.1}
-
-
+          <motion.div
+            initial={{ opacity: 0, y: 150, scale: 1 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
 
             <Title>{note && note.title}</Title>
@@ -101,7 +94,7 @@ const Notestitle = () => {
 
 
 
-          </AnimatedContent>
+          </motion.div>
 
         </NextRouter>
       </TechBackgroundNoGrid>

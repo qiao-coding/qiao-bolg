@@ -102,7 +102,7 @@ const HomeArticles = () => {
         <div className="relative h-32 overflow-hidden">
           <Image
             fill
-            src={notesPage.find(n => n.id.toString() === article.noteId)?.titlePicture || "/bg-1.png"}
+            src={notesPage.find(n => n.id.toString() === article.noteId)?.titlePicture || "/note_img/pageData.png"}
             alt={article.title}
             className="object-cover group-hover:scale-110 transition-transform duration-300"
             sizes="lg:80vw, md:25vw, 20vw"

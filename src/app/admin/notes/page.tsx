@@ -6,7 +6,7 @@ import { FileText } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import { useNotes } from '@/hooks/note/useNotes';
-import { Note } from '@/types/note/type';
+import type { CreateNoteInput, Note } from '@/types/note/type';
 import { NoteHeaderCard } from '@/components/features/admin/notes/headerCard';
 import { NoteCategoryCard } from '@/components/ui/notes/notescategoryCard';
 import { Plus } from 'lucide-react';
@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/shadcnComponents/data-display/card';
+
 import {
   Dialog,
   DialogContent,
@@ -88,12 +89,9 @@ const StudyNodes = () => {
     setIsAddDialogOpen(false);
 
     // 构造新笔记对象
-    const newNotes: Note = {
-      id: notes.length + 1,
+    const newNotes: CreateNoteInput = {
       title: addNotesPage,
       tags: [addNotesPage],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       titlePicture: '',
     };
 
@@ -101,7 +99,7 @@ const StudyNodes = () => {
       const response = await useNotes.postNote(newNotes);
       if (response) {
         // 成功后更新本地列表
-        setNotes(prev => [...prev, { ...newNotes }]);
+        setNotes(prev => [...prev, response]);
         setAddNotesPage('');
       }
     } catch (error) {

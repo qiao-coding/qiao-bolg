@@ -1,12 +1,12 @@
 'use client'
 import { FaAngleDoubleDown } from "react-icons/fa";
 import { motion } from "framer-motion";
-import TiltedCard from "@/components/features/home/TiltedCard";
 import { useSession } from "next-auth/react";
 import { SiGitee, SiGithub } from "react-icons/si";
 import { SiTiktok } from "react-icons/si";
 import { FaBilibili } from "react-icons/fa6";
 import { useState, useEffect } from "react";
+import HomeCard from "./homeCard";
 
 
 
@@ -47,8 +47,6 @@ export function HomeZhuyepage() {
             try {
                 const response = await fetch('/api/blog');
                 const data = await response.json();
-
-
                 if (!response.ok) {
                     throw new Error(data.error || '获取数据失败');
                 }
@@ -56,7 +54,6 @@ export function HomeZhuyepage() {
                 setBlogData(data);
             } catch (error) {
                 console.error('获取博客设置数据失败:', error);
-                // 使用默认数据
             }
         };
 
@@ -66,9 +63,9 @@ export function HomeZhuyepage() {
     
     const handleTiltedCard = () => {
         if (blogData.homePage.isDynamicTiltCard) {
-            return (session && session.user?.image) || '/UserImage/up.jpg';
+            return (session && session.user?.image) || '/user_img/up.jpg';
         }
-        return  '/UserImage/up.jpg';
+        return  '/user_img/up.jpg';
     }
 
     
@@ -165,7 +162,12 @@ export function HomeZhuyepage() {
         }
     };
     return (
-        <article className={` min-h-screen bg-cover homebg bg-center bg-no-repeat  to-white   min-h-screen bg-cover `}>
+        <article
+        style={{
+            backgroundImage: `url(/bg.webp)`,
+            backgroundAttachment:'fixed',
+        }}
+         className={` min-h-screen bg-cover  bg-center bg-no-repeat  to-white   min-h-screen bg-cover `}>
 
             <section className="hero min-h-screen dark:bg-black/60 p-6" >
                 <motion.div
@@ -174,7 +176,7 @@ export function HomeZhuyepage() {
                     transition={{ duration: 0.5 }}
                     className="hero-content flex-col lg:flex-row-reverse gap-22">
                     <figure className="cursor-target">
-                        <TiltedCard
+                        <HomeCard
                             imageSrc={handleTiltedCard()}
                             captionText=""
                             containerHeight="200px"

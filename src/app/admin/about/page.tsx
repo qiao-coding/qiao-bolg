@@ -7,11 +7,13 @@ import { Textarea } from "@/components/ui/shadcnComponents/forms/textarea";
 import { Label } from "@/components/ui/shadcnComponents/forms/label";
 import { Save, } from 'lucide-react';
 import { motion } from "framer-motion";
+import { useAbout } from '@/hooks/about/useAbout';
+import { AboutDeta } from '@/types/about/type';
 
 
 
 export default function AdminAboutPage() {
-  const [aboutData, setAboutData] = useState({
+  const [aboutData, setAboutData] = useState<AboutDeta>({
     description: "",
     details: [
       { label: "", value: "" },
@@ -28,12 +30,10 @@ export default function AdminAboutPage() {
 
   const getAboutData = async () => {
     try {
-      const response = await fetch('/api/about');
-      const data = await response.json();
-      setAboutData(data);
+      const response = await useAbout.getAbout();
+      setAboutData(response);
     } catch (error) {
       console.error('获取关于页面数据失败:', error);
-      // 使用默认数据
       setAboutData({
         description: "你好！我是昊小白，一名热爱前端开发的前端小白",
         details: [
@@ -97,20 +97,8 @@ export default function AdminAboutPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const response = await fetch('/api/about', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(aboutData),
-      });
+      await useAbout.postAbout(aboutData);
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || '保存失败');
-      }
 
       alert('保存成功！');
     } catch (error) {

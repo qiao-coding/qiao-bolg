@@ -1,12 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import NextRouter from '@/components/layout/NextRouter';
-import AnimatedContent from '@/components/ui/animation/AnimatedContent';
-
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import NotesSideber from '@/components/ui/notes/noteSideber';
 import Title from '@/components/ui/public/title';
 import { motion } from 'framer-motion'
+import { useAbout } from '@/hooks/about/useAbout';
 
 const AboutPage = () => {
   // 个人信息数据
@@ -22,14 +21,9 @@ const AboutPage = () => {
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
-        const response = await fetch('/api/about');
-        const data = await response.json();
+        const response = await useAbout.getAbout();
         
-        if (!response.ok) {
-          throw new Error(data.error || '获取数据失败');
-        }
-        
-        setPersonalInfo(data);
+        setPersonalInfo(response);
       } catch (error) {
         console.error('获取关于页面数据失败:', error);
       }
@@ -43,31 +37,20 @@ const AboutPage = () => {
     <TechBackgroundNoGrid>
       <NextRouter>
         <div className="pt-20 pb-16 px-4 min-h-screen">
-          <AnimatedContent
-            distance={150}
-            direction="vertical"
-            duration={0.8}
-            ease="power3.out"
-            initialOpacity={0}
-            animateOpacity
-            scale={1}
-            threshold={0.1}
+          <motion.div
+            initial={{ opacity: 0, y: 150 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 , ease: "easeOut" }}
           >
             <div className="max-w-6xl w-full mx-auto mb-16">
               <Title>关于我</Title>
             </div>
-          </AnimatedContent>
+          </motion.div>
 
-          <AnimatedContent
-            distance={100}
-            direction="vertical"
-            duration={0.8}
-            delay={0.2}
-            ease="power3.out"
-            initialOpacity={0}
-            animateOpacity
-            scale={1}
-            threshold={0.1}
+          <motion.div
+            initial={{ opacity: 0, y: 150, scale: 1 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <div className="max-w-6xl w-full mx-auto">
               <div className="flex flex-col lg:flex-row gap-8">
@@ -113,7 +96,7 @@ const AboutPage = () => {
                 <NotesSideber />
               </div>
             </div>
-          </AnimatedContent>
+          </motion.div>
         </div>
       </NextRouter>
     </TechBackgroundNoGrid>

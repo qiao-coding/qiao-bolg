@@ -25,7 +25,12 @@ const TechBackgroundNoGrid:React.FC<Children> = ({children}) => {
 
   if(!mounted){
     return( 
-    <div className="h-screen bg-cover homebg bg-center">
+    <div
+     style={{
+      backgroundImage: `url(/bg.webp)`,
+      backgroundAttachment:'fixed',
+     }}
+     className="h-screen bg-cover  bg-center">
     <div className={
       resolvedTheme==='light'
     ?"relativept-30  transition-colors duration-300 min-h-screen bg-white/60"
@@ -38,7 +43,12 @@ const TechBackgroundNoGrid:React.FC<Children> = ({children}) => {
 
 
   return (
-    <div className="h-full bg-cover homebg bg-center background-attachment">
+    <div 
+    style={{
+      backgroundImage: `url(/bg.webp)`,
+      backgroundAttachment:'fixed',
+    }}
+    className="h-full bg-cover bg-center background-attachment">
     <div  className={` 
       ${isDark
     ?"relativept-30  transition-colors duration-300 h-full w-full bg-white/60"

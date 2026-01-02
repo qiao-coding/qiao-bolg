@@ -1,11 +1,6 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import zhuye from "../../../public/titleImage/zhuye.svg";
-import bijiben from "../../../public/titleImage/bijiben.svg";
-import shuoshuo from "../../../public/titleImage/shuoshuo.svg";
-import youlian from "../../../public/titleImage/youlian.svg";
-import leaf from "../../../public/titleImage/leaf.svg";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { throttle } from "lodash";
@@ -18,11 +13,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/sh
 const Header = () => {
 
   const HbtnStyle = [
-    { id: 1, title: '主页', href: "/", icons: zhuye },
-    { id: 2, title: '笔记', href: "/notes", icons: bijiben },
-    { id: 3, title: '友链', href: "/friend", icons: youlian },
-    { id: 4, title: '说说', href: "/miscellaneous", icons: shuoshuo },
-    { id: 5, title: '关于', href: "/about", icons: leaf },
+    { id: 1, title: '主页', href: "/", icons: '/header_img/zhuye.svg' },
+    { id: 2, title: '笔记', href: "/notes", icons: '/header_img/bijiben.svg' },
+    { id: 3, title: '友链', href: "/friend", icons: '/header_img/youlian.svg' },
+    { id: 4, title: '说说', href: "/miscellaneous", icons: '/header_img/shuoshuo.svg' },
+    { id: 5, title: '关于', href: "/about", icons: '/header_img/leaf.svg' },
   ]
 
   const { resolvedTheme } = useTheme();
@@ -133,6 +128,8 @@ const Header = () => {
                           src={item.icons}
                           alt=""
                           className="w-5 h-5 opacity-80"
+                          width={20}
+                          height={20}
                         />
                       )}
 
@@ -150,6 +147,8 @@ const Header = () => {
                         src={item.icons}
                         alt=""
                         className="w-5 h-5 opacity-80"
+                        width={20}
+                        height={20}
                       />
                     )}
 
@@ -165,59 +164,65 @@ const Header = () => {
             <SearchBox />
           </div>
           <ThemeSwitcher />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              {session ? (
-                <div className="btn btn-circle cursor-target 
+
+          {session ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                {session && (
+                  <div className="btn btn-circle cursor-target 
                   border-2
                    border-sky-400 
                    dark:border-slate-600
                    hover:dark:border-sky-500 
                    hover:border-slate-600/40 
                    dark:hover:border-sky-500 transition-all duration-300 avatar">
-                  <Image
-                    src={session.user?.image || '/default-avatar.png'}
-                    alt={session.user?.name || 'User Avatar'}
-                    className="w-8 h-8 rounded-full"
-                    width={40}
-                    height={40}
-                  />
-                </div>
-              ) : (
-                <Link
-                  href="/Login"
-                  className="btn cursor-target btn-dash btn-error hover:text-white transition-all duration-700 ease-in-out"
-                >
-                  登录
-                </Link>
-              )}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="mr-2 rounded-lg bg-white shadow-lg p-2 dark:bg-gray-800">
-              <ul className="space-y-1">
-                {session && (
-                  <li>
-                    <Link href="/adminLogin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
-                      后台管理
-                    </Link>
-                  </li>
+                    <Image
+                      src={session.user?.image || '/default-avatar.png'}
+                      alt={session.user?.name || 'User Avatar'}
+                      className="w-8 h-8 rounded-full"
+                      width={40}
+                      height={40}
+                    />
+                  </div>
                 )}
-                {session && (
-                  <li>
-                    <button
-                      onClick={() => signOut()}
-                      type="submit"
-                      className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-red-400 text-sm"
-                    >
-                      退出登录？
-                    </button>
-                  </li>
-                )}
-              </ul>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="mr-2 rounded-lg bg-white shadow-lg p-2 dark:bg-gray-800">
+                <ul className="space-y-1">
+                  {session && (
+                    <li>
+                      <Link href="/adminLogin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
+                        后台管理
+                      </Link>
+                    </li>
+                  )}
+                  {session && (
+                    <li>
+                      <button
+                        onClick={() => signOut()}
+                        type="submit"
+                        className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-red-400 text-sm"
+                      >
+                        退出登录？
+                      </button>
+                    </li>
+                  )}
+                </ul>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+          ) : (
+          
+              <Link
+                href="/Login"
+                className="btn cursor-target btn-dash btn-error hover:text-white transition-all duration-700 ease-in-out"
+              >
+                登录
+              </Link>
+          )}
+
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

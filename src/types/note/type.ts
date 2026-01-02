@@ -8,6 +8,13 @@ interface Note {
   page?: NotesPage[]
 }
 
+interface CreateNoteInput {
+  title: string;
+  tags: string[];
+  titlePicture?: string;
+  createdAt?: string;
+}
+
 // 根据 Prisma 模型定义的笔记页面类型
 interface NotesPage {
   id: number;
@@ -57,4 +64,4 @@ interface NoteSearchParams {
 
 
 
-export type{ Note, NotesPage , Comment , NoteSearchResponse , NoteSearchParams }
+export type{ Note, NotesPage , Comment , NoteSearchResponse , NoteSearchParams, CreateNoteInput }

@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from '../shadcnComponents/overlay/dialog';
 import { Input } from '../shadcnComponents/forms/input';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { GenericDropdownMenuProps } from '../../../types/components/ui/public/GenericDropdownMenu.type';
 
 export function GenericDropdownMenu({

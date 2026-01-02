@@ -2,7 +2,6 @@
 import NextRouter from '@/components/layout/NextRouter';
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import Title from '@/components/ui/public/title';
-import AnimatedContent from '@/components/ui/animation/AnimatedContent';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/shadcnComponents/forms/input';
@@ -93,15 +92,10 @@ const Friend = () => {
     <TechBackgroundNoGrid>
       <NextRouter>
 
-        <AnimatedContent
-          distance={150}
-          direction="vertical"
-          duration={0.8}
-          ease="power3.out"
-          initialOpacity={0}
-          animateOpacity
-          scale={1}
-          threshold={0.1}
+        <motion.div
+          initial={{ opacity: 0, y: 150, scale: 1 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <article className="pt-18 min-h-screen">
             <Title>
@@ -232,10 +226,12 @@ const Friend = () => {
 
           </article>
 
-        </AnimatedContent>
+        </motion.div>
       </NextRouter>
     </TechBackgroundNoGrid>
   )
 }
 
 export default Friend;
+
+

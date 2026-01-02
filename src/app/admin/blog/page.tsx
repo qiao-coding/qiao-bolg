@@ -8,6 +8,7 @@ import { BlogBasicInfo } from '@/components/features/admin/blog/BlogBasicInfo';
 import { HomeIcons } from '@/components/features/admin/blog/HomeIcons';
 import { SidebarSettings } from '@/components/features/admin/blog/SidebarSettings';
 import type { BlogData } from '@/types/blog/type';
+import { useBlog } from '@/hooks/blog/useBlog';
 
 export default function AdminBlogPage() {
   const { data: session } = useSession();
@@ -70,20 +71,11 @@ export default function AdminBlogPage() {
   useEffect(() => {
     const fetchBlogData = async () => {
       try {
-        const response = await fetch('/api/blog', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-        const data = await response.json();
-        if (data.error) {
-          throw new Error(data.error);
-        }
+        const data= await useBlog.getBlog(); // 假设 useBlog 是你的API调用函数
 
         // 合并API返回的数据和本地默认数据
         setBlogData({
-          blogName: data.blogName || "HaoWhiteの小站",
+          blogName: data.blogName || "HaoWhite",
           homePage: {
             mainTitle: data.homePage?.mainTitle || "Hi! HaoWhite 🥰",
             subTitle: data.homePage?.subTitle || "愿生活的每一天，都有惊喜!",
@@ -101,7 +93,6 @@ export default function AdminBlogPage() {
         })
       } catch (error) {
         console.error('获取博客设置数据失败:', error);
-        // 使用默认数据
       }
     };
     fetchBlogData();
@@ -235,19 +226,9 @@ export default function AdminBlogPage() {
       };
 
       // 调用API保存数据
-      const response = await fetch('/api/blog', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(saveData),
-      });
 
-      const result = await response.json();
+       await useBlog.postBlog(saveData);
 
-      if (!response.ok) {
-        throw new Error(result.error || '保存失败');
-      }
       // 刷新数据
       alert('保存成功');
 

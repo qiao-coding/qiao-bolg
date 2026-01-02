@@ -1,4 +1,4 @@
-import { Note, NotesPage } from "@/types/note/type";
+import type { CreateNoteInput, Note, NotesPage } from "@/types/note/type";
 
 
 
@@ -50,7 +50,7 @@ function createNotes() {
 
     }
 
-    async function postNote(note: Note) {
+    async function postNote(note: CreateNoteInput): Promise<Note | undefined> {
         try {
             const res = await fetch('/api/notes/post_notes', {
                 method: 'POST',
@@ -63,7 +63,7 @@ function createNotes() {
             if (!res.ok) {
                 throw new Error('新建笔记失败');
             }
-            const data = await res.json();
+            const data = (await res.json()) as Note;
             return data
         } catch (error) {
         }
@@ -102,11 +102,9 @@ function createNotes() {
                 body: JSON.stringify(note)
             })
 
-            console.log('更新笔记', note);
             if (!res.ok) {
                 throw new Error('更新笔记失败');
             }
-            console.log('更新成功', res);
 
             const data = await res.json();
             return data
