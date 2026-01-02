@@ -18,7 +18,8 @@ function createNotes() {
 
             return data
         } catch (error) {
-
+            console.error('getNote 错误:', error);
+            throw error;
         }
     }
 
@@ -32,6 +33,8 @@ function createNotes() {
             const data = await res.json()
             return data
         } catch (error) {
+            console.error('getNoteList 错误:', error);
+            throw error;
         }
     }
 
@@ -45,7 +48,8 @@ function createNotes() {
             const data = await res.json();
             return data
         } catch (error) {
-
+            console.error('getNoteListById 错误:', error);
+            throw error;
         }
 
     }
@@ -66,6 +70,8 @@ function createNotes() {
             const data = (await res.json()) as Note;
             return data
         } catch (error) {
+            console.error('postNote 错误:', error);
+            throw error;
         }
     }
 
@@ -85,7 +91,10 @@ function createNotes() {
 
             const data = await res.json();
             return data
-        } catch (error) { }
+        } catch (error) {
+            console.error('postNotePage 错误:', error);
+            throw error;
+        }
 
     }
 
@@ -109,6 +118,8 @@ function createNotes() {
             const data = await res.json();
             return data
         } catch (error) {
+            console.error('putNote 错误:', error);
+            throw error;
         }
     }
 
@@ -130,8 +141,9 @@ function createNotes() {
             const data = await res.json();
             return data
         } catch (error) {
-
-         }
+            console.error('putNotePage 错误:', error);
+            throw error;
+        }
 
     }
 
@@ -150,6 +162,8 @@ function createNotes() {
             const data = await res.json();
             return data;
         } catch (error) {
+            console.error('deleteNote 错误:', error);
+            throw error;
         }
     }
 
@@ -166,6 +180,8 @@ function createNotes() {
             const data = await res.json();
             return data;
         } catch (error) {
+            console.error('deleteNotePage 错误:', error);
+            throw error;
         }
     }
 

@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { NotesPage } from "@/types/note/type";
 import { NextRequest, NextResponse } from "next/server";
 
 

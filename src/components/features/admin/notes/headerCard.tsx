@@ -1,6 +1,4 @@
-'use client'
 import { BookOpen, FileText, Tag } from "lucide-react"
-import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/shadcnComponents/data-display/card"
 import { Note } from "@/types/note/type"
 

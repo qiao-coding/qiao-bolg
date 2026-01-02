@@ -1,5 +1,5 @@
 'use client'
-import { MoreHorizontal, Edit3, Trash2, ChevronDown, ChevronUp, Clock, User, CheckCircle2, Circle } from 'lucide-react';
+import { MoreHorizontal, Edit3, Trash2, ChevronDown, ChevronUp, Clock, User} from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcnComponents/data-display/table';
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/overlay/dropdown-menu';

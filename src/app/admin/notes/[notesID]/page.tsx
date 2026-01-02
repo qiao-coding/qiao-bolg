@@ -1,6 +1,7 @@
+// 管理员笔记详情页面组件 - 管理特定笔记分类下的笔记内容
 'use client';
 
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { useSession } from 'next-auth/react';
 import { useNotes } from '@/hooks/note/useNotes';
@@ -13,31 +14,28 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/shadcnComponents/forms/input';
 
 
-function StudyNodes() {
-
-
+export default function StudyNotesDetail() {
   const params = useParams();
-  const [initialNotes, setInitialNotes] = React.useState<Note | null>(null);
+  const [initialNotes, setInitialNotes] = useState<Note | null>(null);
 
   const notesId = params.notesID as string;
 
 
-  const [notes, setNotes] = React.useState<Note | null>(initialNotes);
-  const [notesPage, setNotesPage] = React.useState<NotesPage[]>(initialNotes?.page || []);
-  const [addNotesPageTitle, setAddNotesPageTitle] = React.useState<string>('');
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
-  const [filterTags, setFilterTags] = React.useState<string>('all');
-  const [sortField, setSortField] = React.useState<'title' | 'dateStart' | 'dateEnd' | null>(null);
-  const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
-  const [selectedNotes, setSelectedNotes] = React.useState<number[]>([]);
-  const [isAddNotesDialogOpen, setIsAddNotesDialogOpen] = React.useState<boolean>(false);
+  const [notes, setNotes] = useState<Note | null>(initialNotes);
+  const [notesPage, setNotesPage] = useState<NotesPage[]>(initialNotes?.page || []);
+  const [addNotesPageTitle, setAddNotesPageTitle] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [sortField, setSortField] = useState<'title' | 'dateStart' | 'dateEnd' | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [selectedNotes, setSelectedNotes] = useState<number[]>([]);
+  const [isAddNotesDialogOpen, setIsAddNotesDialogOpen] = useState<boolean>(false);
   const { data: session } = useSession();
-  const [pageTags, setPageTags] = React.useState<string[]>([]);
+  const [pageTags, setPageTags] = useState<string[]>([]);
 
 
 
   // 获取notesList(GET)
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchNotes = async () => {
       if (!notesId) return console.error('未提供笔记ID');
       try {
@@ -63,9 +61,8 @@ function StudyNodes() {
     const matchesSearch = page.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       page.pageTags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesTag = filterTags === 'all' || page.id.toString() === filterTags;
 
-    return matchesSearch && matchesTag;
+    return matchesSearch
   });
 
   // 排序
@@ -177,8 +174,8 @@ function StudyNodes() {
         />
 
         <CardContent className='bg-card/80 dark:bg-card/80'>
-          {/* 添加笔记卡片内容组件 */}
-          <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6 p-4">
+          {/* 搜索区域 */}
+          <section className="flex flex-col md:flex-row md:items-center gap-4 mb-6 p-4">
             <div className="relative flex-grow">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -189,31 +186,31 @@ function StudyNodes() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-          </div>
+          </section>
 
-          {/* 添加笔记卡片表格组件 */}
-          <NoteListTable
-            pages={sortedPages}
-            selectedNotes={selectedNotes}
-            sortField={sortField}
-            sortDirection={sortDirection}
-            onToggleSelectAll={toggleSelectAll}
-            onToggleSelectItem={handleToggleSelectItem}
-            onSortChange={handleSortChange}
-            onDeletePage={handleDeleteNotePage}
-            noteId={notes?.id}
-          />
-          {/* 添加笔记卡片底部组件 */}
-          <div className="flex items-center justify-between mt-6">
+          {/* 笔记表格区域 */}
+          <section className="mb-6">
+            <NoteListTable
+              pages={sortedPages}
+              selectedNotes={selectedNotes}
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onToggleSelectAll={toggleSelectAll}
+              onToggleSelectItem={handleToggleSelectItem}
+              onSortChange={handleSortChange}
+              onDeletePage={handleDeleteNotePage}
+              noteId={notes?.id}
+            />
+          </section>
+          
+          {/* 分页信息区域 */}
+          <footer className="flex items-center justify-between mt-6">
             <div className="text-sm text-muted-foreground bg-gradient-to-r from-primary/10 to-primary/5 px-3 py-2 rounded-lg border border-border/20">
               共 {notesPage.length} 条 {notes?.title} 笔记
             </div>
-          </div>
+          </footer>
         </CardContent>
       </Card>
     </main>
   );
-};
-
-
-export default StudyNodes
+}

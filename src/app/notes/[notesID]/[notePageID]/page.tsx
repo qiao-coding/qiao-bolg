@@ -1,18 +1,18 @@
 'use client'
+// 笔记页面组件 - 展示笔记内容详情和元信息
 import NextRouter from '@/components/layout/NextRouter';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useNotes } from '@/hooks/note/useNotes';
 import { Note, NotesPage } from '@/types/note/type';
-import { NotePageHeader } from '@/components/features/notes/notePageHeader';
-import { NotePageMeta } from '@/components/features/notes/notePageMeta';
+import { NotePageHeader } from '@/components/features/notes/page/notePageHeader';
 import { NotePageContent } from '@/components/features/notes/notePageContent';
-import { NotePageTags } from '@/components/features/notes/notePageTags';
 import { NotePageLoading } from '@/components/features/notes/notePageLoading';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
-import { ArrowUpIcon } from 'lucide-react';
-const NotePage = () => {
+import { ArrowUpIcon, Calendar, Clock } from 'lucide-react';
+
+export default function NotePageDetail() {
   const { notesID, notePageID } = useParams();
   const [note, setNote] = useState<Note | null>(null);
   const [notesPage, setNotesPage] = useState<NotesPage | null>(null);
@@ -54,7 +54,7 @@ const NotePage = () => {
 
 
   return (
-    <div
+    <article
       className="min-h-screen"
       style={{
         backgroundImage: isImageBackground
@@ -65,7 +65,7 @@ const NotePage = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
-        
+
       }}
     >
       <div className="font-sans transition-colors duration-300 bg-sky-50/90 dark:bg-slate-700/80"
@@ -77,30 +77,60 @@ const NotePage = () => {
             className="min-h-screen container mx-auto px-4 sm:px-6 py-8 max-w-3xl"
             key={notesPage.uid}
           >
-            <NotePageMeta notesPage={notesPage} />
+            <header className="mb-8 text-card-foreground">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-6 leading-tight animate-fade-in">
+                {notesPage.title}
+              </h1>
+
+              <ul className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm list-none">
+                <li className="flex items-center gap-1.5 text-muted-foreground">
+                  <Calendar className="w-4 h-4" aria-hidden="true" />
+                  <time dateTime={notesPage.dateStart}>发布于{notesPage.dateStart}</time>
+                </li>
+                <li className="flex items-center gap-1.5 text-muted-foreground">
+                  <Clock className="w-4 h-4" aria-hidden="true" />
+                  <time dateTime={notesPage.dateEnd}>最后编辑：{notesPage.dateEnd}</time>
+                </li>
+              </ul>
+            </header>
+
             <NotePageContent content={notesPage.content} theme={theme as 'light' | 'dark'} />
-            <NotePageTags tags={notesPage.pageTags} />
+            
+            <section aria-labelledby="note-tags" className="mt-8 pt-6 border-t transition-all duration-300 border-border">
+              <div className="flex flex-wrap items-center gap-3">
+                <span id="note-tags" className="text-sm text-muted-foreground">标签：</span>
+                {note.tags && note.tags.map((tag, index) => (
+                  <span
+                    key={`tag-${tag}-${index}`}
+                    className="inline-flex items-center text-sm px-3 py-1.5
+                             rounded-full transition-all duration-300
+                             bg-card text-card-foreground border-[1.5px] border-border
+                             hover:bg-card/80 hover:shadow-md"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </section>
           </main>
 
         </NextRouter>
-              <footer
-        className="fixed bottom-[3%] left-[3%] "
-      >
-        <Button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          variant="outline"
-          aria-label="Submit"
-          className="bg-card/60"
-
+        <footer
+          className="fixed bottom-[3%] left-[3%] "
         >
-          <span className="hidden md:inline-block">返回上级</span>
+          <Button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            variant="outline"
+            aria-label="返回顶部"
+            className="bg-card/60"
 
-          <ArrowUpIcon />
-        </Button>
-      </footer>
+          >
+            <span className="hidden md:inline-block">返回顶部</span>
+
+            <ArrowUpIcon />
+          </Button>
+        </footer>
       </div>
-    </div>
+    </article>
   );
-};
-
-export default NotePage;
+}

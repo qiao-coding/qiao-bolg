@@ -1,3 +1,4 @@
+// 管理员笔记编辑页面组件 - 编辑特定笔记页面的内容
 'use client'
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,7 +13,7 @@ import { useSession } from 'next-auth/react';
 import { NoteListPageContentCard } from '@/components/features/admin/notes/noteList/noteListPage/ContentCard';
 
 
-const NoteEditPage = () => {
+export default function NoteEditPage() {
   const { pageId } = useParams();
   const router = useRouter();
   const { theme } = useTheme();
@@ -111,7 +112,7 @@ const NoteEditPage = () => {
   // 加载状态
   if (loading) {
     return (
-      <div className="min-h-screen      
+      <main className="min-h-screen      
       bg-sky-200/60 dark:bg-slate-600/80
       p-6 flex flex-col items-center justify-center">
         <Card className="w-full py-0 max-w-4xl shadow-lg border border-border/20 overflow-hidden transition-all duration-500 hover:shadow-xl">
@@ -125,14 +126,14 @@ const NoteEditPage = () => {
             <p className="text-muted-foreground animate-pulse text-lg">正在准备笔记...</p>
           </CardContent>
         </Card>
-      </div>
+      </main>
     );
   }
 
   // 错误状态
   if (error) {
     return (
-      <div className="min-h-screen bg-background p-6 flex flex-col items-center justify-center">
+      <main className="min-h-screen bg-background p-6 flex flex-col items-center justify-center">
         <Card className="w-full max-w-2xl px-6 py-8">
           <Alert variant="destructive" className="mb-4">
             <AlertTitle>错误</AlertTitle>
@@ -146,12 +147,12 @@ const NoteEditPage = () => {
             返回
           </Button>
         </Card>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen      bg-sky-200/60 dark:bg-slate-600/80
+    <main className="min-h-screen      bg-sky-200/60 dark:bg-slate-600/80
  backdrop-blur-sm text-foreground p-4 sm:p-6 transition-colors duration-300  mx-auto">
       {/* 页面标题栏 */}
       <header className="flex items-center mb-8">
@@ -169,18 +170,20 @@ const NoteEditPage = () => {
       </header>
 
       {/* 主内容卡片 */}
-      <NoteListPageContentCard
-        notePage={notePage as NotesPage}
-        upNoteNotePage={upNoteNotePage as NotesPage}
-        setUpdateNotePage={setUpdateNotePage}
-        handleCancel={handleCancel}
-        isSaving={isSaving}
-        handleSave={handleSave}
-      />
+      <section className="max-w-6xl mx-auto">
+        <NoteListPageContentCard
+          notePage={notePage as NotesPage}
+          upNoteNotePage={upNoteNotePage as NotesPage}
+          setUpdateNotePage={setUpdateNotePage}
+          handleCancel={handleCancel}
+          isSaving={isSaving}
+          handleSave={handleSave}
+        />
+      </section>
 
       {/* 保存成功提示 */}
       {showSuccessToast && (
-        <div className={`
+        <aside className={`
             fixed bottom-6 right-6 max-w-xs p-4 rounded-lg shadow-lg z-50
             ${theme === 'light' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-green-900/80 text-green-100 border border-green-800'}
             backdrop-blur-sm animate-slide-up
@@ -194,10 +197,8 @@ const NoteEditPage = () => {
             </div>
             <p className="font-medium">笔记保存成功！</p>
           </div>
-        </div>
+        </aside>
       )}
-    </div>
+    </main>
   );
-};
-
-export default NoteEditPage;
+}

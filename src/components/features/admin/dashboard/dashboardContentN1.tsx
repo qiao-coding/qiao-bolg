@@ -1,7 +1,8 @@
 'use client'
-import { Note, NotesPage } from "@/types/note/type";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+// 仪表盘内容组件 - 展示管理员仪表盘上的内容卡片
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Note, NotesPage } from '@/types/note/type';
 
 export default function DashboardContentN1() {
   const [articles, setArticles] = useState<NotesPage[]>([]);
@@ -51,10 +52,10 @@ export default function DashboardContentN1() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-white/80 mb-6">
+      <section className="p-6">
+        <header className="text-xl font-bold text-gray-800 dark:text-white/80 mb-6">
           最近更新笔记
-        </h1>
+        </header>
         <div className="space-y-4">
           {[1, 2, 3].map((item) => (
             <div
@@ -67,15 +68,15 @@ export default function DashboardContentN1() {
             </div>
           ))}
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold text-gray-800 dark:text-white/80 mb-6">
+    <section className="p-6">
+      <header className="text-xl font-bold text-gray-800 dark:text-white/80 mb-6">
         最近更新笔记
-      </h1>
+      </header>
       <div className="space-y-4">
         {articles.map((article) => (
           <Link
@@ -84,7 +85,7 @@ export default function DashboardContentN1() {
             className="flex items-center justify-center"
 
           >
-            <div className="p-4 group backdrop-blur-sm rounded-lg 
+            <article className="p-4 group backdrop-blur-sm rounded-lg 
             border transition-all duration-300 cursor-pointer 
             overflow-hidden hover:scale-102 hover:-translate-y-1
              shadow-md hover:shadow-lg bg-white/60 dark:bg-gray-800/60">
@@ -112,10 +113,10 @@ export default function DashboardContentN1() {
                 {article.content.slice(0, 60)}...
               </p>
 
-            </div>
+            </article>
           </Link>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

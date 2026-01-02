@@ -1,6 +1,7 @@
+// 管理员笔记页面组件 - 管理笔记分类和内容
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { FileText } from 'lucide-react';
 import { format } from 'date-fns';
@@ -28,17 +29,15 @@ import { Input } from '@/components/ui/shadcnComponents/forms/input';
 import { Label } from '@/components/ui/shadcnComponents/forms/label';
 
 
-const StudyNodes = () => {
+export default function StudyNotes() {
   // 笔记列表状态
   const [notes, setNotes] = useState<Note[]>([]);
   // 新建笔记分类的标题输入
   const [addNotesPage, setAddNotesPage] = useState('');
-  // 删除弹窗开关
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  
   // 当前正在编辑的笔记对象
   const [putNotesPage, setPutNotesPage] = useState<Note | null>(null);
-  // 更新笔记时的加载状态
-  const [isPutLoading, setIsPutLoading] = useState<boolean>(false);
+  
   // 新增笔记弹窗开关
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
 
@@ -114,7 +113,6 @@ const StudyNodes = () => {
       if (response) {
         // 成功后从列表移除
         setNotes(prev => prev.filter(note => note.id !== id));
-        setIsDeleteDialogOpen(false);
       }
     } catch (error) {
       console.error('删除笔记分类失败:', error);
@@ -124,10 +122,8 @@ const StudyNodes = () => {
 
   // 更新笔记分类
   const handleUpdateNote = async (id: number) => {
-    setIsPutLoading(true);
 
     if (!putNotesPage) {
-      setIsPutLoading(false);
       return;
     }
 
@@ -145,40 +141,39 @@ const StudyNodes = () => {
       if (response) {
         // 成功后更新本地列表
         setNotes(prev => prev.map(note => note.id === id ? { ...note, title: newPutNote.title } : note));
-        setIsPutLoading(false);
         setPutNotesPage(null);
       }
     } catch (error) {
       console.error('更新笔记分类失败:', error);
-    } finally {
-      setIsPutLoading(false);
     }
   };
 
 
   return (
-    <div className="min-h-screen 
+    <main className="min-h-screen 
     bg-sky-100/60 dark:bg-gray-900/60
-    text-foreground">
-      <main className="p-6">
-        {/* 顶部筛选与统计卡片 */}
+    text-foreground p-6">
+      {/* 顶部筛选与统计卡片 */}
+      <section className="mb-6">
         <NoteHeaderCard
           notes={notes}
           allTags={allTags}
         />
+      </section>
 
-        {/* 主区域 */}
+      {/* 主区域 */}
+      <section className="space-y-6">
         <Card className="
         bg-white/80 dark:bg-card/60 rounded-lg border border-border/40 shadow-xl
         border border-border/40 
         shadow-xl hover:shadow-2xl ">
           {/* 新增笔记分类头部 */}
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 px-6 pt-6">
-            <div>
+            <header>
               <CardTitle className="text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 笔记分类
               </CardTitle>
-            </div>
+            </header>
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button
@@ -222,7 +217,7 @@ const StudyNodes = () => {
           <CardContent className="p-6 border-0 shadow-none 
           bg-transparent
           ">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
              xl:grid-cols-4 gap-6">
               {notes.map((note) => (
                 <NoteCategoryCard
@@ -235,23 +230,21 @@ const StudyNodes = () => {
                   putNotesPage={putNotesPage || note}
                 />
               ))}
-            </div>
+            </section>
 
             {/* 空状态提示 */}
             {notes.length === 0 && (
-              <div className="text-center py-16 bg-gradient-to-br from-card/60 to-card/40 rounded-lg border border-dashed border-border/60 shadow-inner">
+              <section className="text-center py-16 bg-gradient-to-br from-card/60 to-card/40 rounded-lg border border-dashed border-border/60 shadow-inner">
                 <FileText className="mx-auto h-16 w-16 text-muted-foreground/40" />
                 <p className="mt-4 text-lg text-muted-foreground font-medium">
                   暂无分类，创建第一个笔记分类吧
                 </p>
                 <p className="text-sm text-muted-foreground/70 mt-2">点击上方按钮开始创建</p>
-              </div>
+              </section>
             )}
           </CardContent>
         </Card>
-      </main>
-    </div>
+      </section>
+    </main>
   );
-};
-
-export default StudyNodes; 
+}

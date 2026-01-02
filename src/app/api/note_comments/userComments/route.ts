@@ -1,20 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-
-// model Comment {
-//   id        String   @id @default(cuid())
-//   content   String
-//   author    User      @relation(fields: [authorId], references: [id])
-//   authorId  String
-//   publicComment      publicComment     @relation(fields: [postId], references: [id])
-//   postId    String
-//   parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id])
-//   parentId  String?
-//   replies   Comment[] @relation("CommentReplies")
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
 export async function POST(request: NextRequest) {
 
     try {

@@ -1,4 +1,5 @@
 "use client";
+// 笔记详情页面组件 - 展示笔记标题和页面导航
 import NextRouter from "@/components/layout/NextRouter";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,24 +10,18 @@ import Title from "@/components/ui/public/title";
 import { useNotes } from "@/hooks/note/useNotes";
 import { Note, NotesPage } from "@/types/note/type";
 import { NoteListCard } from "@/components/features/notes/noteListCard";
-import { NoteListHeader } from "@/components/features/notes/noteListHeader";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import ThemePage from "@/components/ui/public/themePage";
 
-
-
-
-const Notestitle = () => {
+export default function NoteDetailPage() {
   const { notesID } = useParams();
   const router = useRouter();
 
   const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(false);
-
-
-
-
 
   //获取noteList(GET)
   useEffect(() => {
@@ -53,71 +48,72 @@ const Notestitle = () => {
     router.push(`/notes/${notesID}/${notePageID}`);
   };
 
-
-
-
-
   if (!note && !loading) {
     return (
-      <article>
+      <section className="fixed inset-0 flex items-center justify-center">
         <TechBackgroundNoGrid>
-          <div className="fixed top-0 left-0 w-full h-full ">
-            <div className=" w-full ">
-              <LoadingPage />
-            </div>
-          </div>
+          <LoadingPage />
         </TechBackgroundNoGrid>
-      </article>
+      </section>
     );
   }
   return (
-
-    <div className="">
-      <TechBackgroundNoGrid>
-        <NextRouter showHeader={false} >
-          <NoteListHeader />
-          <motion.div
-            initial={{ opacity: 0, y: 150, scale: 1 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+    <TechBackgroundNoGrid>
+      <NextRouter showHeader={false} >
+        <header className="flex justify-between mb-5 container mx-auto px-4 sm:px-6 py-4 flex">
+          <Link
+            href="/notes"
+            className="flex items-center text-[#8A94A6] hover:text-[#4A6FA5] transition-colors cursor-target"
           >
-
+            <svg
+              className="mr-2 w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            <span>返回列表</span>
+          </Link>
+          <ThemePage />
+        </header>
+        <motion.main
+          initial={{ opacity: 0, y: 150, scale: 1 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <header>
             <Title>{note && note.title}</Title>
+          </header>
 
-            <section className="min-h-screen">
-              {note && <NoteListCard
-                note={note}
-                handleUid={handleUid}
-              />}
-            </section>
+          <section className="min-h-screen">
+            {note && <NoteListCard
+              note={note}
+              handleUid={handleUid}
+            />}
+          </section>
+        </motion.main>
+      </NextRouter>
 
-
-
-
-          </motion.div>
-
-        </NextRouter>
-      </TechBackgroundNoGrid>
-
-
-
-
-
-      <aside className=" hidden lg:flex  z-50
+      <nav className=" hidden lg:flex  z-50
        flex flex-col  
        fixed right-[5%] lg:right-[10%] top-[15%]
          md:right-[-20%] sm:right-[-20%]
          h-50 
-          ">
+          " aria-label="笔记目录导航">
         <span className="text-amber-50 text-base my-4 opacity-70 ">
           <p className="mx-1 text-sky-500 dark:text-slate-300 text-3xl font-bold">笔记目录</p>
-
         </span>
-          <PageNavigation
-            notesPage={note?.page as NotesPage[]}
-            pageStyle='text-amber-50 opacity-70'
-            activeStyle='text-blue-400 font-bold' />
-      </aside>
+        <PageNavigation
+          notesPage={note?.page as NotesPage[]}
+          pageStyle='text-amber-50 opacity-70'
+          activeStyle='text-blue-400 font-bold' />
+      </nav>
 
       <footer
         className="fixed bottom-[3%] left-[3%] "
@@ -125,18 +121,13 @@ const Notestitle = () => {
         <Button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           variant="outline"
-          aria-label="Submit"
+          aria-label="返回顶部"
           className="bg-card/60"
-
         >
-          <span className="hidden md:inline-block">返回上级</span>
-
+          <span className="hidden md:inline-block">返回顶部</span>
           <ArrowUpIcon />
         </Button>
       </footer>
-
-    </div>
+    </TechBackgroundNoGrid>
   );
-};
-
-export default Notestitle;
+}

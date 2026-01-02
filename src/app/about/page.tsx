@@ -7,6 +7,7 @@ import Title from '@/components/ui/public/title';
 import { motion } from 'framer-motion'
 import { useAbout } from '@/hooks/about/useAbout';
 
+// 关于页面组件 - 展示个人信息和简介
 const AboutPage = () => {
   // 个人信息数据
   const [personalInfo, setPersonalInfo] = useState({
@@ -36,7 +37,9 @@ const AboutPage = () => {
   return (
     <TechBackgroundNoGrid>
       <NextRouter>
+        {/* 页面主内容区域 */}
         <div className="pt-20 pb-16 px-4 min-h-screen">
+          {/* 页面标题区域 */}
           <motion.div
             initial={{ opacity: 0, y: 150 }}
             animate={{ opacity: 1, y: 0 }}
@@ -47,19 +50,21 @@ const AboutPage = () => {
             </div>
           </motion.div>
 
+          {/* 个人信息和侧边栏内容区域 */}
           <motion.div
             initial={{ opacity: 0, y: 150, scale: 1 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <div className="max-w-6xl w-full mx-auto">
+              {/* 主内容和侧边栏布局 */}
               <div className="flex flex-col lg:flex-row gap-8">
                 <div className="w-full lg:w-2/3">
-                  {/* 个人信息卡片 */}
-                  <div className="mb-8 bg-white dark:bg-gray-800/90 rounded-2xl shadow-sm dark:shadow-lg dark:shadow-gray-900/20 p-6 dark:border dark:border-gray-700">
-                    <div className="flex items-center gap-3 mb-5">
+                  {/* 个人简介卡片 */}
+                  <article className="mb-8 bg-white dark:bg-gray-800/90 rounded-2xl shadow-sm dark:shadow-lg dark:shadow-gray-900/20 p-6 dark:border dark:border-gray-700">
+                    <header className="flex items-center gap-3 mb-5">
                       <h2 className="text-xl font-bold text-gray-800 dark:text-white">个人简介</h2>
-                    </div>
+                    </header>
 
                     <div className="space-y-4">
                       <motion.p 
@@ -71,6 +76,7 @@ const AboutPage = () => {
                         {personalInfo.description}
                       </motion.p>
                       
+                      {/* 详细信息列表 */}
                       <div className="grid grid-cols-1 gap-5 mt-2 pb-10">
                         {personalInfo.details.map((info, index) => (
                           <motion.div 
@@ -88,7 +94,7 @@ const AboutPage = () => {
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </article>
 
           
                 </div>

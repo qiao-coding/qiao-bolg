@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import { Note, NotesPage } from "@/types/note/type";
 
@@ -11,21 +10,13 @@ const HomeArticles = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { resolvedTheme } = useTheme();
-  const [isDark, setIsDark] = useState(false);
   const [notesPage, setNotesPage] = useState<Note[]>([]);
 
   const handleArticleClick = useCallback((noteId: string, pageId?: string) => {
-    const pageIdList =
       router.push(`/notes/${noteId}/${pageId}`);
   }, [router]);
 
 
-  useEffect(() => {
-    if (resolvedTheme) {
-      setIsDark(resolvedTheme === "dark");
-    }
-  }, [resolvedTheme]);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -137,7 +128,7 @@ const HomeArticles = () => {
         </div>
       </article>
     ));
-  }, [articles, handleArticleClick]);
+  }, [articles, handleArticleClick, notesPage]);
 
   if (loading) {
     return (

@@ -1,5 +1,4 @@
 import Image from "next/image"
-import { auth } from "../../../../auth"
 import { useSession } from "next-auth/react"
 
 export function UserAvatar() {

@@ -2,19 +2,15 @@
 import React, { useState } from "react";
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { Input } from '@/components/ui/shadcnComponents/forms/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/data-display/card';
+import { Card, CardContent, CardHeader} from '@/components/ui/shadcnComponents/data-display/card';
 import { Label } from '@/components/ui/shadcnComponents/forms/label';
 import { Separator } from '@/components/ui/shadcnComponents/navigation/separator';
-import { Save, ArrowLeft, Tag, FileText, Calendar } from 'lucide-react';
+import { Save,Tag, FileText, Calendar } from 'lucide-react';
 import { NotesPage } from '@/types/note/type';
 import { AntTabs } from '@/components/ui/ant/ant_taps';
-import ReactSimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useTheme } from "next-themes";
 import MarkdownEditor from "@/components/features/editor/markdown/markdownEditor";
-// import './light.css'
-// import './dark.css'
-// import 'highlight.js/styles/atom-one-dark.css';
 
 
 

@@ -1,4 +1,4 @@
-import { AboutDeta } from "@/types/about/type";
+import { AboutDetail } from "@/types/about/type";
 import { AboutPage } from "@prisma/client";
 
 function createAbout() {
@@ -22,7 +22,7 @@ function createAbout() {
   }
 
   // 更新关于页面数据
-  async function postAbout(aboutData: AboutDeta){
+  async function postAbout(aboutData: AboutDetail){
     try {
       const res = await fetch('/api/about/post_about', {
         method: 'POST',

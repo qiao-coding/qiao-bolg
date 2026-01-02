@@ -1,11 +1,12 @@
 'use client';
 
+// 搜索框组件 - 提供全局搜索功能
 import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { Button } from '../../ui/shadcnComponents/forms/button';
 import { SearchResult, SearchBoxProps } from '../../../types/components/features/search/SearchBox.type';
 import { NoteSearchResponse } from '../../../types/note/type';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export function SearchBox({ className }: SearchBoxProps) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -13,7 +14,6 @@ export function SearchBox({ className }: SearchBoxProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const searchRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -204,7 +204,7 @@ export function SearchBox({ className }: SearchBoxProps) {
                                 {searchQuery.trim() ? '未找到相关笔记' : '输入关键词搜索笔记'}
                             </div>
                         ) : (
-                            <div className="space-y-1">
+                            <section className="space-y-1">
                                 {searchResults.map((result) => (
                                     <Link
                                         key={result.id}
@@ -216,9 +216,9 @@ export function SearchBox({ className }: SearchBoxProps) {
                                             setIsExpanded(false);
                                         }}
                                     >
-                                        <div className="font-medium text-sm text-gray-900 dark:text-white mb-1">
+                                        <header className="font-medium text-sm text-gray-900 dark:text-white mb-1">
                                             {result.title}
-                                        </div>
+                                        </header>
                                         {result.content && (
                                             <div className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
                                                 {result.content}
@@ -229,7 +229,7 @@ export function SearchBox({ className }: SearchBoxProps) {
                                         </div>
                                     </Link>
                                 ))}
-                            </div>
+                            </section>
                         )}
                     </motion.div>
                 )}

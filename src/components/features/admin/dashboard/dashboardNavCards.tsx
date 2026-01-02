@@ -6,7 +6,6 @@ import { useNotes } from "@/hooks/note/useNotes";
 import Link from "next/link";
 import {
   BookOpen,
-  Home,
   Link as LinkIcon,
   MessageCircle,
 } from 'lucide-react';

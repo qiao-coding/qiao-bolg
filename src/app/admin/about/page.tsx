@@ -1,19 +1,20 @@
 'use client'
+// 管理员关于页面组件 - 管理个人简介和详细信息
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/data-display/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/data-display/card";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { Input } from "@/components/ui/shadcnComponents/forms/input";
 import { Textarea } from "@/components/ui/shadcnComponents/forms/textarea";
 import { Label } from "@/components/ui/shadcnComponents/forms/label";
-import { Save, } from 'lucide-react';
+import { Save, TrashIcon, } from 'lucide-react';
 import { motion } from "framer-motion";
 import { useAbout } from '@/hooks/about/useAbout';
-import { AboutDeta } from '@/types/about/type';
+import { AboutDetail } from '@/types/about/type';
 
 
 
 export default function AdminAboutPage() {
-  const [aboutData, setAboutData] = useState<AboutDeta>({
+  const [aboutData, setAboutData] = useState<AboutDetail>({
     description: "",
     details: [
       { label: "", value: "" },
@@ -44,63 +45,14 @@ export default function AdminAboutPage() {
       setIsLoading(false);
     }
   };
-  // 页面加载时获取数据
-  useEffect(() => {
-    getAboutData();
-  }, []);
 
-  // 处理个人简介描述变更
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setAboutData({
-      ...aboutData,
-      description: e.target.value
-    });
-  };
-
-  // 处理个人信息详情变更
-  const handleDetailChange = (index: number, field: 'label' | 'value', value: string) => {
-    const updatedDetails = [...aboutData.details];
-    updatedDetails[index] = {
-      ...updatedDetails[index],
-      [field]: value
-    };
-
-    setAboutData({
-      ...aboutData,
-      details: updatedDetails
-    });
-  };
-
-  // 添加新个人信息项
-  const handleAddDetail = () => {
-    setAboutData({
-      ...aboutData,
-      details: [
-        ...aboutData.details,
-        { label: "新标签", value: "输入详细信息" }
-      ]
-    });
-  };
-
-  // 删除个人信息项
-  const handleDeleteDetail = (index: number) => {
-    const updatedDetails = [...aboutData.details];
-    updatedDetails.splice(index, 1);
-
-    setAboutData({
-      ...aboutData,
-      details: updatedDetails
-    });
-  };
-
-  // 处理保存
+  // 保存关于页面数据
   const handleSave = async () => {
     setIsSaving(true);
     try {
       await useAbout.postAbout(aboutData);
-
-
-      alert('保存成功！');
+      // 保存成功提示
+      alert('关于页面信息已更新');
     } catch (error) {
       console.error('保存关于页面数据失败:', error);
       alert('保存失败，请重试');
@@ -109,111 +61,155 @@ export default function AdminAboutPage() {
     }
   };
 
+  // 添加详情项
+  const addDetailItem = () => {
+    setAboutData({
+      ...aboutData,
+      details: [...aboutData.details, { label: "", value: "" }]
+    });
+  };
 
+  // 更新详情项
+  const updateDetailItem = (index: number, field: 'label' | 'value', value: string) => {
+    const updatedDetails = [...aboutData.details];
+    updatedDetails[index] = { ...updatedDetails[index], [field]: value };
+    setAboutData({
+      ...aboutData,
+      details: updatedDetails
+    });
+  };
+
+  // 删除详情项
+  const removeDetailItem = (index: number) => {
+    if (aboutData.details.length <= 1) return; // 至少保留一项
+    const updatedDetails = aboutData.details.filter((_, i) => i !== index);
+    setAboutData({
+      ...aboutData,
+      details: updatedDetails
+    });
+  };
+
+  // 页面加载时获取数据
+  useEffect(() => {
+    getAboutData();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60 py-8">
-      <div className="container mx-auto px-4">
+    <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60 py-8">
+      <div className="container mx-auto px-4 grid grid-cols-1  gap-8" >
+        {/* 页面标题区域 */}
+        <header className="text-center py-6">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">关于页面管理</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">管理关于页面的个人简介和详细信息</p>
+        </header>
 
-        <div className="mb-8 flex justify-end">
-          {/* 操作按钮 */}
-
-          <Button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
-          >
-            <Save className="h-4 w-4 mr-2" />
-            {isSaving ? '保存中...' : '保存更改'}
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-1  gap-8">
-          {/* 个人简介管理 */}
-          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                个人简介
-              </CardTitle>
-
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+        {/* 个人简介编辑区域 */}
+        <section className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-xl shadow-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span>个人简介</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <section 
+                aria-label="加载中"
+                aria-live="polite"
+                role="status"
+                className="py-12 text-center"
+              >
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                <p className="mt-2 text-gray-600 dark:text-gray-400">加载中...</p>
+              </section>
+            ) : (
+              <div className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="description">个人简介</Label>
+                  <Label htmlFor="description">个人描述</Label>
                   <Textarea
                     id="description"
                     value={aboutData.description}
-                    onChange={handleDescriptionChange}
-                    rows={6}
-                    className="resize-none"
-                    placeholder="请输入您的个人简介..."
+                    onChange={(e) => setAboutData({...aboutData, description: e.target.value})}
+                    placeholder="请输入个人描述"
+                    className="min-h-[120px]"
                   />
                 </div>
+
+                {/* 详细信息列表 */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-medium">详细信息</h3>
+                    <Button type="button" onClick={addDetailItem} variant="outline" size="sm">
+                      添加项目
+                    </Button>
+                  </div>
+
+                  {aboutData.details.map((detail, index) => (
+                    <motion.div
+                      key={index}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="space-y-2">
+                        <Label htmlFor={`label-${index}`}>标签</Label>
+                        <Input
+                          id={`label-${index}`}
+                          value={detail.label}
+                          onChange={(e) => updateDetailItem(index, 'label', e.target.value)}
+                          placeholder="例如：职业"
+                        />
+                      </div>
+                      <div className="space-y-2 flex items-end gap-2">
+                        <div className="flex-grow space-y-2">
+                          <Label htmlFor={`value-${index}`}>值</Label>
+                          <Input
+                            id={`value-${index}`}
+                            value={detail.value}
+                            onChange={(e) => updateDetailItem(index, 'value', e.target.value)}
+                            placeholder="例如：前端开发工程师"
+                          />
+                        </div>
+                        {aboutData.details.length > 1 && (
+                          <Button
+                            type="button"
+                            onClick={() => removeDetailItem(index)}
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10"
+                          >
+                            <TrashIcon className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="flex justify-end pt-4">
+                  <Button 
+                    onClick={handleSave} 
+                    disabled={isSaving}
+                    className="flex items-center gap-2"
+                  >
+                    {isSaving ? (
+                      <>
+                        <div className="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                        保存中...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4" />
+                        保存更改
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* 个人信息管理 */}
-          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                个人信息
-              </CardTitle>
-
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {aboutData.details.map((detail, index) => (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    key={index} className="flex gap-2">
-                    <div className="flex-1 space-y-2">
-                      <Input
-                        value={detail.label}
-                        onChange={(e) => handleDetailChange(index, 'label', e.target.value)}
-                        placeholder="标签名称"
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <Input
-                        value={detail.value}
-                        onChange={(e) => handleDetailChange(index, 'value', e.target.value)}
-                        placeholder="标签值"
-                      />
-                    </div>
-                    <div className="flex items-center">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="p-2 h-auto"
-                        onClick={() => handleDeleteDetail(index)}
-                      >
-                        ×
-                      </Button>
-                    </div>
-                  </motion.div>
-                ))}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleAddDetail}
-                  className="h-9"
-                >
-                  添加信息项
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-        </div>
-
-
-
+            )}
+          </CardContent>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
-

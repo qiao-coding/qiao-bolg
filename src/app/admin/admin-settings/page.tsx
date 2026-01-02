@@ -1,6 +1,6 @@
 'use client'
+// 管理员设置页面组件 - 管理管理员账户和设置
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/shadcnComponents/data-display/card";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { Input } from "@/components/ui/shadcnComponents/forms/input";
 import { Label } from "@/components/ui/shadcnComponents/forms/label";
@@ -109,21 +109,21 @@ export default function AdminUsersPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60 py-8">
+    <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60 py-8">
       <div className="container mx-auto px-4 grid grid-cols-1  gap-8" >
 
-        {/* 添加管理员 */}
-        <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        {/* 添加管理员表单区域 */}
+        <section className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+          <header className="p-6 pb-4">
+            <h2 className="flex items-center gap-2 text-xl font-semibold">
               <Plus className="h-5 w-5" />
               添加管理员
-            </CardTitle>
-            <CardDescription>
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               添加新的管理员账户或更新现有账户
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </p>
+          </header>
+          <div className="p-6 space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">邮箱地址</Label>
               <Input
@@ -180,21 +180,21 @@ export default function AdminUsersPage() {
             >
               {isAdminLoading ? '保存中...' : '保存管理员'}
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </section>
 
-        {/* 管理员列表 */}
-        <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        {/* 管理员列表区域 */}
+        <section className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+          <header className="p-6 pb-4">
+            <h2 className="flex items-center gap-2 text-xl font-semibold">
               管理员列表 ({adminUsers.length})
-            </CardTitle>
-            <CardDescription>
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               当前博客系统中的所有管理员账户
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 max-h-96 overflow-y-auto">
+            </p>
+          </header>
+          <div>
+            <div className="p-6 space-y-3 max-h-96 overflow-y-auto">
               {adminUsers.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <p>暂无管理员账户</p>
@@ -239,9 +239,9 @@ export default function AdminUsersPage() {
                 ))
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }

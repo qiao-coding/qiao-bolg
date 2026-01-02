@@ -1,3 +1,4 @@
+// 友链管理页面组件 - 管理网站友情链接信息
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Plus, Trash2, Globe } from 'lucide-react';
@@ -118,6 +119,8 @@ const FriendLinksManagement= () => {
         return 0;
     });
 
+
+    // 排序友链字段
     const handleSortChange = (field: 'createdAt' | 'name' | 'status') => {
         if (sortField === field) {
             setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -298,11 +301,11 @@ const FriendLinksManagement= () => {
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <div>
+                        <header>
                             <CardTitle>友链列表</CardTitle>
                             <CardDescription>管理您的友情链接，支持添加、编辑和删除操作</CardDescription>
-                        </div>
-                        <div className="flex gap-2">
+                        </header>
+                        <section className="flex gap-2">
                             <Link
                                 href="/friend"
                                 target="_blank"
@@ -321,7 +324,7 @@ const FriendLinksManagement= () => {
                                 <Plus className="h-4 w-4" />
                                 <span>添加友链</span>
                             </Button>
-                        </div>
+                        </section>
                     </CardHeader>
 
                     <CardContent>
@@ -333,19 +336,19 @@ const FriendLinksManagement= () => {
                         />
 
                         {isLoading ? (
-                            <div className="flex justify-center items-center p-12">
+                            <section className="flex justify-center items-center p-12">
                                 <div className="flex flex-col items-center gap-2">
                                     <div className="w-8 h-8 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin" />
                                     <p className="text-slate-500 dark:text-slate-400">加载中...</p>
                                 </div>
-                            </div>
+                            </section>
                         ) : filteredAndSearchedItems.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center p-12 text-center">
+                            <section className="flex flex-col items-center justify-center p-12 text-center">
                                 <div className="w-16 h-16 mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                                     <Globe className="h-8 w-8 text-slate-400 dark:text-slate-500" />
                                 </div>
                                 <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">暂无友链</h3>
-                            </div>
+                            </section>
                         ) : (
                             <FriendLinksTable
                                 friends={sortedItems}
@@ -362,7 +365,7 @@ const FriendLinksManagement= () => {
                         )}
 
                         {filteredAndSearchedItems.length > 0 && (
-                            <div className="flex items-center justify-between mt-6">
+                            <footer className="flex items-center justify-between mt-6">
                                 <div className="text-sm text-muted-foreground">
                                     显示 {Math.min(1, filteredAndSearchedItems.length)} 到 {Math.min(10, filteredAndSearchedItems.length)} 条，共 {filteredAndSearchedItems.length} 条
                                 </div>
@@ -375,7 +378,7 @@ const FriendLinksManagement= () => {
                                         批量删除
                                     </Button>
                                 )}
-                            </div>
+                            </footer>
                         )}
                     </CardContent>
                 </Card>

@@ -4,7 +4,7 @@ export interface AboutPageDetail {
 }
 
 
-export interface AboutDeta {
+export interface AboutDetail {
   description: string;
   details: { label: string; value: string }[];
 }

@@ -1,4 +1,5 @@
 'use client'
+// 学习笔记页面组件 - 展示笔记列表和侧边栏导航
 import NextRouter from "@/components/layout/NextRouter";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
@@ -13,10 +14,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 
-
-
-const Article = () => {
-
+export default function NotesPage() {
   const [notes, setNotes] = useState<Note[]>([])
 
   //数据获取
@@ -32,78 +30,83 @@ const Article = () => {
 
   const {data:session} = useSession()
 
-
-
-
-
-
-
   return (
     <TechBackgroundNoGrid>
       <NextRouter>
-        <motion.div
+        <motion.main
           initial={{ opacity: 0, y: 150, scale: 1 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          aria-labelledby="notes-title"
         >
-          <main className="py-12 px-4 
-           sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28">
-            <article>
-              <Title>学习笔记</Title>
-              <div className="flex justify-center w-full">
-                {notes.length > 0 ? (
-                  <motion.section
+          {/* 笔记列表内容区域 */}
+          <section className="py-12 px-4 sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28">
+            <header>
+              <Title >学习笔记</Title>
+            </header>
+            <section className="flex justify-center w-full">
+              {notes.length > 0 ? (
+                <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                   className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 
-                   sm:w-[80vw] md:w-[65vw] lg:w-[50vw] gap-6 m-auto">
-                    {notes.map((note) => (
-                      <article key={note.id} className="cursor-pointer">
-                        <motion.div
-                          whileHover={{ transition: { duration: 0.3 }, translateY: -15 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <NotesCard id={note.id} title={note.title} tags={note.tags || []} titlePicture={note.titlePicture || ""} />
-                        </motion.div>
-                      </article>
-                    ))}
-                  </motion.section>
-                ) : (
-                  <div className="flex flex-col justify-center items-center ">
-                    <RotatingCube />
-                    <p className="text-3xl text-sky-400 dark:text-white font-bold">正在加载笔记...</p>
-                  </div>
-                )}
-               {notes.length > 0 && session &&  <aside className="hidden lg:block lg:w-[200px] xl:w-[250px] px-0 ml-8">
+                  className="grid grid-cols-1 gap-6 sm:w-[80vw] md:w-[65vw] lg:w-[50vw] m-auto"
+                  role="list"
+                  aria-label="笔记列表"
+                >
+                  {notes.map((note) => (
+                    <motion.article
+                      key={note.id}
+                      className="cursor-pointer"
+                      role="listitem"
+                      whileHover={{ translateY: -15, transition: { duration: 0.3 } }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <NotesCard
+                        id={note.id}
+                        title={note.title}
+                        tags={note.tags || []}
+                        titlePicture={note.titlePicture || ""}
+                      />
+                    </motion.article>
+                  ))}
+                </motion.div>
+              ) : (
+                <section
+                  className="flex flex-col justify-center items-center"
+                  aria-live="polite"
+                  aria-busy="true"
+                >
+                  <RotatingCube />
+                  <p className="text-3xl text-sky-400 dark:text-white font-bold">
+                    正在加载笔记...
+                  </p>
+                </section>
+              )}
+              {notes.length > 0 && session && (
+                <aside
+                  className="hidden lg:block lg:w-[200px] xl:w-[250px] px-0 ml-8"
+                  aria-label="笔记侧边栏"
+                >
                   <NotesSideber />
-                </aside>}
-              </div>
-            </article>
-
-          </main>
-        </motion.div>
+                </aside>
+              )}
+            </section>
+          </section>
+        </motion.main>
       </NextRouter>
-          <footer
-        className="fixed bottom-[3%] left-[3%] "
-      >
+
+      <footer className="fixed bottom-[3%] left-[3%]">
         <Button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           variant="outline"
-          aria-label="Submit"
+          aria-label="返回顶部"
           className="bg-card/60"
-
         >
-          <span className="hidden md:inline-block">返回上级</span>
-
-          <ArrowUpIcon />
+          <span className="hidden md:inline-block">返回顶部</span>
+          <ArrowUpIcon aria-hidden="true" />
         </Button>
       </footer>
     </TechBackgroundNoGrid>
-
-
-
   );
-};
-
-export default Article;
+}

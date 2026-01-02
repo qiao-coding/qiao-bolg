@@ -46,10 +46,26 @@ function createFriend() {
       throw error;
     }
   }
+  // 删除友链
+  async function deleteFriend(id: number) {
+    try {
+      const res = await fetch(`/api/friend/${id}`, {
+        method: 'DELETE'
+      });
+      if (!res.ok) {
+        throw new Error('删除友链失败');
+      }
+      return await res.json();
+    } catch (error) {
+      console.error('删除友链失败:', error);
+      throw error;
+    }
+  }
 
   return {
     getFriendList,
-    postFriend
+    postFriend,
+    deleteFriend
   };
 }
 

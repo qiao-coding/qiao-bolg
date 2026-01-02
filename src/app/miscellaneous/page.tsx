@@ -1,4 +1,5 @@
 "use client";
+// 杂项页面组件 - 展示说说内容和时间线
 import NextRouter from "@/components/layout/NextRouter";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
@@ -11,10 +12,7 @@ import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 import { motion } from "framer-motion";
 
-
-
-
-const Miscellaneous = () => {
+export default function MiscellaneousPage() {
 
   const [miscellaneous, setMiscellaneous] = useState<miscellaneousType[]>([])
 
@@ -31,32 +29,30 @@ const Miscellaneous = () => {
     fetchMiscellaneous()
   }, [miscellaneous.length])
 
-
-
   return (
     <TechBackgroundNoGrid>
       <NextRouter>
-        <motion.div
+        <motion.main
           initial={{ opacity: 0, y: 150, scale: 1 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          aria-labelledby="miscellaneous-title"
         >
-
-          <article className="pt-18 min-h-screen">
-            <Title>说说</Title>
+          {/* 说说内容区域 */}
+          <section className="py-12 px-4 sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28" aria-label="说说时间线">
+            <header>
+              <Title>说说</Title>
+            </header>
             {miscellaneous.length > 0 ? (
               <MiscellaneousTimeline items={miscellaneous} />
             ) : (
-              <div className="flex flex-col justify-center items-center ">
+              <section className="flex flex-col justify-center items-center " aria-live="polite" aria-busy="true">
                 <RotatingCube />
                 <p className="text-3xl text-sky-400 dark:text-white font-bold">正在加载说说...</p>
-              </div>
+              </section>
             )}
-
-
-          </article>
-
-        </motion.div>
+          </section>
+        </motion.main>
       </NextRouter>
       <footer
         className="fixed bottom-[3%] left-[3%] "
@@ -64,17 +60,13 @@ const Miscellaneous = () => {
         <Button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           variant="outline"
-          aria-label="Submit"
+          aria-label="返回顶部"
           className="bg-card/60"
-
         >
-          <span className="hidden md:inline-block">返回上级</span>
-
-          <ArrowUpIcon />
+          <span className="hidden md:inline-block">返回顶部</span>
+          <ArrowUpIcon aria-hidden="true" />
         </Button>
       </footer>
     </TechBackgroundNoGrid>
   );
-};
-
-export default Miscellaneous;
+}

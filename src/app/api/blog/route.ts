@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 
 // 获取博客设置数据
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // 默认使用ID为1的记录
     const blogId = 1;

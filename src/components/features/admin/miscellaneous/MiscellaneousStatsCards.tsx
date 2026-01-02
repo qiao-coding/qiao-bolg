@@ -2,23 +2,10 @@
 import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { MessageCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { format } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
+import { miscellaneousType } from '@/types/miscellaneous/type';
 
-interface Miscellaneous {
-  id: number;
-  content: string;
-  date: string;
-}
 
-export function MiscellaneousStatsCards({ miscellaneous }: { miscellaneous: Miscellaneous[] }) {
-  const formatDate = (dateString: string) => {
-    try {
-      return format(new Date(dateString), 'yyyy-MM-dd HH:mm', { locale: zhCN });
-    } catch {
-      return dateString;
-    }
-  };
+export function MiscellaneousStatsCards({ miscellaneous }: { miscellaneous: miscellaneousType[] }) {
 
   // 获取最新的说说
   const latestMiscellaneous = miscellaneous.length > 0 

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { signOut } from '../../../../../auth';
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     await signOut({ redirectTo: '/' });
     return NextResponse.json({ success: true });
