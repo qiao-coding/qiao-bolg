@@ -40,14 +40,16 @@ const LoadingPage= () => {
   ];
 
   return (
-    <section className='h-screen'>
+    <section className='h-screen w-full'>
     <TechBackgroundNoGrid>
     <div className="flex flex-col items-center pt-80 justify-center min-h-[50vh] w-full py-10 px-4">
       <div className="
-        w-full max-w-md p-6 rounded-xl shadow-lg
+        p-6 rounded-xl shadow-lg
         bg-card/90
         backdrop-blur-sm border border-border/20
         transition-all duration-500
+        w-full max-w-md
+        mx-auto
       ">
         {/* 笔记本图标动画 */}
         <div className="flex justify-center mb-6">

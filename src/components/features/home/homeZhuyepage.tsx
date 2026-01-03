@@ -60,17 +60,17 @@ export function HomeZhuyepage() {
         fetchBlogData();
     }, []);
 
-    
+
     const handleTiltedCard = () => {
         if (blogData.homePage.isDynamicTiltCard) {
             return (session && session.user?.image) || '/user_img/up.jpg';
         }
-        return  '/user_img/up.jpg';
+        return '/user_img/up.jpg';
     }
 
-    
 
-    
+
+
     const handleTitle = () => {
         if (blogData.homePage.isDynamicTitle) {
             return session && `Hi ${session.user?.name} 🥰` || 'Hi HaoWhite 🥰';
@@ -163,11 +163,11 @@ export function HomeZhuyepage() {
     };
     return (
         <article
-        style={{
-            backgroundImage: `url(/bg.webp)`,
-            backgroundAttachment:'fixed',
-        }}
-         className={` min-h-screen bg-cover  bg-center bg-no-repeat  to-white   min-h-screen bg-cover `}>
+            style={{
+                backgroundImage: `url(/bg.webp)`,
+                backgroundAttachment: 'fixed',
+            }}
+            className={` min-h-screen bg-cover  bg-center bg-no-repeat  to-white   min-h-screen bg-cover `}>
 
             <section className="hero min-h-screen dark:bg-black/60 p-6" >
                 <motion.div
@@ -195,7 +195,7 @@ export function HomeZhuyepage() {
                             {handleTitle()}
                         </h1>
 
-                        <p className="py-6">{blogData.homePage?.subTitle || "愿生活的每一天，都有惊喜!"}</p>
+                        <p className="py-6 text-lg text-slate-600 dark:text-slate-300">{blogData.homePage?.subTitle || "愿生活的每一天，都有惊喜!"}</p>
                         <nav className="flex gap-10 justify-center">
                             {blogData.homeIcons?.map((icon, index) => (
                                 <a
@@ -206,7 +206,7 @@ export function HomeZhuyepage() {
                                     aria-label={`跳转到 ${icon.name}`}
                                 >
                                     <motion.div
-                                        className="cursor-target "
+                                        className="cursor-target txet-black "
                                         whileHover={{ scale: 1.1, rotate: -5, transition: { duration: 0.3 }, translateY: -10 }}
                                     >
                                         {getIconComponent(icon.name)}
@@ -230,18 +230,13 @@ export function HomeZhuyepage() {
                 className="flex justify-center -mt-24 relative z-10 relative bottom-15 text-center"
 
             >
-                <button
-                    onClick={() => {
-                        const articlesSection = document.getElementById('articles-section');
-                        if (articlesSection) {
-                            articlesSection.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    }}
+                <motion.button
                     className="group cursor-target transform transition-all duration-300 hover:scale-110 cursor-pointer"
                     aria-label="滚动到文章部分"
+                    onClick={() => window.scrollTo({
+                        top: window.innerHeight,
+                        behavior: 'smooth'
+                    })}
                 >
                     <p className="text-sm mt-3 text-center font-medium drop-shadow-lg pb-3 text-black/70 dark:text-white">
                         查看文章
@@ -249,7 +244,7 @@ export function HomeZhuyepage() {
                     <span className="text-4xl relative left-2 text-black/70 dark:text-white/70">
                         <FaAngleDoubleDown />
                     </span>
-                </button>
+                </motion.button>
             </motion.div>
         </article>
     )

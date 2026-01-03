@@ -74,7 +74,9 @@ export function NoteListPageContentCard(
 
                 {/* 标签输入 */}
                 <div className="space-y-3">
-                    <Label htmlFor="title" className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
+                    <Label htmlFor="title" className="text-lg 
+                    font-semibold flex items-center gap-3  px-4 py-2
+                     rounded-lg border border-border/20">
                         <Tag className="h-5 w-5 text-primary/80" />
                         标签
                     </Label>
@@ -105,11 +107,13 @@ export function NoteListPageContentCard(
                 <Separator className="border-border/40" />
 
                 <div className="space-y-3">
-                    <Label className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
+                    <Label className="text-lg font-semibold 
+                    flex items-center gap-3  px-4 py-2 
+                     border border-border/20">
                         笔记内容 (Markdown格式)
                     </Label>
 
-                    <div className="h-170 rounded-xl border border-border/40
+                    <div className="h-170 
                       "
                     >
                         <MarkdownEditor
@@ -120,6 +124,8 @@ export function NoteListPageContentCard(
                             showToolbar={true}
                             showStatusBar={true}
                             initialMode="split"
+                            className="border border-solid rounded-lg "
+                            
                             theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
                         />
 

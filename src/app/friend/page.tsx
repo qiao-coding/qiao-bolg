@@ -12,6 +12,8 @@ import { FriendType } from '@/types/friend/type';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/shadcnComponents/overlay/dialog';
 import { RotatingCube } from '@/components/features/mol/RotatingCube';
 import { motion } from 'framer-motion';
+import { PlusIcon } from 'lucide-react';
+import { DialogTitle } from '@radix-ui/react-dialog';
 
 // 友链页面组件 - 展示和管理友链信息
 export default function FriendPage() {
@@ -151,11 +153,24 @@ export default function FriendPage() {
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="fixed bottom-6 right-6 rounded-full w-14 h-14 p-0 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <PlusIcon className="h-6 w-6" />
+                <Button
+                  className="fixed bottom-6 right-6 
+                  p-2 
+                   text-white
+                    bg-sky-500 dark:bg-slate-600
+                    hover:bg-slate-700 dark:hover:bg-slate-500
+                     transition-colors duration-300
+                     border
+                     
+                     "
+                >
+                  <PlusIcon className="h-5 w-5" />
+                  <span className="">添加友链</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="sm:max-w-[425px] 
+              bg-slate-50 dark:bg-slate-700">
+                <DialogTitle className="sr-only">添加友链</DialogTitle>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
                     <Input
@@ -193,25 +208,5 @@ export default function FriendPage() {
         </motion.div>
       </NextRouter>
     </TechBackgroundNoGrid>
-  )
-}
-
-function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
   )
 }

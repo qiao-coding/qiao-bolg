@@ -48,7 +48,7 @@ export default function NoteDetailPage() {
     router.push(`/notes/${notesID}/${notePageID}`);
   };
 
-  if (!note && !loading) {
+  if (!note || !loading) {
     return (
       <section className="fixed inset-0 flex items-center justify-center">
         <TechBackgroundNoGrid>
@@ -63,7 +63,9 @@ export default function NoteDetailPage() {
         <header className="flex justify-between mb-5 container mx-auto px-4 sm:px-6 py-4 flex">
           <Link
             href="/notes"
-            className="flex items-center text-[#8A94A6] hover:text-[#4A6FA5] transition-colors cursor-target"
+            className="flex items-center
+             text-[#8A94A6] dark:text-white/65
+             hover:text-[#4A6FA5] transition-colors cursor-target"
           >
             <svg
               className="mr-2 w-5 h-5"
@@ -122,7 +124,7 @@ export default function NoteDetailPage() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           variant="outline"
           aria-label="返回顶部"
-          className="bg-card/60"
+          className="bg-card/60 text-black dark:text-white"
         >
           <span className="hidden md:inline-block">返回顶部</span>
           <ArrowUpIcon />

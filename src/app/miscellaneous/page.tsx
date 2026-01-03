@@ -11,6 +11,7 @@ import { RotatingCube } from "@/components/features/mol/RotatingCube";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import PageNavigation from "@/components/features/notes/PageNavigation";
 
 export default function MiscellaneousPage() {
 
@@ -61,7 +62,7 @@ export default function MiscellaneousPage() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           variant="outline"
           aria-label="返回顶部"
-          className="bg-card/60"
+          className="bg-card/60 text-black dark:text-white"
         >
           <span className="hidden md:inline-block">返回顶部</span>
           <ArrowUpIcon aria-hidden="true" />

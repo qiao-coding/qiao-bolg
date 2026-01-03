@@ -39,7 +39,8 @@ export function ThemeSwitcher() {
       </svg>
 
       <svg
-        className="swap-on h-8 w-8 fill-current text-primary-500 duration-700"
+        className="swap-on h-8 w-8 fill-current 
+        text-sky-300 duration-700"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >

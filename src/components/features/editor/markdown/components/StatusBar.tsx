@@ -8,8 +8,8 @@ interface StatusBarProps {
 
 const StatusBar: React.FC<StatusBarProps> = ({ wordCount, charCount, theme }) => (
   <div className={`flex items-center justify-between px-4 py-2 text-sm border-t ${theme === 'dark'
-    ? 'border-gray-700 bg-gray-800 text-gray-400'
-    : 'border-gray-200 bg-gray-100 text-gray-600'
+    ? 'border-gray-700 text-gray-400'
+    : 'border-gray-200 text-gray-600'
     }`}>
     <div className="flex items-center gap-4">
       <div>

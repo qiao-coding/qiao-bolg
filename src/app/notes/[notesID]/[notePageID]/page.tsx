@@ -68,7 +68,8 @@ export default function NotePageDetail() {
 
       }}
     >
-      <div className="font-sans transition-colors duration-300 bg-sky-50/90 dark:bg-slate-700/80"
+      <div className="font-sans transition-colors duration-300
+       bg-sky-50/90 dark:bg-slate-800/90"
       >
 
         <NextRouter showHeader={false}>
@@ -122,7 +123,7 @@ export default function NotePageDetail() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             variant="outline"
             aria-label="返回顶部"
-            className="bg-card/60"
+            className="bg-card/60 text-black dark:text-white"
 
           >
             <span className="hidden md:inline-block">返回顶部</span>

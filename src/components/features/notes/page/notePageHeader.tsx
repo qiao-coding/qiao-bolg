@@ -21,14 +21,14 @@ export function NotePageHeader({ setIsImageBackground }: { setIsImageBackground:
           <span>返回列表</span>
         </Link>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 text-black dark:text-white ">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="px-2">
               切换背景
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className='bg-sky-50 dark:bg-slate-700/80 '>
             <DropdownMenuItem onClick={() => setIsImageBackground(false)}>
               <Palette className="mr-2 w-4 h-4" />
               纯色背景

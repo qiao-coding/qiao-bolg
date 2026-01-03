@@ -34,6 +34,9 @@ export default function MarkdownEditor({
   showStatusBar = true,
   initialMode = 'edit',
   theme = 'light',
+  className = '',
+  editorClass = '',
+  viewClass = '',
 }: MarkdownEditorLayoutProps) {
 
   // 状态管理
@@ -411,11 +414,12 @@ export default function MarkdownEditor({
     <div
       ref={containerRef}
       className={`flex flex-col  h-full transition-colors duration-200 
-        ${isFullscreen ? 'fixed inset-0 z-50' : 'rounded-xl  border'}
+        ${isFullscreen ? 'fixed inset-0 z-50' : ''}
         ${theme === 'dark'
           ? 'bg-gray-900 text-gray-100'
           : 'bg-gray-50 text-gray-800'
-        } `}
+        }
+        ${className} `}
     >
       {/* 工具栏 */}
       {showToolbar && <ShowToolbar
@@ -442,11 +446,12 @@ export default function MarkdownEditor({
               value={content}
               onChange={(e) => handleContentChange(e.target.value)}
               onScroll={handleEditorScroll}
-              className={`w-full h-[97%] p-6 resize-none outline-none
+              className={`w-full h-[98.8%] p-6 resize-none outline-none
                  font-mono text-sm leading-relaxed ${theme === 'dark'
                 ? 'bg-gray-900 text-gray-100 placeholder-gray-500'
                 : 'bg-gray-50 text-gray-800 placeholder-gray-400'
-                }`}
+                
+                }  ${editorClass}`}
               placeholder={initialContent}
               spellCheck="true"
               aria-label="Markdown 编辑器"
@@ -471,7 +476,7 @@ export default function MarkdownEditor({
               className={`h-full overflow-auto p-6 scrollbar-hide prose prose-lg max-w-none ${theme === 'dark'
                 ? ' prose-invert bg-gray-900'
                 : 'bg-white'
-                }`}
+                }  ${viewClass}`}
             >
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}

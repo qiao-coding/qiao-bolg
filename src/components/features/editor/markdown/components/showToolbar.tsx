@@ -44,10 +44,12 @@ export function ShowToolbar({
 }: ShowToolbarProps) {
 
   return (
-    <div className={`flex flex-wrap items-center gap-1 p-3 border-b ${theme === 'dark'
-      ? 'border-gray-700 bg-gray-800'
-      : 'border-gray-200 bg-white'
-      }`}>
+    <div className={`flex flex-wrap items-center gap-1 p-3 border-b 
+      ${theme === 'dark'
+      ? 'border-gray-700 '
+      : 'border-gray-200 '
+      }
+      `}>
       {/* 文件操作 */}
       <div className="flex items-center gap-1 mr-2 pr-2 border-r border-gray-300 dark:border-gray-600">
         <ToolbarButton

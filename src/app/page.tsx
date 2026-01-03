@@ -10,10 +10,14 @@ function Home() {
       {/* 主要内容区域 - 包含首页头部和文章列表 */}
       <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-700/60">
         <NextRouter>
-          {/* 首页头部区域 - 包含导航、标题等 */}
+          {/* 首页区域  */}
           <HomeZhuyepage />
           {/* 文章列表区域 - 展示博客文章内容 */}
-          <section id="articles-section" className={`backdrop-blur-sm py-16 pb-30`}>
+          <section className={`
+            backdrop-sky-100/50 dark:backdrop-sky-900/50
+            py-16 pb-30
+            mx-auto 
+          `}>
             <HomeArticles />
           </section>
         </NextRouter>

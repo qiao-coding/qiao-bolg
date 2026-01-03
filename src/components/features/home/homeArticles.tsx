@@ -13,7 +13,7 @@ const HomeArticles = () => {
   const [notesPage, setNotesPage] = useState<Note[]>([]);
 
   const handleArticleClick = useCallback((noteId: string, pageId?: string) => {
-      router.push(`/notes/${noteId}/${pageId}`);
+    router.push(`/notes/${noteId}/${pageId}`);
   }, [router]);
 
 
@@ -85,9 +85,11 @@ const HomeArticles = () => {
         onClick={() => article.noteId && handleArticleClick(article.noteId, article?.uid)}
 
         className={`
-          group backdrop-blur-sm rounded-lg border transition-all duration-300 cursor-target 
-          overflow-hidden hover:scale-102 hover:-translate-y-1 shadow-md hover:shadow-lg
-          bg-white/60 dark:bg-gray-500/60 cursor-pointer
+          group backdrop-blur-sm rounded-lg border transition-all duration-300 
+          cursor-target 
+          overflow-hidden 
+          hover:scale-102 hover:-translate-y-1 shadow-md hover:shadow-lg
+          bg-white/60 dark:bg-gray-700/80 cursor-pointer
         `}
       >
         <div className="relative h-32 overflow-hidden">
@@ -104,10 +106,16 @@ const HomeArticles = () => {
 
         <div className="p-4 flex flex-col justify-between">
           <div className="flex justify-between items-start mb-2">
-            <h3 className={`text-lg  font-semibold transition-colors line-clamp-2  group-hover:text-blue-400 `}>
+            <h3 className={`text-lg 
+            text-black dark:text-white
+               font-semibold transition-colors 
+               line-clamp-2 
+                group-hover:text-blue-400 `}>
               {article.title.length > 10 ? article.title.substring(0, 10) + '...' : article.title}
             </h3>
-            <span className={`text-xs flex-shrink-0 ml-2 `}>
+            <span className={`text-xs flex-shrink-0 ml-2
+               text-gray-500 dark:text-gray-200 
+               `}>
               {article.dateStart}
             </span>
           </div>
@@ -177,10 +185,10 @@ const HomeArticles = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-8">
+    <div className="container mx-auto px-4 py-8 ">
+      <div className="text-center mb-8 text-black dark:text-white">
         <h2 className={`text-3xl font-bold mb-3 `}>
-          最新笔记
+          最近更新笔记
         </h2>
         <p className={`text-sm mt-2 `}>找到 {articles.length} 篇笔记</p>
       </div>

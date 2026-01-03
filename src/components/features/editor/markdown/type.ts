@@ -11,6 +11,9 @@ export interface MarkdownEditorLayoutProps {
   showStatusBar?: boolean;
   initialMode?: EditorMode;
   theme?: 'light' | 'dark';
+  className?: string;
+  editorClass?: string;
+  viewClass?: string;
 }
 
 export interface insertTextAtCursorType {
