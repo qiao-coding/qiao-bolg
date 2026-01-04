@@ -6,7 +6,7 @@ import Title from "@/components/ui/public/title";
 import { useEffect, useState } from "react";
 import NotesSideber from "@/components/ui/notes/noteSideber";
 import { motion } from "framer-motion";
-import { useNotes } from "@/hooks/note/useNotes";
+import { api_notes } from "@/hooks/note/api_notes";
 import { Note } from "@/types/note/type";
 import NotesCard from "@/components/features/notes/noteCard";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
@@ -20,7 +20,7 @@ export default function NotesPage() {
   //数据获取
   useEffect(() => {
     const fetchNotes = async () => {
-      const note = await useNotes.getNote()
+      const note = await api_notes.getNote()
       if (note) {
         setNotes(note);
       }
@@ -50,23 +50,22 @@ export default function NotesPage() {
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="grid grid-cols-1 gap-6 sm:w-[80vw] md:w-[65vw] lg:w-[50vw] m-auto"
+                  className="grid grid-cols-1 gap-6 w-[90vw]
+                   md:w-[65vw] lg:w-[50vw] m-auto"
                   role="list"
                   aria-label="笔记列表"
                 >
                   {notes.map((note) => (
                     <motion.article
                       key={note.id}
-                      className="cursor-pointer"
+                      className="cursor-pointer w-full"
                       role="listitem"
                       whileHover={{ translateY: -15, transition: { duration: 0.3 } }}
                       whileTap={{ scale: 0.95 }}
+                      
                     >
                       <NotesCard
-                        id={note.id}
-                        title={note.title}
-                        tags={note.tags || []}
-                        titlePicture={note.titlePicture || ""}
+                        note={note}
                       />
                     </motion.article>
                   ))}
@@ -101,7 +100,7 @@ export default function NotesPage() {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           variant="outline"
           aria-label="返回顶部"
-          className="bg-card/60"
+          className="bg-card/60 text-black dark:text-white"
         >
           <span className="hidden md:inline-block">返回顶部</span>
           <ArrowUpIcon aria-hidden="true" />

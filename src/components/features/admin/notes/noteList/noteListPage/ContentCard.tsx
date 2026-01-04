@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React from "react";
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { Input } from '@/components/ui/shadcnComponents/forms/input';
 import { Card, CardContent, CardHeader} from '@/components/ui/shadcnComponents/data-display/card';
@@ -35,14 +35,6 @@ export function NoteListPageContentCard(
 
     const { resolvedTheme } = useTheme();
 
-    const [editorTitle, setEditorTitle] = useState(notePage?.title || '');
-
-    const handleEditorChange = (value: string) => {
-        setEditorTitle(value);
-        upNoteNotePage!.title = value;
-    };
-
-
 
 
 
@@ -63,8 +55,8 @@ export function NoteListPageContentCard(
                     </Label>
                     <Input
                         id="title"
-                        value={editorTitle}
-                        onChange={(e) => handleEditorChange(e.target.value)}
+                        value={upNoteNotePage?.title||''}
+                        onChange={(e) => setUpdateNotePage({ ...(upNoteNotePage || notePage) as NotesPage, title: e.target.value })}
                         placeholder="输入笔记标题"
                         className="text-lg h-14 border-border/40 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 
                         transition-all duration-300 rounded-xl px-4 bg-gradient-to-br from-card/50 to-card/30
@@ -81,7 +73,7 @@ export function NoteListPageContentCard(
                         标签
                     </Label>
                     <div className="border border-border/30 rounded-xl p-4 bg-gradient-to-br from-card/50 to-card/30">
-                        <AntTabs defaultTags={notePage?.pageTags} onTagsChange={(tags) => setUpdateNotePage({ ...notePage!, pageTags: tags })} />
+                        <AntTabs defaultTags={upNoteNotePage?.pageTags} onTagsChange={(tags) => setUpdateNotePage({ ...(upNoteNotePage || notePage) as NotesPage, pageTags: tags })} />
                     </div>
                 </div>
                 <CardHeader className="
@@ -120,7 +112,7 @@ export function NoteListPageContentCard(
                             key={notePage?.uid}
                             value={upNoteNotePage?.content || ''}
                             onSave={handleSave}
-                            onChange={(content: string) => setUpdateNotePage({ ...notePage!, content: content || '' })}
+                            onChange={(content: string) => setUpdateNotePage({ ...(upNoteNotePage || notePage) as NotesPage, content: content || '' })}
                             showToolbar={true}
                             showStatusBar={true}
                             initialMode="split"

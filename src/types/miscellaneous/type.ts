@@ -1,16 +1,9 @@
-interface miscellaneousType {
-    id: number;
-    content: string;
-    date: string;
-}
- interface Miscellaneous {
+export type Miscellaneous = {
   id: number;
   content: string;
   date: string;
-}
+};
 
-interface MiscellaneousSearchParams {
+export type MiscellaneousSearchParams = {
   q: string;
-}
-
-export type { miscellaneousType , Miscellaneous , MiscellaneousSearchParams }
+};

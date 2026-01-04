@@ -1,13 +1,5 @@
-interface Friend {
-  id: number;
-  name: string;
-  url: string;
-  avatar?: string;
-  bio?: string;
-  createdAt: string;
-  updatedAt: string;
-  status: boolean;
-}
+import { FriendType } from "@/types/friend/type";
+
 
 function createFriend() {
   // 获取所有友链数据
@@ -26,7 +18,7 @@ function createFriend() {
   }
 
   // 提交新友链
-  async function postFriend(newFriend: Omit<Friend, 'id' | 'createdAt' | 'updatedAt' | 'status'>) {
+  async function postFriend(newFriend: Omit<FriendType, 'id' | 'createdAt' | 'updatedAt' | 'status'>) {
     try {
       const res = await fetch('/api/friend/post_friend', {
         method: 'POST',
@@ -69,4 +61,4 @@ function createFriend() {
   };
 }
 
-export const useFriend = createFriend();
+export const api_friend = createFriend();

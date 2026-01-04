@@ -5,7 +5,7 @@ import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import NotesSideber from '@/components/ui/notes/noteSideber';
 import Title from '@/components/ui/public/title';
 import { motion } from 'framer-motion'
-import { useAbout } from '@/hooks/about/useAbout';
+import { api_about } from '@/hooks/about/api_about';
 
 // 关于页面组件 - 展示个人信息和简介
 const AboutPage = () => {
@@ -22,7 +22,7 @@ const AboutPage = () => {
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
-        const response = await useAbout.getAbout();
+        const response = await api_about.getAbout();
         
         setPersonalInfo(response);
       } catch (error) {

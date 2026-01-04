@@ -23,5 +23,5 @@ function createAdmin() {
   };
 }
 
-export const useAdmin = createAdmin();
-export default useAdmin;
+export const api_admin = createAdmin();
+export default api_admin;

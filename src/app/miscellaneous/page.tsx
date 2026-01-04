@@ -3,24 +3,23 @@
 import NextRouter from "@/components/layout/NextRouter";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
-import { useMiscellaneous } from "@/hooks/miscellaneous/useMiscellaneous";
-import { miscellaneousType } from "@/types/miscellaneous/type";
+import { api_miscellaneous } from "@/hooks/miscellaneous/api_miscellaneous";
 import React, { useEffect, useState } from "react";
 import { MiscellaneousTimeline } from "@/components/features/miscellaneous/MiscellaneousTimeline";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 import { motion } from "framer-motion";
-import PageNavigation from "@/components/features/notes/PageNavigation";
+import { Miscellaneous } from "@/types/miscellaneous/type";
 
 export default function MiscellaneousPage() {
 
-  const [miscellaneous, setMiscellaneous] = useState<miscellaneousType[]>([])
+  const [miscellaneous, setMiscellaneous] = useState<Miscellaneous[]>([])
 
   useEffect(() => {
     const fetchMiscellaneous = async () => {
       try {
-        const res = await useMiscellaneous.getMiscellaneousList()
+        const res = await api_miscellaneous.getMiscellaneousList()
         const data = res.reverse()
         setMiscellaneous(data)
       } catch (error) {

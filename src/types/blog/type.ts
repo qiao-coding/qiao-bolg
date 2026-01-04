@@ -1,16 +1,16 @@
-interface HomeIcon {
+export type HomeIcon = {
   id: number;
   name: string;
   link: string;
-}
+};
 
-interface SocialLink {
+export type SocialLink = {
   id: number;
   name: string;
   link: string;
-}
+};
 
-interface BlogData {
+export type BlogData = {
   blogName: string;
   homePage: {
     mainTitle: string;
@@ -26,9 +26,9 @@ interface BlogData {
     isDynamicEmail: boolean;
     isDynamicName: boolean;
   };
-}
+};
 
-interface BlogDataStruct {
+export type BlogDataStruct = {
   blogName?: string;
   homePage: {
     mainTitle: string;
@@ -41,6 +41,3 @@ interface BlogDataStruct {
     link: string;
   }>;
 };
-
-
-export type { HomeIcon, SocialLink, BlogData ,BlogDataStruct};

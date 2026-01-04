@@ -7,7 +7,7 @@ import PageNavigation from "@/components/features/notes/PageNavigation";
 import LoadingPage from "@/components/ui/public/loadingPage";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
-import { useNotes } from "@/hooks/note/useNotes";
+import { api_notes } from "@/hooks/note/api_notes";
 import { Note, NotesPage } from "@/types/note/type";
 import { NoteListCard } from "@/components/features/notes/noteListCard";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
@@ -29,7 +29,7 @@ export default function NoteDetailPage() {
       if (!notesID) return
 
       try {
-        const res = await useNotes.getNoteList(notesID as string)
+        const res = await api_notes.getNoteList(notesID as string)
         if (res) {
           setNote(res)
           setLoading(true)
@@ -48,6 +48,7 @@ export default function NoteDetailPage() {
     router.push(`/notes/${notesID}/${notePageID}`);
   };
 
+  //加载
   if (!note || !loading) {
     return (
       <section className="fixed inset-0 flex items-center justify-center">

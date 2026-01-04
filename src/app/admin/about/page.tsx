@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/shadcnComponents/forms/textarea";
 import { Label } from "@/components/ui/shadcnComponents/forms/label";
 import { Save, TrashIcon, } from 'lucide-react';
 import { motion } from "framer-motion";
-import { useAbout } from '@/hooks/about/useAbout';
+import { api_about } from '@/hooks/about/api_about';
 import { AboutDetail } from '@/types/about/type';
 
 
@@ -31,7 +31,7 @@ export default function AdminAboutPage() {
 
   const getAboutData = async () => {
     try {
-      const response = await useAbout.getAbout();
+      const response = await api_about.getAbout();
       setAboutData(response);
     } catch (error) {
       console.error('获取关于页面数据失败:', error);
@@ -50,7 +50,7 @@ export default function AdminAboutPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await useAbout.postAbout(aboutData);
+      await api_about.postAbout(aboutData);
       // 保存成功提示
       alert('关于页面信息已更新');
     } catch (error) {
@@ -97,34 +97,19 @@ export default function AdminAboutPage() {
   return (
     <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60 py-8">
       <div className="container mx-auto px-4 grid grid-cols-1  gap-8" >
-        {/* 页面标题区域 */}
-        <header className="text-center py-6">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">关于页面管理</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">管理关于页面的个人简介和详细信息</p>
-        </header>
+
 
         {/* 个人简介编辑区域 */}
-        <section className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-xl shadow-sm">
+        <section className="bg-white/80 py-8 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-xl shadow-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <span>个人简介</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {isLoading ? (
-              <section 
-                aria-label="加载中"
-                aria-live="polite"
-                role="status"
-                className="py-12 text-center"
-              >
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">加载中...</p>
-              </section>
-            ) : (
+       
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="description">个人描述</Label>
                   <Textarea
                     id="description"
                     value={aboutData.description}
@@ -146,28 +131,27 @@ export default function AdminAboutPage() {
                   {aboutData.details.map((detail, index) => (
                     <motion.div
                       key={index}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg"
+                      className="grid grid-cols-1 md:grid-cols-2 gap-4
+                       p-2 border rounded-lg"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
                     >
                       <div className="space-y-2">
-                        <Label htmlFor={`label-${index}`}>标签</Label>
                         <Input
                           id={`label-${index}`}
                           value={detail.label}
                           onChange={(e) => updateDetailItem(index, 'label', e.target.value)}
-                          placeholder="例如：职业"
+                          placeholder="例如：生日"
                         />
                       </div>
                       <div className="space-y-2 flex items-end gap-2">
                         <div className="flex-grow space-y-2">
-                          <Label htmlFor={`value-${index}`}>值</Label>
                           <Input
                             id={`value-${index}`}
                             value={detail.value}
                             onChange={(e) => updateDetailItem(index, 'value', e.target.value)}
-                            placeholder="例如：前端开发工程师"
+                            placeholder="2005-7-7"
                           />
                         </div>
                         {aboutData.details.length > 1 && (
@@ -206,7 +190,6 @@ export default function AdminAboutPage() {
                   </Button>
                 </div>
               </div>
-            )}
           </CardContent>
         </section>
       </div>

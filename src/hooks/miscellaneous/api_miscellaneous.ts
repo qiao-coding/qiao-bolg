@@ -1,4 +1,4 @@
-import { miscellaneousType } from "@/types/miscellaneous/type";
+import { Miscellaneous } from "@/types/miscellaneous/type";
 
 
 function createMiscellaneous() {
@@ -18,7 +18,7 @@ function createMiscellaneous() {
     }
 
 
-    async function postMiscellaneous(params: miscellaneousType) {
+    async function postMiscellaneous(params: Miscellaneous) {
         try {
             const res = await fetch('/api/miscellaneous/post_miscellaneous', {
                 method: 'POST',
@@ -36,7 +36,7 @@ function createMiscellaneous() {
     }
 
 
-    async function putMiscellaneous(params: miscellaneousType) {
+    async function putMiscellaneous(params: Miscellaneous) {
         try {
             const response = await fetch('/api/miscellaneous/put_miscellaneous', {
                 method: 'PUT',
@@ -78,4 +78,4 @@ function createMiscellaneous() {
     };
 }
 
-export const useMiscellaneous = createMiscellaneous();
+export const api_miscellaneous = createMiscellaneous();

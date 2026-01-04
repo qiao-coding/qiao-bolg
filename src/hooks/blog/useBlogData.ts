@@ -1,20 +1,10 @@
+import { BlogDataStruct } from '@/types/blog/type';
 import { useState, useEffect } from 'react';
 
-interface BlogData {
-  homePage: {
-    mainTitle: string;
-    subTitle: string;
-    isDynamicTitle: boolean;
-    isDynamicTiltCard: boolean;
-  };
-  homeIcons: Array<{
-    name: string;
-    link: string;
-  }>;
-};
+
 
 export const useBlogData = () => {
-  const [blogData, setBlogData] = useState<BlogData>({
+  const [blogData, setBlogData] = useState<BlogDataStruct>({
     homePage: {
       mainTitle: 'Hi! HaoWhite 🥰',
       subTitle: '愿生活的每一天，都有惊喜!',

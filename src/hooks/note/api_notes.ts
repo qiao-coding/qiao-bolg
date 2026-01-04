@@ -206,4 +206,4 @@ function createNotes() {
 
 
 
-export const useNotes = createNotes();
+export const api_notes = createNotes();

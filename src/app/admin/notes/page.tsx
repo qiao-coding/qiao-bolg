@@ -6,7 +6,6 @@ import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display
 import { FileText } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
-import { useNotes } from '@/hooks/note/useNotes';
 import type { CreateNoteInput, Note } from '@/types/note/type';
 import { NoteHeaderCard } from '@/components/features/admin/notes/headerCard';
 import { NoteCategoryCard } from '@/components/ui/notes/notescategoryCard';
@@ -27,6 +26,7 @@ import {
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { Input } from '@/components/ui/shadcnComponents/forms/input';
 import { Label } from '@/components/ui/shadcnComponents/forms/label';
+import { api_notes } from '@/hooks/note/api_notes';
 
 
 export default function StudyNotes() {
@@ -48,7 +48,7 @@ export default function StudyNotes() {
 
   const getNotes = async () => {
     try {
-      const response = await useNotes.getNote({
+      const response = await api_notes.getNote({
         credentials: 'include'
       });
       // 格式化后端返回的笔记数据
@@ -95,7 +95,7 @@ export default function StudyNotes() {
     };
 
     try {
-      const response = await useNotes.postNote(newNotes);
+      const response = await api_notes.postNote(newNotes);
       if (response) {
         // 成功后更新本地列表
         setNotes(prev => [...prev, response]);
@@ -109,7 +109,7 @@ export default function StudyNotes() {
   // 删除笔记分类
   const handleDeleteNote = async (id: number) => {
     try {
-      const response = await useNotes.deleteNote(id);
+      const response = await api_notes.deleteNote(id);
       if (response) {
         // 成功后从列表移除
         setNotes(prev => prev.filter(note => note.id !== id));
@@ -137,7 +137,7 @@ export default function StudyNotes() {
     };
 
     try {
-      const response = await useNotes.putNote(newPutNote);
+      const response = await api_notes.putNote(newPutNote);
       if (response) {
         // 成功后更新本地列表
         setNotes(prev => prev.map(note => note.id === id ? { ...note, title: newPutNote.title } : note));

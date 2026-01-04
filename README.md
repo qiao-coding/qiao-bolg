@@ -194,7 +194,7 @@ npm run dev
 │   │   ├── friend/         # 友链相关 hooks
 │   │   ├── miscellaneous/  # 说说相关 hooks
 │   │   ├── note/           # 笔记相关 hooks
-│   │   └── useBlogData.ts  # 博客数据 hooks
+│   │   └── api_blogData.ts  # 博客数据 hooks
 │   ├── lib/                # 工具库和辅助函数
 │   │   ├── prisma.ts       # Prisma 客户端配置
 │   │   ├── store/          # 状态管理
@@ -246,8 +246,8 @@ graph TD
     B2 --> L[用户管理组件]
     
     B5 --> M[useNote Hook]
-    B5 --> N[useAdmin Hook]
-    B5 --> O[useFriend Hook]
+    B5 --> N[api_admin Hook]
+    B5 --> O[api_friend Hook]
     
     C1 --> P[笔记API]
     C1 --> Q[用户API]

@@ -8,7 +8,7 @@ import { Plus } from 'lucide-react';
 import { motion } from "framer-motion";
 import { useSession } from 'next-auth/react';
 import { AdminUser } from '@prisma/client';
-import { useAdminUser } from '@/hooks/adminUser/useAdminUser';
+import { api_adminUser } from '@/hooks/adminUser/api_adminUser';
 
 export default function AdminUsersPage() {
   // 管理员管理相关状态
@@ -50,7 +50,7 @@ export default function AdminUsersPage() {
 
     setIsAdminLoading(true);
     try {
-      await useAdminUser.postAdminUser({
+      await api_adminUser.postAdminUser({
         username: adminSettings.email,
         password: adminSettings.password,
         isDynamicEmail: adminSettings.enhancedProtection
@@ -78,7 +78,7 @@ export default function AdminUsersPage() {
     if (!confirm('确定要删除这个管理员吗？')) return;
 
     try {
-      await useAdminUser.deleteAdminUser(Number(id));
+      await api_adminUser.deleteAdminUser(Number(id));
       alert('删除成功');
       getAdminUsers();
 
@@ -91,7 +91,7 @@ export default function AdminUsersPage() {
   // 切换增强保护模式
   const handleToggleProtection = async (id: string, currentStatus: boolean) => {
     try {
-      await useAdminUser.putAdminUser({
+      await api_adminUser.putAdminUser({
         id: Number(id),
         isDynamicEmail: !currentStatus
       });

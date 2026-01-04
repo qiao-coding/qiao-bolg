@@ -7,77 +7,27 @@ import { SiTiktok } from "react-icons/si";
 import { FaBilibili } from "react-icons/fa6";
 import { useState, useEffect } from "react";
 import HomeCard from "./homeCard";
-
+import { api_blogDataContext } from "@/components/layout/BlogDataProvider";
 
 
 
 export function HomeZhuyepage() {
     const { data: session } = useSession()
-    const [blogData, setBlogData] = useState({
-        homePage: {
-            mainTitle: "Hi! HaoWhite 🥰",
-            subTitle: "愿生活的每一天，都有惊喜!",
-            isDynamicTitle: true,
-            isDynamicTiltCard: true,
-
-        },
-        homeIcons: [
-            {
-                name: "GitHub",
-                link: "https://github.com/xier123456"
-            },
-            {
-                name: "Gitee",
-                link: "https://gitee.com/xier123456"
-            },
-            {
-                name: "抖音",
-                link: "https://www.douyin.com/user/self?from_tab_name=main&showTab=post"
-            },
-            {
-                name: "哔哩哔哩",
-                link: "https://space.bilibili.com/3493288889813717?spm_id_from=333.1007.0.0"
-            }
-        ]
-    });
-
-    // 页面加载时获取博客设置数据
-    useEffect(() => {
-        const fetchBlogData = async () => {
-            try {
-                const response = await fetch('/api/blog');
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.error || '获取数据失败');
-                }
-
-                setBlogData(data);
-            } catch (error) {
-                console.error('获取博客设置数据失败:', error);
-            }
-        };
-
-        fetchBlogData();
-    }, []);
-
+    const { blogData } = api_blogDataContext();
 
     const handleTiltedCard = () => {
-        if (blogData.homePage.isDynamicTiltCard) {
-            return (session && session.user?.image) || '/user_img/up.jpg';
+        if (blogData?.homePage?.isDynamicTiltCard) {
+            return (session?.user && session.user?.image) || '/user_img/up.jpg';
         }
         return '/user_img/up.jpg';
     }
 
-
-
-
     const handleTitle = () => {
-        if (blogData.homePage.isDynamicTitle) {
+        if (blogData?.homePage?.isDynamicTitle) {
             return session && `Hi ${session.user?.name} 🥰` || 'Hi HaoWhite 🥰';
         }
-        return blogData.homePage.mainTitle || 'HaoWhite';
+        return blogData?.homePage?.mainTitle || 'HaoWhite';
     }
-
 
     const getIconComponent = (name: string) => {
         switch (name.toLowerCase()) {
@@ -191,13 +141,13 @@ export function HomeZhuyepage() {
                         />
                     </figure>
                     <header>
-                        <h1 className="mt-2 text-5xl font-bold text-center text-slate-700 dark:text-white">
+                        <h1 className="mt-2 text-3xl md:text-5xl font-bold text-center text-slate-700 dark:text-white">
                             {handleTitle()}
                         </h1>
 
-                        <p className="py-6 text-lg text-slate-600 dark:text-slate-300">{blogData.homePage?.subTitle || "愿生活的每一天，都有惊喜!"}</p>
+                        <p className="py-6 text-lg text-slate-600 dark:text-slate-300">{blogData?.homePage?.subTitle || "愿生活的每一天，都有惊喜!"}</p>
                         <nav className="flex gap-10 justify-center">
-                            {blogData.homeIcons?.map((icon, index) => (
+                            {blogData?.homeIcons?.map((icon, index) => (
                                 <a
                                     key={index}
                                     href={icon.link}

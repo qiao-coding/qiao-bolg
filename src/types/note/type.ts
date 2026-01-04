@@ -1,22 +1,22 @@
-interface Note {
+export type Note = {
   id: number;
   title: string;
   tags?: string[];
   titlePicture?: string;
   createdAt?: string;
   updatedAt?: string;
-  page?: NotesPage[]
-}
+  page?: NotesPage[];
+};
 
-interface CreateNoteInput {
+export type CreateNoteInput = {
   title: string;
   tags: string[];
   titlePicture?: string;
   createdAt?: string;
-}
+};
 
 // 根据 Prisma 模型定义的笔记页面类型
-interface NotesPage {
+export type NotesPage = {
   id: number;
   uid?: string;
   title: string;
@@ -28,26 +28,25 @@ interface NotesPage {
   pageTags: string[];
   noteId?: string;
   note?: Note;
-}
+};
 
-
-interface ReplyComment {
+export type ReplyComment = {
   id: string;
   author: string;
   content: string;
   date: string;
-}
+};
 
 // 定义评论接口
-interface Comment {
+export type Comment = {
   id: string;
   author: string;
   content: string;
   date: string;
   replies?: ReplyComment[];
-}
+};
 
- interface NoteSearchResponse {
+export type NoteSearchResponse = {
   id: number;
   title: string;
   tags?: string[];
@@ -55,13 +54,9 @@ interface Comment {
   createdAt?: string|Date;
   updatedAt?: string|Date;
   page: NotesPage[];
-}
+};
 
-interface NoteSearchParams {
+export type NoteSearchParams = {
   q: string;
-}
+};
 
-
-
-
-export type{ Note, NotesPage , Comment , NoteSearchResponse , NoteSearchParams, CreateNoteInput }

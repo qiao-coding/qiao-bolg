@@ -50,4 +50,4 @@ function createBlog() {
   };
 }
 
-export const useBlog = createBlog();
+export const api_blog = createBlog();

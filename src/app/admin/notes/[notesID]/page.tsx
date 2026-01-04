@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { useSession } from 'next-auth/react';
-import { useNotes } from '@/hooks/note/useNotes';
+import { api_notes } from '@/hooks/note/api_notes';
 import { Note, NotesPage } from '@/types/note/type';
 import { useParams } from 'next/navigation';
 import { NoteListCardHeader } from '@/components/features/admin/notes/noteList/cardHeader';
@@ -39,7 +39,7 @@ export default function StudyNotesDetail() {
     const fetchNotes = async () => {
       if (!notesId) return console.error('未提供笔记ID');
       try {
-        const response = await useNotes.getNoteList(notesId as string);
+        const response = await api_notes.getNoteList(notesId as string);
         setNotes(response);
         setNotesPage(response.page || []);
         setInitialNotes(response);
@@ -117,7 +117,7 @@ export default function StudyNotesDetail() {
     };
 
     try {
-      await useNotes.postNotePage(newNotesPage);
+      await api_notes.postNotePage(newNotesPage);
       setNotesPage(prev => [...prev, newNotesPage]);
       setAddNotesPageTitle('');
       setIsAddNotesDialogOpen(false)
@@ -131,7 +131,7 @@ export default function StudyNotesDetail() {
     if (!pageID) return console.error('未提供笔记页面ID');
 
     try {
-      await useNotes.deleteNotePage(pageID)
+      await api_notes.deleteNotePage(pageID)
       setNotesPage(prev => prev.filter(page => page.pageId !== pageID.toString()))
     } catch (error) {
       console.error('删除笔记失败:', error);

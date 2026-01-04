@@ -2,12 +2,13 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
-  Command,
-  Frame,
   GalleryVerticalEnd,
-  Map,
+  Leaf,
+  LinkIcon,
+  MessageCircle,
+  NotebookTabs,
   PieChart,
+  SettingsIcon,
   User,
   UserCog2,
 } from "lucide-react"
@@ -31,37 +32,37 @@ const data = {
     {
       name: "仪表盘",
       url: "/admin",
-      icon: Frame,
+      icon: PieChart,
     },
     {
       name: "笔记管理",
       url: "/admin/notes",
-      icon: PieChart,
+      icon: NotebookTabs,
     },
     {
       name: '说说管理',
       url: '/admin/miscellaneous',
-      icon: AudioWaveform,
+      icon: MessageCircle,
     },
     {
       name: '友链管理',
       url: '/admin/friend-links',
-      icon: Map,
+      icon: LinkIcon,
     },
     {
-      name: '个人设置',
+      name: '关于设置',
       url: '/admin/about',
-      icon: User,
+      icon: Leaf,
     },
     {
       name: '博客设置',
+      icon: SettingsIcon,
       url: '/admin/blog',
-      icon: Command,
     },
     {
-      name:'管理员设置',
-      url:'/admin/admin-settings',
-      icon:UserCog2,
+      name: '管理员设置',
+      url: '/admin/admin-settings',
+      icon: UserCog2,
     }
 
   ],

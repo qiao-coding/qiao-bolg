@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/shadcnComponents/forms/input';
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { useTheme } from 'next-themes';
-import { useFriend } from '@/hooks/friend/useFriend';
+import { api_friend } from '@/hooks/friend/api_friend';
 import { FriendType } from '@/types/friend/type';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/shadcnComponents/overlay/dialog';
 import { RotatingCube } from '@/components/features/mol/RotatingCube';
@@ -35,7 +35,7 @@ export default function FriendPage() {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await useFriend.getFriendList()
+        const response = await api_friend.getFriendList()
         setFriends(response);
       } catch (error) {
         console.error('获取友链数据失败:', error);
@@ -53,7 +53,7 @@ export default function FriendPage() {
     }
 
     try {
-      await useFriend.postFriend({
+      await api_friend.postFriend({
         name: friendData.name,
         url: friendData.url,
         avatar: friendData.avatar,
@@ -72,7 +72,7 @@ export default function FriendPage() {
       });
 
       // 重新获取数据
-      const response = await useFriend.getFriendList()
+      const response = await api_friend.getFriendList()
       setFriends(response);
     } catch (error) {
       console.error('提交友链申请失败:', error);
@@ -105,7 +105,23 @@ export default function FriendPage() {
                 >
                   {friends.filter(friend => friend.status).map((friend) => (
                     <Link href={friend.url} key={friend.id} target="_blank" rel="noopener noreferrer" className="group">
-                      <article className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                      <article className="
+                      bg-white/70 dark:bg-slate-800/70
+                        hover:bg-white/20
+                        dark:hover:bg-slate-700/20
+
+                         border-transparent
+                         hover:border
+                         hover:border-primary/40
+                        
+
+                         backdrop-blur-sm 
+                         border
+                         rounded-xl overflow-hidden shadow-lg 
+                         hover:shadow-xl 
+                         transition-all duration-300 
+                         hover:-translate-y-1
+                         ">
                         <section className="p-6 sm:p-7">
                           <header className="flex items-center gap-4 mb-4">
                             <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-50 flex items-center justify-center">
@@ -124,7 +140,7 @@ export default function FriendPage() {
                               )}
                             </div>
 
-                            <h3 className="text-lg font-semibold  transition-colors duration-300">
+                            <h3 className="text-lg font-semibold text-slate-800 dark:text-white transition-colors duration-300">
                               {friend.name}
                             </h3>
                           </header>
@@ -134,8 +150,8 @@ export default function FriendPage() {
                           </p>
 
                           <footer className="flex justify-end items-center text-xs pt-3 border-t border-[#EFF6FF]">
-                            <span className=" opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              {friend.name === 'HaoWhite' ? '已经在博客,那... , 你喜欢就好 →' : `前往${friend.name}的基地 →`}
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity text-black dark:text-white duration-300">
+                              { `前往${friend.name}的基地 →`}
                             </span>
                           </footer>
                         </section>

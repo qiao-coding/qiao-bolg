@@ -3,7 +3,7 @@
 import NextRouter from '@/components/layout/NextRouter';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useNotes } from '@/hooks/note/useNotes';
+import { api_notes } from '@/hooks/note/api_notes';
 import { Note, NotesPage } from '@/types/note/type';
 import { NotePageHeader } from '@/components/features/notes/page/notePageHeader';
 import { NotePageContent } from '@/components/features/notes/notePageContent';
@@ -29,7 +29,7 @@ export default function NotePageDetail() {
 
       try {
         setIsLoading(true);
-        const res = await useNotes.getNoteListById(notesID as string)
+        const res = await api_notes.getNoteListById(notesID as string)
 
         setNote(res);
 

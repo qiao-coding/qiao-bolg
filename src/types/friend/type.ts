@@ -1,4 +1,4 @@
-interface FriendType {
+export type FriendType = {
   id: number;
   name: string;
   url: string;
@@ -7,14 +7,12 @@ interface FriendType {
   createdAt: string;
   updatedAt: string;
   status: boolean;
-}
+};
 
-interface FriendForm {
+export type FriendForm = {
   name: string;
   url: string;
   avatar?: string;
   bio?: string;
   status: boolean;
-}
-
-export type { FriendType, FriendForm };
+};

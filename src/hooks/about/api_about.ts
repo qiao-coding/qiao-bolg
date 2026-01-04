@@ -51,4 +51,4 @@ function createAbout() {
   };
 }
 
-export const useAbout = createAbout();
+export const api_about = createAbout();

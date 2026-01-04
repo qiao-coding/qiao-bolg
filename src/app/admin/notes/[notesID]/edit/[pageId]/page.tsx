@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcnComponents/data-display/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/shadcnComponents/feedback/alert';
 import { ArrowLeft, FileText } from 'lucide-react';
-import { useNotes } from '@/hooks/note/useNotes';
+import { api_notes } from '@/hooks/note/api_notes';
 import { NotesPage } from '@/types/note/type';
 import { useSession } from 'next-auth/react';
 import { NoteListPageContentCard } from '@/components/features/admin/notes/noteList/noteListPage/ContentCard';
@@ -33,7 +33,7 @@ export default function NoteEditPage() {
 
       try {
         setLoading(true);
-        const notesResponse = await useNotes.getNote()
+        const notesResponse = await api_notes.getNote()
         let foundPage: NotesPage | null = null;
 
         for (const note of notesResponse) {
@@ -68,7 +68,7 @@ export default function NoteEditPage() {
       id: notePage.id,
       uid: notePage.uid,
       author: session?.user?.name || '',
-      pageId: notePage?.id * 10000 + notePage.uid + 1,
+      pageId: crypto.randomUUID(),
       title: upNoteNotePage.title,
       content: upNoteNotePage.content,
       pageTags: upNoteNotePage.pageTags,
@@ -83,7 +83,7 @@ export default function NoteEditPage() {
 
       // 更新现有笔记页面
       if (!notePage) return;
-      const res = await useNotes.putNotePage(newNotePage);
+      const res = await api_notes.putNotePage(newNotePage);
 
 
       if (!res) {

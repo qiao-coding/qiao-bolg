@@ -9,7 +9,7 @@ export async function PUT(req: NextRequest) {
         const { title, content } = body;
         const {id,noteId,...data } = body;
 
-        if (!id || !title  || !content) {
+        if (!id || !title ) {
             
             return new Response('缺少必要的参数', { status: 400 });
         }

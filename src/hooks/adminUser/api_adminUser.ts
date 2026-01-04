@@ -82,12 +82,13 @@ function createAdminUser() {
   // 删除管理员用户
   async function deleteAdminUser(id: number): Promise<{ message: string } | undefined> {
     try {
-      const res = await fetch(`/api/adminUser/${id}`, {
+      const res = await fetch(`/api/adminUser/delete_adminUser`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({ id })
       });
 
       if (!res.ok) {
@@ -111,4 +112,4 @@ function createAdminUser() {
 
 }
 
-export const useAdminUser = createAdminUser();
+export const api_adminUser = createAdminUser();

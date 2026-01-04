@@ -9,7 +9,7 @@ import { MiscellaneousSearch } from '@/components/features/admin/miscellaneous/M
 import { MiscellaneousTable } from '@/components/features/admin/miscellaneous/MiscellaneousTable';
 import { MiscellaneousAddDialog, MiscellaneousEditDialog, MiscellaneousDeleteDialog } from '@/components/features/admin/miscellaneous/MiscellaneousDialogs';
 import { miscellaneousType } from '@/types/miscellaneous/type';
-import { useMiscellaneous } from '@/hooks/miscellaneous/useMiscellaneous';
+import { api_miscellaneous } from '@/hooks/miscellaneous/api_miscellaneous';
 import { motion } from 'framer-motion';
 
 
@@ -35,7 +35,7 @@ const MiscellaneousManagement: React.FC = () => {
   useEffect(() => {
     const fetchMiscellaneous = async () => {
       try {
-        const response = await useMiscellaneous.getMiscellaneousList()
+        const response = await api_miscellaneous.getMiscellaneousList()
         const formattedItems: miscellaneousType[] = response.map((item: miscellaneousType) => ({
           id: item.id,
           content: item.content,
@@ -92,7 +92,7 @@ const MiscellaneousManagement: React.FC = () => {
         };
         setMiscellaneous([...miscellaneous, newItem]);
         setIsAddDialogOpen(false);
-        await useMiscellaneous.postMiscellaneous(newItem)
+        await api_miscellaneous.postMiscellaneous(newItem)
         setNewContent('');
       }
     } catch (error) {
@@ -120,7 +120,7 @@ const MiscellaneousManagement: React.FC = () => {
       setMiscellaneous(updatedItems);
       setIsEditDialogOpen(false);
 
-      await useMiscellaneous.putMiscellaneous(newEditItem)
+      await api_miscellaneous.putMiscellaneous(newEditItem)
       setEditItem(null);
       setEditContent('');
     } catch (error) {
@@ -136,7 +136,7 @@ const MiscellaneousManagement: React.FC = () => {
         setMiscellaneous(updatedItems);
         setIsDeleteDialogOpen(false);
 
-        await useMiscellaneous.deleteMiscellaneous(itemToDelete)
+        await api_miscellaneous.deleteMiscellaneous(itemToDelete)
         setItemToDelete(null);
       }
     } catch (error) {

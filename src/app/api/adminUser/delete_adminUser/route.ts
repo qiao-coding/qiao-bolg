@@ -18,10 +18,9 @@ function isPrismaNotFoundError(error: unknown): boolean {
 
 export async function DELETE(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const rawId = searchParams.get('id');
 
-    const id = parseId(rawId);
+    const body = await request.json();
+    const { id } = body;
 
     if (id === null) {
       return NextResponse.json(

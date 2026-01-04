@@ -8,7 +8,7 @@ import { BlogBasicInfo } from '@/components/features/admin/blog/BlogBasicInfo';
 import { HomeIcons } from '@/components/features/admin/blog/HomeIcons';
 import { SidebarSettings } from '@/components/features/admin/blog/SidebarSettings';
 import type { BlogData } from '@/types/blog/type';
-import { useBlog } from '@/hooks/blog/useBlog';
+import { api_blog } from '@/hooks/blog/api_blog';
 
 export default function AdminBlogPage() {
   const { data: session } = useSession();
@@ -71,7 +71,7 @@ export default function AdminBlogPage() {
   useEffect(() => {
     const fetchBlogData = async () => {
       try {
-        const data= await useBlog.getBlog(); // 假设 useBlog 是你的API调用函数
+        const data= await api_blog.getBlog(); // 假设 api_blog 是你的API调用函数
 
         // 合并API返回的数据和本地默认数据
         setBlogData({
@@ -227,7 +227,7 @@ export default function AdminBlogPage() {
 
       // 调用API保存数据
 
-       await useBlog.postBlog(saveData);
+       await api_blog.postBlog(saveData);
 
       // 刷新数据
       alert('保存成功');

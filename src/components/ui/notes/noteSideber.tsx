@@ -12,7 +12,7 @@ export default function NotesSideber() {
     name: "昊小白",
     email: "",
     isDynamicName: false,
-    isDynamicEmail: false,
+    isDynamicEmail: true,
     socialLinks: [
       {
         name: "GitHub",

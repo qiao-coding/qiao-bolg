@@ -17,7 +17,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/admin/chart/chart"
 
-import { useNotes } from "@/hooks/note/useNotes"
+import { api_notes } from "@/hooks/note/api_notes"
 import { Note } from "@/types/note/type"
 
 const chartConfig = {
@@ -32,7 +32,7 @@ export function DashboardContentChart() {
 
   const notesData = async () => {
     try {
-      const notes = await useNotes.getNote()
+      const notes = await api_notes.getNote()
       setNoteChartData(notes)
     } catch (error) {
       console.error("获取笔记数据失败:", error)

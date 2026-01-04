@@ -58,7 +58,7 @@ export function NavUser({
                 src={session?.user?.image || ''}
                 width={40}
                 height={40}
-                alt={session?.user?.name || ''}
+                alt={''}
                 className="rounded-full"
               />
               <div className="grid flex-1 text-left text-sm leading-tight">
