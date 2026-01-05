@@ -2,10 +2,10 @@
 import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
 import { MessageCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { miscellaneousType } from '@/types/miscellaneous/type';
+import { Miscellaneous } from '@/types/miscellaneous/type';
 
 
-export function MiscellaneousStatsCards({ miscellaneous }: { miscellaneous: miscellaneousType[] }) {
+export function MiscellaneousStatsCards({ miscellaneous }: { miscellaneous: Miscellaneous[] }) {
 
   // 获取最新的说说
   const latestMiscellaneous = miscellaneous.length > 0 

@@ -1,5 +1,4 @@
 'use client'
-import { miscellaneousType } from '@/types/miscellaneous/type';
 import Image from 'next/image';
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/shadcnComponents/data-display/card";
@@ -10,9 +9,10 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import 'highlight.js/styles/github.css';
 import { useSession } from 'next-auth/react';
+import { Miscellaneous } from '@/types/miscellaneous/type';
 
 // 创建单独的TimelineItem组件以支持独立的动画延迟
-function TimelineItem({ item }: { item: miscellaneousType }) {
+function TimelineItem({ item }: { item: Miscellaneous }) {
   // 为每个卡片生成随机的延迟时间，实现错位动画效果
   const [delay, setDelay] = useState(0);
 
@@ -99,7 +99,7 @@ function TimelineItem({ item }: { item: miscellaneousType }) {
 export function MiscellaneousTimeline({
   items,
 }: {
-  items: miscellaneousType[];
+  items: Miscellaneous[];
 }) {
   return (
     <section >

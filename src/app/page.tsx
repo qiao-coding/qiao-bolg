@@ -15,6 +15,7 @@ function Home() {
           {/* 文章列表区域 - 展示博客文章内容 */}
           <section className={`
             backdrop-sky-100/50 dark:backdrop-sky-900/50
+            bg-sky-100/20 dark:bg-gray-800/40
             py-16 pb-30
             mx-auto 
           `}>

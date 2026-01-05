@@ -64,6 +64,9 @@ export default function NotesPage() {
                       whileTap={{ scale: 0.95 }}
                       
                     >
+
+                      {/* 这是笔记列表的卡片*/}
+                      
                       <NotesCard
                         note={note}
                       />

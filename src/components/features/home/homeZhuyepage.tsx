@@ -5,15 +5,15 @@ import { useSession } from "next-auth/react";
 import { SiGitee, SiGithub } from "react-icons/si";
 import { SiTiktok } from "react-icons/si";
 import { FaBilibili } from "react-icons/fa6";
-import { useState, useEffect } from "react";
 import HomeCard from "./homeCard";
-import { api_blogDataContext } from "@/components/layout/BlogDataProvider";
+import { useBlogDataContext } from "@/components/layout/BlogDataProvider";
+import { useMemo } from "react";
 
 
 
 export function HomeZhuyepage() {
     const { data: session } = useSession()
-    const { blogData } = api_blogDataContext();
+    const { blogData } = useBlogDataContext();
 
     const handleTiltedCard = () => {
         if (blogData?.homePage?.isDynamicTiltCard) {
@@ -127,7 +127,8 @@ export function HomeZhuyepage() {
                     className="hero-content flex-col lg:flex-row-reverse gap-22">
                     <figure className="cursor-target">
                         <HomeCard
-                            imageSrc={handleTiltedCard()}
+                        // 使用 useMemo 缓存图片路径，避免每次渲染都重新计算
+                            imageSrc={useMemo(() => handleTiltedCard(), [])}
                             captionText=""
                             containerHeight="200px"
                             containerWidth="200px"

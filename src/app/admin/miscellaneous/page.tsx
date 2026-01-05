@@ -8,13 +8,13 @@ import { MiscellaneousStatsCards } from '@/components/features/admin/miscellaneo
 import { MiscellaneousSearch } from '@/components/features/admin/miscellaneous/MiscellaneousSearch';
 import { MiscellaneousTable } from '@/components/features/admin/miscellaneous/MiscellaneousTable';
 import { MiscellaneousAddDialog, MiscellaneousEditDialog, MiscellaneousDeleteDialog } from '@/components/features/admin/miscellaneous/MiscellaneousDialogs';
-import { miscellaneousType } from '@/types/miscellaneous/type';
 import { api_miscellaneous } from '@/hooks/miscellaneous/api_miscellaneous';
 import { motion } from 'framer-motion';
+import { Miscellaneous } from '@/types/miscellaneous/type';
 
 
 const MiscellaneousManagement: React.FC = () => {
-  const [miscellaneous, setMiscellaneous] = useState<miscellaneousType[]>([]);
+  const [miscellaneous, setMiscellaneous] = useState<Miscellaneous[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortField, setSortField] = useState<'date' | null>('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -24,7 +24,7 @@ const MiscellaneousManagement: React.FC = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const [newContent, setNewContent] = useState<string>('');
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
-  const [editItem, setEditItem] = useState<miscellaneousType | null>(null);
+  const [editItem, setEditItem] = useState<Miscellaneous | null>(null);
   const [editContent, setEditContent] = useState<string>('');
 
   const filteredAndSearchedItems = miscellaneous.filter(item =>
@@ -36,7 +36,7 @@ const MiscellaneousManagement: React.FC = () => {
     const fetchMiscellaneous = async () => {
       try {
         const response = await api_miscellaneous.getMiscellaneousList()
-        const formattedItems: miscellaneousType[] = response.map((item: miscellaneousType) => ({
+        const formattedItems: Miscellaneous[] = response.map((item: Miscellaneous) => ({
           id: item.id,
           content: item.content,
           date: item.date
@@ -44,7 +44,7 @@ const MiscellaneousManagement: React.FC = () => {
         setMiscellaneous(formattedItems);
       } catch (error) {
         console.error('获取说说数据失败:', error);
-        const mockData: miscellaneousType[] = [
+        const mockData: Miscellaneous[] = [
           {
             id: 1,
             content: '加载失败',
@@ -85,7 +85,7 @@ const MiscellaneousManagement: React.FC = () => {
   const handleAddItem = async () => {
     try {
       if (newContent.trim()) {
-        const newItem: miscellaneousType = {
+        const newItem: Miscellaneous = {
           id: miscellaneous.length + 1,
           content: newContent,
           date: new Date().toISOString().slice(0, 10),
@@ -107,7 +107,7 @@ const MiscellaneousManagement: React.FC = () => {
         return console.error('编辑说说失败: 缺少必要字段');
       }
 
-      const newEditItem: miscellaneousType = {
+      const newEditItem: Miscellaneous = {
         id: editItem.id,
         content: editContent,
         date: new Date().toISOString().slice(0, 10)

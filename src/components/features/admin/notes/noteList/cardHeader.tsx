@@ -57,7 +57,10 @@ export function NoteListCardHeader({
             <span>新建笔记</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] backdrop-blur-sm bg-card/90 dark:bg-card/90 border border-border/40 shadow-2xl">
+        <DialogContent className="sm:max-w-[425px]
+        text-black dark:text-slate-100
+         backdrop-blur-sm bg-card/90 dark:bg-slate-700/90 
+         border border-border/40 shadow-2xl">
           <form onSubmit={onSubmit}>
             <DialogHeader>
               <DialogTitle>新建笔记</DialogTitle>

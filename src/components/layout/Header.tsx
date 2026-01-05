@@ -9,10 +9,10 @@ import { ThemeSwitcher } from "../features/theme/ThemeSwitcher";
 import { SearchBox } from "../features/search/SearchBox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/shadcnComponents/overlay/dropdown-menu";
 import { debounce } from "../logic/public/debounce";
-import { api_blogDataContext } from "./BlogDataProvider";
+import { useBlogDataContext } from "./BlogDataProvider";
 
 const Header = () => {
-  const { blogData } = api_blogDataContext();
+  const { blogData } = useBlogDataContext();
   const { resolvedTheme } = useTheme();
   const { data: session } = useSession()
   const [HeaderStyle, setHeaderStyle] = useState(false);
@@ -35,7 +35,7 @@ const Header = () => {
       } else {
         setHeaderStyle(false);
       }
-    }, 50)
+    }, 100)
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -56,7 +56,7 @@ const Header = () => {
 
   return (
     <div
-      className={`fixed z-50 mr-5 duration-700 mx-auto
+      className={`fixed z-50 mr-5 duration-800 mx-auto
            rounded-full left-1/2 -translate-x-1/2
           ${headerStyleClass}`}
     >
