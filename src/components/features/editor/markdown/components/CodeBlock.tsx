@@ -64,7 +64,7 @@ import React, { useCallback, useState } from "react";
     const displayLanguage = languageDisplayNames[language] || language.charAt(0).toUpperCase() + language.slice(1);
 
     return (
-      <div className="relative group my-6 overflow-hidden rounded-lg border border-border">
+      <div className="relative group  my-6 overflow-hidden rounded-lg border border-border">
         <div className={`flex justify-between items-center px-4 py-2 bg-muted/90 dark:bg-muted/90 border-b border-border`}>
           {/* 语言标签 */}
           <div className="flex items-center gap-1.5">
@@ -75,7 +75,11 @@ import React, { useCallback, useState } from "react";
           </div>
           <button
             onClick={handleCopy}
-            className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-secondary hover:bg-secondary/80 rounded-md px-2.5 py-1 text-xs font-medium text-secondary-foreground flex items-center gap-1.5"
+            className="opacity-100 md:opacity-0 md:group-hover:opacity-100 
+            transition-all duration-200 bg-secondary
+             hover:bg-secondary/80 rounded-md px-2.5 
+             py-1 text-xs font-medium text-secondary-foreground 
+             flex items-center gap-1.5"
             aria-label="复制代码"
           >
             {copied ? (
@@ -91,8 +95,8 @@ import React, { useCallback, useState } from "react";
             )}
           </button>
         </div>
-        <div className="bg-background dark:bg-slate-900">
-          <pre className={`overflow-x-auto text-sm  leading-relaxed m-0 !bg-transparent ${className || ''}`}>
+        <div className="hljs">
+          <pre className={`overflow-x-auto text-sm leading-relaxed m-0 !bg-transparent ${className || ''}`}>
             {children}
           </pre>
         </div>

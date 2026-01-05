@@ -72,17 +72,23 @@ export default function NotePageDetail() {
        bg-sky-50/90 dark:bg-slate-800/90"
       >
 
+        {/* 路由组件 */}
         <NextRouter showHeader={false}>
+          {/* 笔记页面头部 */}
           <NotePageHeader setIsImageBackground={setIsImageBackground} />
+
+          {/* 笔记页面主体 */}
           <main
             className="min-h-screen container mx-auto px-4 sm:px-6 py-8 max-w-3xl"
             key={notesPage.uid}
           >
+            {/* 笔记页面标题 */}
             <header className="mb-8 text-card-foreground">
               <h1 className="text-3xl sm:text-4xl font-bold mb-6 leading-tight animate-fade-in">
                 {notesPage.title}
               </h1>
 
+              {/* 笔记页面时间信息 */}
               <ul className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm list-none">
                 <li className="flex items-center gap-1.5 text-muted-foreground">
                   <Calendar className="w-4 h-4" aria-hidden="true" />
@@ -95,8 +101,10 @@ export default function NotePageDetail() {
               </ul>
             </header>
 
+            {/* 笔记页面内容 */}
             <NotePageContent content={notesPage.content} theme={theme as 'light' | 'dark'} />
             
+            {/* 笔记页面标签 */}
             <section aria-labelledby="note-tags" className="mt-8 pt-6 border-t transition-all duration-300 border-border">
               <div className="flex flex-wrap items-center gap-3">
                 <span id="note-tags" className="text-sm text-muted-foreground">标签：</span>
@@ -116,6 +124,8 @@ export default function NotePageDetail() {
           </main>
 
         </NextRouter>
+
+        {/* 返回顶部按钮 */}
         <footer
           className="fixed bottom-[3%] left-[3%] "
         >
@@ -126,8 +136,10 @@ export default function NotePageDetail() {
             className="bg-card/60 text-black dark:text-white"
 
           >
+            {/* 返回顶部按钮文本 */}
             <span className="hidden md:inline-block">返回顶部</span>
 
+            {/* 返回顶部按钮图标 */}
             <ArrowUpIcon />
           </Button>
         </footer>

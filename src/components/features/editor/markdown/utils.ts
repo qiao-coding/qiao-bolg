@@ -1,7 +1,7 @@
 
 // 文件扩展名到语言标识的映射表
 export const fileExtensionToLanguage: Record<string, string> = {
-  // 前端语言
+  // 语言
   'js': 'javascript',
   'jsx': 'jsx',
   'ts': 'typescript',
@@ -10,8 +10,6 @@ export const fileExtensionToLanguage: Record<string, string> = {
   'css': 'css',
   'scss': 'scss',
   'less': 'less',
-
-  // 后端语言
   'java': 'java',
   'py': 'python',
   'cpp': 'cpp',

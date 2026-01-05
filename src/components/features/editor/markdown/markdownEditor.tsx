@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import ReactMarkdown from 'react-markdown';
+import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
+import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import {
@@ -24,7 +24,30 @@ import { calculateWordCount, calculateCharCount, getLanguageFromExtension, Markd
 import StatusBar from './components/StatusBar';
 import { ShowToolbar } from './components/showToolbar';
 import { CodeBlock } from './components/CodeBlock';
+import { throttle } from '@/components/logic/public/throttle';
 
+
+const MemoizedMarkdownPreview = memo(({ 
+  content, 
+  theme, 
+  markdownComponents 
+}: { 
+  content: string;
+  theme: string;
+  markdownComponents: Components;
+}) => (
+  <ReactMarkdown
+    remarkPlugins={[remarkGfm]}
+    rehypePlugins={[rehypeHighlight]}
+    components={markdownComponents}
+  >
+    {content}
+  </ReactMarkdown>
+));
+
+MemoizedMarkdownPreview.displayName = 'MemoizedMarkdownPreview';
+
+// 主组件
 export default function MarkdownEditor({
   initialContent = "开始你的写作吧...",
   value = '',
@@ -41,20 +64,10 @@ export default function MarkdownEditor({
 
   // 状态管理
   const [content, setContent] = useState<string>(value);
-
-  // 编辑器模式（编辑/预览/分屏）
   const [editorMode, setEditorMode] = useState<EditorMode>(initialMode);
-
-  // 全屏状态
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-
-  // 字数统计和字符数统计
   const [wordCount, setWordCount] = useState<number>(0);
-
-  // 字符数统计
   const [charCount, setCharCount] = useState<number>(0);
-
-  // 撤销/重做状态
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const [history, setHistory] = useState<string[]>([value || initialContent]);
 
@@ -65,32 +78,43 @@ export default function MarkdownEditor({
   const saveTimeoutRef = useRef<NodeJS.Timeout>(null);
   const isScrollingRef = useRef<boolean>(false);
   const isUndoingOrRedoingRef = useRef<boolean>(false);
+  const lastScrollSyncRef = useRef<number>(0);
+  const previewScrollTopRef = useRef<number>(0);
+  const editorScrollTopRef = useRef<number>(0);
 
+  // Markdown 组件配置
   const markdownComponents = useMemo(() => ({
-            p: ({ className = '', ...props }) => <p className={`my-4 leading-relaxed ${className || ''}`} {...props} />,
-            h1: ({ className = '', ...props }) => <h1 className={`text-3xl font-bold mt-8 mb-4 ${className || ''}`} {...props} />,
-            h2: ({ className = '', ...props }) => <h2 className={`text-2xl font-bold mt-8 mb-3 ${className || ''}`} {...props} />,
-            h3: ({ className = '', ...props }) => <h3 className={`text-xl font-bold mt-6 mb-2 ${className || ''}`} {...props} />,
-            code: ({ className = '', ...props }) => {
-              const isInlineCode = !className?.includes('language');
-
-              return (
-                <code
-                  className={`font-mono ${isInlineCode
-                    ? 'px-1.5 py-0.5 rounded text-sm font-medium bg-muted/80 dark:bg-muted/40'
-                    : className}`}
-                  {...props}
-                />
-              );
-            },
-            pre: ({ className = '', ...props }) => {
-              const children = props.children;
-              return <CodeBlock className={className}>{children}</CodeBlock>;
-            },
-            a: ({ ...props }) => <a
-              className="text-[#4A6FA5] hover:text-[#3A5F95] underline decoration-1 underline-offset-2 dark:text-blue-400 dark:hover:text-blue-300"
-              {...props} />
-          }), []);
+    p: ({ className = '', ...props }) => <p className={`my-4 leading-relaxed ${className || ''}`} {...props} />,
+    h1: ({ className = '', ...props }) => <h1 className={`text-3xl font-bold mt-8 mb-4 ${className || ''}`} {...props} />,
+    h2: ({ className = '', ...props }) => <h2 className={`text-2xl font-bold mt-8 mb-3 ${className || ''}`} {...props} />,
+    h3: ({ className = '', ...props }) => <h3 className={`text-xl font-bold mt-6 mb-2 ${className || ''}`} {...props} />,
+    code: ({ className = '', ...props }) => {
+      const isInlineCode = !className?.includes('language');
+      return (
+        <code
+        style={{
+          backgroundColor:'transparent',
+        }}
+          className={`font-mono  ${isInlineCode
+            ? 'px-1.5 py-0.5 rounded text-sm font-medium '
+            : className}`}
+          {...props}
+        />
+      );
+    },
+    pre: ({ className = '', ...props }) => {
+      return <CodeBlock className={`p-2 bg-transparent ${className}`}>{props.children}</CodeBlock>;
+    },
+    a: ({ ...props }) => (
+      <a
+        className="text-[#4A6FA5] hover:text-[#3A5F95] underline decoration-1 underline-offset-2 dark:text-blue-400 dark:hover:text-blue-300"
+        {...props}
+      />
+    ),
+    table: ({ className = '', ...props }) => <table className={`my-4 w-full border-collapse text-sm table-auto border-border ${className || ''}`} {...props} />,
+    th: ({ className = '', ...props }) => <th className={`px-4 py-2 border border-border ${className || ''}`} {...props} />,
+    td: ({ className = '', ...props }) => <td className={`px-4 py-2 border border-border ${className || ''}`} {...props} />,
+  }), []);
 
   // 处理内容更新并维护历史记录
   const handleContentChange = useCallback((newContent: string) => {
@@ -103,21 +127,17 @@ export default function MarkdownEditor({
 
     // 更新历史记录
     setHistory(prevHistory => {
-      // 截断历史记录到当前索引位置（防止在撤销后进行编辑时保留未来状态）
       const newHistory = prevHistory.slice(0, historyIndex + 1);
-      // 添加新内容
       newHistory.push(newContent);
       return newHistory;
     });
     setHistoryIndex(prevIndex => prevIndex + 1);
   }, [historyIndex]);
 
-  // 切换编辑器模式
- useEffect(() => {
-    MarkdownStyle.getMarkdownStyle({theme})
-  }, [theme])
-
-
+  // 应用主题样式
+  useEffect(() => {
+    MarkdownStyle.getMarkdownStyle({ theme });
+  }, [theme]);
 
   // 防抖的字数统计和内容变化回调
   useEffect(() => {
@@ -127,7 +147,6 @@ export default function MarkdownEditor({
     setWordCount(words);
     setCharCount(chars);
 
-    // 防抖处理内容变化回调
     if (onChange) {
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
@@ -144,55 +163,92 @@ export default function MarkdownEditor({
       }
     };
   }, [content, onChange]);
-  
-  // 同步滚动功能
-  const handleEditorScroll = useCallback(() => {
-    if (isScrollingRef.current || !previewRef.current || editorMode !== 'split') return;
 
-    try {
-      isScrollingRef.current = true;
-      const textarea = textareaRef.current;
-      if (!textarea) return;
+  // 滚动同步函数
+  const syncScroll = useCallback((source: 'editor' | 'preview') => {
+    const now = Date.now();
+    
+    // 约60fps
+    if (now - lastScrollSyncRef.current < 16) return
+    lastScrollSyncRef.current = now
+    
+    if (isScrollingRef.current || editorMode !== 'split') return;
+    
+    
+    requestAnimationFrame(() => {
+      const editor = textareaRef.current; // 编辑器
+      const preview = previewRef.current; // 预览
+      
+      if (!editor || !preview) return;
+      
+      // 检查是否有有效的滚动高度
+      const editorScrollHeight = editor.scrollHeight - editor.clientHeight;
+      const previewScrollHeight = preview.scrollHeight - preview.clientHeight;
+      
+      if (editorScrollHeight <= 0 || previewScrollHeight <= 0) return;
+      
+      try {
+        isScrollingRef.current = true;
+        
+        if (source === 'editor') {
+          const editorScrollTop = editor.scrollTop;
+          
+          // 只有当滚动位置有显著变化时才更新
+          if (Math.abs(editorScrollTopRef.current - editorScrollTop) < 1) {
+            isScrollingRef.current = false;
+            return;
+          }
+          
+          // 更新编辑器的滚动位置
+          editorScrollTopRef.current = editorScrollTop;
+          const scrollRatio = editorScrollTop / editorScrollHeight;
+          const targetScrollTop = scrollRatio * previewScrollHeight;
+          
+          // 检查目标滚动位置是否合理
+          if (targetScrollTop >= 0 && targetScrollTop <= previewScrollHeight) {
+            preview.scrollTop = targetScrollTop;
+            previewScrollTopRef.current = targetScrollTop;
+          }
+        } else {
 
-      const editorScroll = textarea.scrollTop;
-      const editorHeight = textarea.scrollHeight - textarea.clientHeight;
-      const previewScrollRatio = editorScroll / editorHeight;
-
-      const preview = previewRef.current;
-      const previewHeight = preview.scrollHeight - preview.clientHeight;
-      preview.scrollTop = previewHeight * previewScrollRatio;
-    } finally {
-      // 使用setTimeout来避免快速滚动时的竞争条件
-      setTimeout(() => {
-        isScrollingRef.current = false;
-      }, 10);
-    }
+          // 预览的滚动位置
+          const previewScrollTop = preview.scrollTop;
+          
+          // 只有当滚动位置有显著变化时才更新
+          if (Math.abs(previewScrollTopRef.current - previewScrollTop) < 1) {
+            isScrollingRef.current = false;
+            return;
+          }
+          
+          // 更新编辑器的滚动位置
+          previewScrollTopRef.current = previewScrollTop;
+          const scrollRatio = previewScrollTop / previewScrollHeight;
+          const targetScrollTop = scrollRatio * editorScrollHeight;
+          
+          // 检查目标滚动位置是否合理
+          if (targetScrollTop >= 0 && targetScrollTop <= editorScrollHeight) {
+            editor.scrollTop = targetScrollTop;
+            editorScrollTopRef.current = targetScrollTop;
+          }
+        }
+      } finally {
+        // 在下一次动画帧重置状态
+        requestAnimationFrame(() => {
+          isScrollingRef.current = false;
+        });
+      }
+    });
   }, [editorMode]);
 
+  const handleEditorScroll = useCallback(throttle(
+    () => syncScroll('editor'),
+    16,
+  ), [syncScroll]);
 
-  // 处理预览区域滚动同步到编辑器
-  const handlePreviewScroll = useCallback(() => {
-    if (isScrollingRef.current || !textareaRef.current || editorMode !== 'split') return;
-
-    try {
-      isScrollingRef.current = true;
-      const preview = previewRef.current;
-      if (!preview) return;
-
-      const previewScroll = preview.scrollTop;
-      const previewHeight = preview.scrollHeight - preview.clientHeight;
-      const editorScrollRatio = previewScroll / previewHeight;
-
-      const textarea = textareaRef.current;
-      const editorHeight = textarea.scrollHeight - textarea.clientHeight;
-      textarea.scrollTop = editorHeight * editorScrollRatio;
-    } finally {
-      setTimeout(() => {
-        isScrollingRef.current = false;
-      }, 10);
-    }
-  }, [editorMode]);
-
+  const handlePreviewScroll = useCallback(throttle(
+    () => syncScroll('preview'),
+    16,
+  ), [syncScroll]);
 
   // 优化的插入文本函数
   const insertTextAtCursor = useCallback((prefix: string, suffix: string = '', defaultText: string = '') => {
@@ -204,7 +260,7 @@ export default function MarkdownEditor({
     const selectedText = content.substring(start, end);
     const newText = selectedText || defaultText;
 
-    // 检查是否已经应用了相同的格式，如果是则移除格式
+    // 检查是否已经应用了相同的格式
     let newContent, newCursorPos;
     if (selectedText.startsWith(prefix) && selectedText.endsWith(suffix) && 
         selectedText.length >= prefix.length + suffix.length) {
@@ -214,7 +270,6 @@ export default function MarkdownEditor({
         content.substring(0, start) +
         innerText +
         content.substring(end);
-      // 光标位置：起始位置 + 内部文本长度
       newCursorPos = start + innerText.length;
     } else {
       // 添加新的格式
@@ -222,13 +277,11 @@ export default function MarkdownEditor({
         content.substring(0, start) +
         prefix + newText + suffix +
         content.substring(end);
-      // 光标位置：起始位置 + 前缀长度 + 新文本长度 + 后缀长度
       newCursorPos = start + prefix.length + newText.length + suffix.length;
     }
 
     handleContentChange(newContent);
 
-    // 延迟设置光标位置，确保 DOM 已更新
     requestAnimationFrame(() => {
       textarea.setSelectionRange(newCursorPos, newCursorPos);
     });
@@ -269,15 +322,12 @@ export default function MarkdownEditor({
   // 键盘快捷键处理
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // 检查是否按下了 Ctrl+Z (或 Cmd+Z)
       if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-        e.preventDefault(); // 阻止浏览器默认的撤销操作
+        e.preventDefault();
         
         if (e.shiftKey) {
-          //重做
           redo();
         } else {
-          //撤销
           undo();
         }
       }
@@ -288,7 +338,6 @@ export default function MarkdownEditor({
       textarea.addEventListener('keydown', handleKeyDown);
     }
 
-    // 清理事件监听器
     return () => {
       if (textarea) {
         textarea.removeEventListener('keydown', handleKeyDown);
@@ -353,8 +402,6 @@ export default function MarkdownEditor({
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target?.result as string;
-
-      // 从文件名提取扩展名
       const fileName = file.name;
       const extensionMatch = fileName.match(/\.([^.]+)$/);
 
@@ -362,7 +409,6 @@ export default function MarkdownEditor({
         const extension = extensionMatch[1];
         const language = getLanguageFromExtension(extension);
 
-        // 如果找到对应的语言标识，则将内容包装在代码块中
         if (language) {
           const formattedContent = `\`\`\`${language}\n${text}\n\`\`\``;
           handleContentChange(formattedContent);
@@ -370,7 +416,6 @@ export default function MarkdownEditor({
         }
       }
 
-      // 对于不识别的文件类型或Markdown文件，直接设置原始内容
       handleContentChange(text);
     };
     reader.readAsText(file);
@@ -398,60 +443,69 @@ export default function MarkdownEditor({
       document.exitFullscreen();
       setIsFullscreen(false);
     }
-  }, []);
+  }, [containerRef]);
 
   // 监听全屏变化
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      setIsFullscreen(document.fullscreenElement !== null);
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  // 清理函数
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div
       ref={containerRef}
-      className={`flex flex-col  h-full transition-colors duration-200 
+      className={`flex flex-col h-full transition-colors duration-200 
         ${isFullscreen ? 'fixed inset-0 z-50' : ''}
         ${theme === 'dark'
-          ? 'bg-gray-900 text-gray-100'
+          ? 'bg-card/70 text-gray-100'
           : 'bg-gray-50 text-gray-800'
         }
-        ${className} `}
+        ${className}`}
     >
       {/* 工具栏 */}
-      {showToolbar && <ShowToolbar
-        onSave={handleSave}
-        onFileDownload={handleFileDownload}
-        onFileUpload={handleFileUpload}
-        toolbarActions={toolbarActions}
-        modeButtons={modeButtons}
-        editorMode={editorMode}
-        setEditorMode={setEditorMode}
-        isFullscreen={isFullscreen}
-        toggleFullscreen={toggleFullscreen}
-        theme={theme}
-       />}
+      {showToolbar && (
+        <ShowToolbar
+          onSave={handleSave}
+          onFileDownload={handleFileDownload}
+          onFileUpload={handleFileUpload}
+          toolbarActions={toolbarActions}
+          modeButtons={modeButtons}
+          editorMode={editorMode}
+          setEditorMode={setEditorMode}
+          isFullscreen={isFullscreen}
+          toggleFullscreen={toggleFullscreen}
+          theme={theme}
+        />
+      )}
 
       {/* 编辑器主体 */}
-      <div className="flex flex-1 overflow-hidden ">
+      <div className="flex flex-1 overflow-hidden">
         {/* 编辑区域 */}
         {(editorMode === 'edit' || editorMode === 'split') && (
-          <div className={`flex-1 ${editorMode === 'split' ? 'w-1/2' : 'w-full'}
-           overflow-auto h-full`}>
+          <div className={`flex-1 ${editorMode === 'split' ? 'w-1/2' : 'w-full'} overflow-auto`}>
             <textarea
               ref={textareaRef}
               value={content}
               onChange={(e) => handleContentChange(e.target.value)}
               onScroll={handleEditorScroll}
-              className={`w-full h-[98.8%] p-6 resize-none outline-none
-                 font-mono text-sm leading-relaxed ${theme === 'dark'
-                ? 'bg-gray-900 text-gray-100 placeholder-gray-500'
-                : 'bg-gray-50 text-gray-800 placeholder-gray-400'
-                
-                }  ${editorClass}`}
+              className={`w-full h-full p-6 resize-none outline-none font-mono text-sm leading-relaxed 
+                ${theme === 'dark'
+                  ? 'bg-card/70 text-gray-100 placeholder-gray-500'
+                  : 'bg-gray-50 text-gray-800 placeholder-gray-400'
+                } ${editorClass}`}
               placeholder={initialContent}
               spellCheck="true"
               aria-label="Markdown 编辑器"
@@ -461,38 +515,33 @@ export default function MarkdownEditor({
 
         {/* 分割线 */}
         {editorMode === 'split' && (
-          <div className="relative w-px bg-gray-100 dark:bg-gray-700 hover:bg-blue-400 dark:hover:bg-blue-400 cursor-col-resize">
+          <div className="relative w-px bg-gray-100 dark:bg-gray-700">
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-10 bg-gray-400 dark:bg-gray-600 rounded-full" />
           </div>
         )}
 
         {/* 预览区域 */}
         {(editorMode === 'preview' || editorMode === 'split') && (
-          <div className={`flex-1 ${editorMode === 'split' ? 'w-1/2' : 'w-full'}
-           overflow-auto scrollbar-hide`}>
+          <div className={`flex-1 ${editorMode === 'split' ? 'w-1/2' : 'w-full'} overflow-auto`}>
             <div
               ref={previewRef}
               onScroll={handlePreviewScroll}
-              className={`h-full overflow-auto p-6 scrollbar-hide prose prose-lg max-w-none ${theme === 'dark'
-                ? ' prose-invert bg-gray-900'
-                : 'bg-white'
-                }  ${viewClass}`}
+              className={`h-full overflow-auto p-6 prose prose-lg max-w-none 
+                ${theme === 'dark' ? 'prose-invert bg-card/70' : 'bg-white'} 
+                ${viewClass}`}
             >
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeHighlight]}
-                components={markdownComponents}
-              >
-                {content}
-              </ReactMarkdown>
+              <MemoizedMarkdownPreview
+                content={content}
+                theme={theme}
+                markdownComponents={markdownComponents}
+              />
             </div>
           </div>
         )}
-
       </div>
 
       {/* 状态栏 */}
       {showStatusBar && <StatusBar wordCount={wordCount} charCount={charCount} theme={theme} />}
     </div>
-  )
+  );
 }

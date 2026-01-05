@@ -7,28 +7,34 @@ import { SiTiktok } from "react-icons/si";
 import { FaBilibili } from "react-icons/fa6";
 import HomeCard from "./homeCard";
 import { useBlogDataContext } from "@/components/layout/BlogDataProvider";
-import { useMemo } from "react";
-
+import { useEffect, useMemo, useState } from "react";
 
 
 export function HomeZhuyepage() {
     const { data: session } = useSession()
     const { blogData } = useBlogDataContext();
+    const [image, setImage] = useState('/user_img/up.jpg');
 
-    const handleTiltedCard = () => {
-        if (blogData?.homePage?.isDynamicTiltCard) {
-            return (session?.user && session.user?.image) || '/user_img/up.jpg';
-        }
-        return '/user_img/up.jpg';
-    }
 
+    //标题
     const handleTitle = () => {
         if (blogData?.homePage?.isDynamicTitle) {
             return session && `Hi ${session.user?.name} 🥰` || 'Hi HaoWhite 🥰';
         }
-        return blogData?.homePage?.mainTitle || 'HaoWhite';
+        return blogData?.homePage?.mainTitle || 'Hi HaoWhite ';
     }
 
+    //homeCard图片
+    useEffect(() => {
+        if (session?.user?.image && blogData?.homePage?.isDynamicTiltCard) {
+            setImage(session.user.image);
+        } else {
+            // 当条件不满足时，重置为默认图片
+            setImage('/user_img/up.jpg');
+        }
+    }, [session?.user?.image, blogData?.homePage?.isDynamicTiltCard])
+
+    //图标
     const getIconComponent = (name: string) => {
         switch (name.toLowerCase()) {
             case 'github':
@@ -110,7 +116,9 @@ export function HomeZhuyepage() {
                     </div>
                 );
         }
-    };
+    }
+
+
     return (
         <article
             style={{
@@ -127,8 +135,7 @@ export function HomeZhuyepage() {
                     className="hero-content flex-col lg:flex-row-reverse gap-22">
                     <figure className="cursor-target">
                         <HomeCard
-                        // 使用 useMemo 缓存图片路径，避免每次渲染都重新计算
-                            imageSrc={useMemo(() => handleTiltedCard(), [])}
+                            imageSrc={useMemo(() => image, [image])}
                             captionText=""
                             containerHeight="200px"
                             containerWidth="200px"

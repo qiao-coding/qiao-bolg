@@ -16,7 +16,7 @@ function Home() {
           <section className={`
             backdrop-sky-100/50 dark:backdrop-sky-900/50
             bg-sky-100/20 dark:bg-gray-800/40
-            py-16 pb-30
+            pt-16 pb-0
             mx-auto 
           `}>
             <HomeArticles />

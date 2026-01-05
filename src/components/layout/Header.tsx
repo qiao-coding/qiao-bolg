@@ -99,7 +99,9 @@ const Header = () => {
             >
               {HbtnStyle.map((item) => (
                 <li key={item.id}>
-                  <Link href={item.href} className="cursor-target text-black dark:text-white">
+                  <Link href={item.href} className="
+                  cursor-target text-black dark:text-white
+                  ">
                     {item.title}
                   </Link>
                 </li>

@@ -55,10 +55,10 @@ export function NavUser({
                "
             >
               <Image
-                src={session?.user?.image || ''}
+                src={session?.user?.image || '/user_img/up.jpg'}
+                alt={'admin-user avatar'}
                 width={40}
                 height={40}
-                alt={''}
                 className="rounded-full"
               />
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -78,10 +78,10 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Image
-                  src={session?.user?.image || ''}
+                  src={session?.user?.image || '/user_img/up.jpg'}
+                  alt={'admin-user avatar'}
                   width={40}
                   height={40}
-                  alt={user.name}
                   className="rounded-full"
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -90,20 +90,6 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            {/* <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                账户
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                账单
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                通知
-              </DropdownMenuItem>
-            </DropdownMenuGroup> */}
             <DropdownMenuSeparator />
             <Link href="/" className="text-red-500">
               <DropdownMenuItem className="text-red-500">

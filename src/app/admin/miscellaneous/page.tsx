@@ -146,7 +146,7 @@ const MiscellaneousManagement: React.FC = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-sky-100/60 dark:bg-slate-600/80 text-foreground"
+      className="min-h-screen  bg-sky-100/60 dark:bg-gray-900/60 text-foreground"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}

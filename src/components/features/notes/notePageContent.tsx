@@ -1,5 +1,5 @@
 'use client'
-import React, {  useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -14,7 +14,7 @@ export function NotePageContent({ content, theme }: { content: string; theme: 'l
 
   // 加载markdown样式
   useEffect(() => {
-    MarkdownStyle.getMarkdownStyle({theme})
+    MarkdownStyle.getMarkdownStyle({ theme })
   }, [theme])
 
 
@@ -36,8 +36,11 @@ export function NotePageContent({ content, theme }: { content: string; theme: 'l
 
               return (
                 <code
-                  className={`font-mono ${isInlineCode
-                    ? 'px-1.5 py-0.5 rounded text-sm font-medium bg-muted/80 dark:bg-muted/40'
+                  style={{
+                    backgroundColor: 'transparent'
+                  }}
+                  className={`font-mono  ${isInlineCode
+                    ? 'px-1.5 py-0.5 rounded text-sm font-medium'
                     : className}`}
                   {...props}
                 />
@@ -45,8 +48,12 @@ export function NotePageContent({ content, theme }: { content: string; theme: 'l
             },
             pre: ({ className, ...props }) => {
               const children = props.children;
-              return <CodeBlock className={className}>{children}</CodeBlock>;
+              return <CodeBlock className={`p-2 ${className}`}>{children}</CodeBlock>;
             },
+            table: ({ className = '', ...props }) => <table className={`my-4 w-full border-collapse text-sm table-auto border-border ${className || ''}`} {...props} />,
+            th: ({ className = '', ...props }) => <th className={`px-4 py-2 border border-border ${className || ''}`} {...props} />,
+            td: ({ className = '', ...props }) => <td className={`px-4 py-2 border border-border ${className || ''}`} {...props} />,
+
             a: ({ ...props }) => <a
               className="text-[#4A6FA5] hover:text-[#3A5F95] underline decoration-1 underline-offset-2 dark:text-blue-400 dark:hover:text-blue-300"
               {...props} />

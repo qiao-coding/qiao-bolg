@@ -57,7 +57,7 @@ const HomeArticles = () => {
 
 
 
-          allArticles.sort((a, b) => new Date(b.dateStart || '').getTime() - new Date(a.dateStart || '').getTime());
+          allArticles.sort((a, b) => new Date(b.dateEnd || '').getTime() - new Date(a.dateEnd || '').getTime());
 
           setArticles(allArticles.slice(0, 6));
         } else {
@@ -77,7 +77,7 @@ const HomeArticles = () => {
 
 
 
-
+ //文章列表
   const articlesList = useMemo(() => {
     return articles.map((article, index) => (
       <article
@@ -111,12 +111,13 @@ const HomeArticles = () => {
                font-semibold transition-colors 
                line-clamp-2 
                 group-hover:text-blue-400 `}>
-              {article.title.length > 10 ? article.title.substring(0, 10) + '...' : article.title}
+              {article.title.length > 12 ? article.title.substring(0, 12) + '...' : article.title}
             </h3>
             <span className={`text-xs flex-shrink-0 ml-2
                text-gray-500 dark:text-gray-200 
                `}>
-              {article.dateStart}
+                最后更新：
+              {article.dateEnd}
             </span>
           </div>
 
@@ -138,6 +139,7 @@ const HomeArticles = () => {
     ));
   }, [articles, handleArticleClick, notesPage]);
 
+   //加载状态
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -149,6 +151,7 @@ const HomeArticles = () => {
     );
   }
 
+  //错误状态
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -169,6 +172,7 @@ const HomeArticles = () => {
     );
   }
 
+  //无数据状态
   if (articles.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -184,8 +188,9 @@ const HomeArticles = () => {
     );
   }
 
+   
   return (
-    <div className="container mx-auto px-4 py-8 ">
+    <div className="container mx-auto px-4 py-8 min-h-screen">
       <div className="text-center mb-8 text-black dark:text-white">
         <h2 className={`text-3xl font-bold mb-3 `}>
           最近更新笔记

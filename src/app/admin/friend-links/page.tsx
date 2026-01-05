@@ -295,7 +295,7 @@ const FriendLinksManagement= () => {
 
 
     return (
-        <div className="min-h-screen  bg-sky-100/60 dark:bg-slate-600/80 text-foreground">
+        <div className="min-h-screen   bg-sky-100/60 dark:bg-gray-900/60 text-foreground">
             <main className="p-6">
                 <FriendLinksStatsCards friends={friends} />
 

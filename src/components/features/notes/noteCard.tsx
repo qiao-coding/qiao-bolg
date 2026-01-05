@@ -14,6 +14,8 @@ const NotesCard = ({
 
   const {id, title, tags, titlePicture,page} = note;
 
+  
+
 
   const handleNotesID = (notesID: number) => {
     router.push(`/notes/${notesID}`);
