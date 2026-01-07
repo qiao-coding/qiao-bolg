@@ -20,7 +20,9 @@ Hanwhite  Blog 是一个基于 Next.js 15 App Router 构建的个人博客和内
 - **Redux Toolkit**：状态管理，支持持久化和中间件
 
 ## 示例效果图
+
 ### 主页
+可以前往作者博客查看该博客项目的效果展示，博客链接：[www.haowhiteblog.cn](https://www.haowhiteblog.cn/)
 #### 亮色
 ![](/public/readme_img/home_light.png)
 
