@@ -183,9 +183,6 @@ NEXTAUTH_SECRET="your-secret-key"
 AUTH_GITHUB_ID="your-github-client-id"
 AUTH_GITHUB_SECRET="your-github-client-secret"
 
-# AI配置（可选）
-OPENAI_API_KEY="your-openai-api-key"
-DEEPSEEK_API_KEY="your-deepseek-api-key"
 ```
 
 4. **数据库初始化**
