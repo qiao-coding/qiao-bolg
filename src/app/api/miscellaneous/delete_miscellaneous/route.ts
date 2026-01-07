@@ -17,7 +17,11 @@ export async function DELETE(request: NextRequest) {
 
         return NextResponse.json(miscellaneous)
     } catch (error) {
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        console.error('删除杂项失败:', error);
+        return NextResponse.json(
+            { message: 'Failed to delete miscellaneous' },
+            { status: 400 }
+        );
 
 
     }

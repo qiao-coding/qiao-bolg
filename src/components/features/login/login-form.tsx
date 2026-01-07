@@ -33,7 +33,7 @@ export function LoginForm({
 
           <div className="bg-muted relative hidden md:block">
             <Image
-              src='/loginImage/LoginForm.jpg'
+              src='/login_img/LoginForm.jpg'
               alt="Image"
               width={500}
               height={500}

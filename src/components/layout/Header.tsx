@@ -22,8 +22,8 @@ const Header = () => {
     { id: 1, title: '主页', href: "/", icons: '/header_img/zhuye.svg' },
     { id: 2, title: '笔记', href: "/notes", icons: '/header_img/bijiben.svg' },
     { id: 3, title: '友链', href: "/friend", icons: '/header_img/youlian.svg' },
-    { id: 4, title: '说说', href: "/miscellaneous", icons: '/header_img/shuoshuo.svg' },
-    { id: 5, title: '关于', href: "/about", icons: '/header_img/leaf.svg' },
+    { id: 5, title: '说说', href: "/miscellaneous", icons: '/header_img/shuoshuo.svg' },
+    { id: 6, title: '关于', href: "/about", icons: '/header_img/leaf.svg' },
   ]
 
 
@@ -150,6 +150,7 @@ const Header = () => {
         </div>
         <div className={`navbar-end pr-4 flex items-center gap-4 duration-700 
             ${!HeaderStyle ? "mr-0" : "mr-5"}`}>
+            
           <div className="hidden md:block">
             <SearchBox />
           </div>

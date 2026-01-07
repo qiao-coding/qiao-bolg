@@ -1,7 +1,6 @@
 import NextRouter from "@/components/layout/NextRouter";
 import { HomeZhuyepage } from "@/components/features/home/homeZhuyepage";
 import HomeArticles from "@/components/features/home/homeArticles";
-
 // 首页组件 - 提供网站入口和内容展示
 
 function Home() {
@@ -9,6 +8,8 @@ function Home() {
     <>
       {/* 主要内容区域 - 包含首页头部和文章列表 */}
       <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-700/60">
+
+       
         <NextRouter>
           {/* 首页区域  */}
           <HomeZhuyepage />

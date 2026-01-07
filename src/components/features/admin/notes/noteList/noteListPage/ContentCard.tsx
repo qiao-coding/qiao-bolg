@@ -105,14 +105,13 @@ export function NoteListPageContentCard(
                         笔记内容 (Markdown格式)
                     </Label>
 
-                    <div className="h-170 
-                      "
+                    <div className="h-170"
                     >
                         <MarkdownEditor
                             key={notePage?.uid}
                             value={upNoteNotePage?.content || ''}
                             onSave={handleSave}
-                            onChange={(content: string) => setUpdateNotePage({ ...(upNoteNotePage || notePage) as NotesPage, content: content || '' })}
+                            onChange={(content) => setUpdateNotePage({ ...(upNoteNotePage || notePage) as NotesPage, content: content || '' })}
                             showToolbar={true}
                             showStatusBar={true}
                             initialMode="split"

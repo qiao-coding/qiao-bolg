@@ -18,6 +18,7 @@ export async function PUT(req:NextRequest) {
         }
         return NextResponse.json(res);
     } catch (error) {
+        console.error('更新好友失败:', error);
         return NextResponse.json(
             { message: 'Failed to update friend' },
             { status: 400 }

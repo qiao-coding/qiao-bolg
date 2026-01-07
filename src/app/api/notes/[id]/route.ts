@@ -32,6 +32,7 @@ export async function GET(
 
         return NextResponse.json(res);
     } catch (error) {
+        console.error('获取Note失败:', error);
         return NextResponse.json({ error: "获取失败" }, { status: 500 });
 
     }

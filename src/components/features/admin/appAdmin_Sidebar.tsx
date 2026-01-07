@@ -9,7 +9,6 @@ import {
   NotebookTabs,
   PieChart,
   SettingsIcon,
-  User,
   UserCog2,
 } from "lucide-react"
 

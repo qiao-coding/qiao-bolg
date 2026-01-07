@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PUT(req: NextRequest) {
     try {
         const body = await req.json();
-        const { title, content } = body;
+        const { title } = body;
         const {id,noteId,...data } = body;
 
         if (!id || !title ) {

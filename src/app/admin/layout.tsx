@@ -43,7 +43,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       }
       return null
     } catch (err) {
-      throw new Error('获取管理员信息失败');
+      throw new Error('获取管理员信息失败', { cause: err });
     }
   })();
 

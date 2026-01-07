@@ -2,14 +2,6 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import type { Prisma } from '@prisma/client';
 
-function parseId(value: unknown): number | null {
-  if (typeof value === 'number' && Number.isInteger(value)) return value;
-  if (typeof value === 'string' && value.trim() !== '') {
-    const n = Number(value);
-    return Number.isInteger(n) ? n : null;
-  }
-  return null;
-}
 
 function isPrismaNotFoundError(error: unknown): boolean {
   const prismaError = error as Prisma.PrismaClientKnownRequestError | null;

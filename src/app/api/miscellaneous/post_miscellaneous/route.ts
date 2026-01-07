@@ -23,6 +23,12 @@ export async function POST(Request: NextRequest) {
     return NextResponse.json(miscellaneous);
     
    } catch (error) {
+        console.error('创建杂项失败:', error);
+        return NextResponse.json(
+            { message: 'Failed to create miscellaneous' },
+            { status: 400 }
+        );
+
     
    }
 

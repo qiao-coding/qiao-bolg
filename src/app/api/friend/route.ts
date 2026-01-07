@@ -8,6 +8,11 @@ export async function GET() {
         return NextResponse.json(res);
 
     } catch (err) {
+        console.error('获取好友列表失败:', err);
+        return NextResponse.json(
+            { message: 'Failed to get friend list' },
+            { status: 400 }
+        );
     }
 
 }

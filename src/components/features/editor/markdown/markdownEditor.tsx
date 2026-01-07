@@ -29,11 +29,10 @@ import { throttle } from '@/components/logic/public/throttle';
 
 const MemoizedMarkdownPreview = memo(({ 
   content, 
-  theme, 
   markdownComponents 
 }: { 
   content: string;
-  theme: string;
+  theme?: string;
   markdownComponents: Components;
 }) => (
   <ReactMarkdown
@@ -240,15 +239,15 @@ export default function MarkdownEditor({
     });
   }, [editorMode]);
 
-  const handleEditorScroll = useCallback(throttle(
-    () => syncScroll('editor'),
-    16,
-  ), [syncScroll]);
+  const handleEditorScroll = useMemo(
+    () => throttle(() => syncScroll('editor'), 16),
+    [syncScroll]
+  );
 
-  const handlePreviewScroll = useCallback(throttle(
-    () => syncScroll('preview'),
-    16,
-  ), [syncScroll]);
+  const handlePreviewScroll = useMemo(
+    () => throttle(() => syncScroll('preview'), 16),
+    [syncScroll]
+  );
 
   // 优化的插入文本函数
   const insertTextAtCursor = useCallback((prefix: string, suffix: string = '', defaultText: string = '') => {

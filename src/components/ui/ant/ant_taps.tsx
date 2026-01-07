@@ -26,10 +26,10 @@ export const AntTabs = ({
     const inputRef = useRef<InputRef>(null);
     const editInputRef = useRef<InputRef>(null);
 
-
     useEffect(() => {
+        if (tags?.length === 0) return;
         onTagsChange?.(tags);
-    }, [tags.length]);
+    }, [tags, onTagsChange]);
 
     useEffect(() => {
         if (inputVisible) {

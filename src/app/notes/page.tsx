@@ -40,7 +40,8 @@ export default function NotesPage() {
           aria-labelledby="notes-title"
         >
           {/* 笔记列表内容区域 */}
-          <section className="py-12 px-4 sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28">
+          <section className="py-12 px-4 sm:px-6 lg:px-8 
+          min-h-screen max-w-5xl mx-auto pt-28">
             <header>
               <Title >学习笔记</Title>
             </header>

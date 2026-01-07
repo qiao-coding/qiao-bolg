@@ -44,6 +44,7 @@ export default async function RootLayout({
         <SessionProvider>
           <BlogDataProvider>
             <ClientProviders>
+        
               {children}
             </ClientProviders>
           </BlogDataProvider>

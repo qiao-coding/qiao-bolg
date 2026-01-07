@@ -18,7 +18,11 @@ export async function DELETE(req:NextRequest) {
         }
         return NextResponse.json(res);
     } catch (error) {
-        
+        console.error('删除好友失败:', error);
+        return NextResponse.json(
+            { message: 'Failed to delete friend' },
+            { status: 400 }
+        );
     }
     
 }

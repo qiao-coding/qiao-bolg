@@ -20,7 +20,11 @@ export async function PUT(request: NextRequest) {
         });
         return NextResponse.json(miscellaneous);
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating miscellaneous' }, { status: 500 });
+        console.error('更新杂项失败:', error);
+        return NextResponse.json(
+            { message: 'Failed to update miscellaneous' },
+            { status: 400 }
+        );
 
     }
 

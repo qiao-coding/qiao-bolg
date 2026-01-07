@@ -5,7 +5,6 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/shadcnCompon
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { Input } from "@/components/ui/shadcnComponents/forms/input";
 import { Textarea } from "@/components/ui/shadcnComponents/forms/textarea";
-import { Label } from "@/components/ui/shadcnComponents/forms/label";
 import { Save, TrashIcon, } from 'lucide-react';
 import { motion } from "framer-motion";
 import { api_about } from '@/hooks/about/api_about';
@@ -21,7 +20,6 @@ export default function AdminAboutPage() {
     ]
   });
 
-  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
 
@@ -41,9 +39,7 @@ export default function AdminAboutPage() {
           { label: "新标签", value: "输入详细信息" }
         ]
       });
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   // 保存关于页面数据

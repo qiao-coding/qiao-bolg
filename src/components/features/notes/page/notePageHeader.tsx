@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link';
-import { ArrowLeft, Image, Palette } from 'lucide-react';
+import { ArrowLeft, ImageIcon, Palette } from 'lucide-react';
 import ThemePage from '@/components/ui/public/themePage';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/overlay/dropdown-menu';
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
@@ -34,7 +34,7 @@ export function NotePageHeader({ setIsImageBackground }: { setIsImageBackground:
               纯色背景
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setIsImageBackground(true)}>
-              <Image className="mr-2 w-4 h-4" />
+              <ImageIcon className="mr-2 w-4 h-4" />
               图片背景
             </DropdownMenuItem>
           </DropdownMenuContent>
