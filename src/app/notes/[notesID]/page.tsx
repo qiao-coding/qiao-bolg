@@ -44,6 +44,7 @@ export default function NoteDetailPage() {
     fetchNotes()
   }, [notesID])
 
+  // 处理点击笔记页面跳转
   const handleUid = (notePageID: string) => {
     router.push(`/notes/${notesID}/${notePageID}`);
   };

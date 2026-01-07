@@ -103,6 +103,7 @@ export default function StudyNotesDetail() {
 
     if (!notes) return console.error('未提供笔记ID');
 
+    
     const newNotesPage: NotesPage = {
       id: new Date().getTime(),
       uid: crypto.randomUUID() || '',

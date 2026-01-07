@@ -46,6 +46,7 @@ export default function StudyNotes() {
     notes.flatMap(note => [...(note.tags || []), ...(note.page || []).flatMap(page => page.pageTags || [])])
   ));
 
+  // 获取所有笔记分类(GET)
   const getNotes = async () => {
     try {
       const response = await api_notes.getNote({
