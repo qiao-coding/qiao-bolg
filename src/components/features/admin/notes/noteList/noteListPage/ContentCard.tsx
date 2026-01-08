@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useCallback } from "react";
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { Input } from '@/components/ui/shadcnComponents/forms/input';
 import { Card, CardContent, CardHeader} from '@/components/ui/shadcnComponents/data-display/card';
@@ -34,6 +34,10 @@ export function NoteListPageContentCard(
 ) {
 
     const { resolvedTheme } = useTheme();
+
+    const handleTagsChange = useCallback((tags: string[]) => {
+        setUpdateNotePage({ ...(upNoteNotePage || notePage) as NotesPage, pageTags: tags });
+    }, [upNoteNotePage, notePage, setUpdateNotePage]);
 
 
 
@@ -73,7 +77,7 @@ export function NoteListPageContentCard(
                         标签
                     </Label>
                     <div className="border border-border/30 rounded-xl p-4 bg-gradient-to-br from-card/50 to-card/30">
-                        <AntTabs defaultTags={upNoteNotePage?.pageTags} onTagsChange={(tags) => setUpdateNotePage({ ...(upNoteNotePage || notePage) as NotesPage, pageTags: tags })} />
+                        <AntTabs defaultTags={upNoteNotePage?.pageTags} onTagsChange={handleTagsChange} />
                     </div>
                 </div>
                 <CardHeader className="

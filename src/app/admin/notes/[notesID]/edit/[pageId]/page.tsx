@@ -78,6 +78,9 @@ export default function NoteEditPage() {
       noteId: notePage.noteId,
     };
 
+    console.log(newNotePage);
+    
+
     try {
       setIsSaving(true);
 

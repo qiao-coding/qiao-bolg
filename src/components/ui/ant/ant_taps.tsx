@@ -29,7 +29,7 @@ export const AntTabs = ({
     useEffect(() => {
         if (tags?.length === 0) return;
         onTagsChange?.(tags);
-    }, [tags, onTagsChange]);
+    }, [tags]);
 
     useEffect(() => {
         if (inputVisible) {

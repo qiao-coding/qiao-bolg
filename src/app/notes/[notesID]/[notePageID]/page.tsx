@@ -108,7 +108,7 @@ export default function NotePageDetail() {
             <section aria-labelledby="note-tags" className="mt-8 pt-6 border-t transition-all duration-300 border-border">
               <div className="flex flex-wrap items-center gap-3">
                 <span id="note-tags" className="text-sm text-muted-foreground">标签：</span>
-                {note.tags && note.tags.map((tag, index) => (
+                {notesPage.pageTags && notesPage.pageTags.map((tag, index) => (
                   <span
                     key={`tag-${tag}-${index}`}
                     className="inline-flex items-center text-sm px-3 py-1.5
