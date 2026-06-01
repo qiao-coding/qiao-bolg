@@ -14,7 +14,7 @@ export function NotePageHeader({ setIsImageBackground }: { setIsImageBackground:
      bg-sky-50 dark:bg-slate-700/80 border-border">
       <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
         <Link
-          href="#" onClick={(e) => { e.preventDefault(); window.history.back(); }}
+          href="/notes"
           className="flex items-center transition-colors text-muted-foreground hover:text-primary"
         >
           <ArrowLeft className="mr-2 w-5 h-5" />

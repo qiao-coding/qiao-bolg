@@ -34,6 +34,8 @@ export const AntTabs = ({
     useEffect(() => {
         if (inputVisible) {
             inputRef.current?.focus();
+
+            
         }
     }, [inputVisible]);
 

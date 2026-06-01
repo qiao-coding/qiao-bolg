@@ -6,14 +6,54 @@
 
 
 
-/* 隐藏滚动条 */
-::-webkit-scrollbar {
-  display: none;
+/* 笔记页面显示自定义页面滚动条 */
+html.notes-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+  -ms-overflow-style: auto;
+}
+html.notes-scrollbar::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+}
+html.notes-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+html.notes-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+html.notes-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
 }
 
+/* 默认隐藏滚动条（全局保持干净外观） */
 html {
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+/* 需要滚动条时使用 .custom-scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+  -ms-overflow-style: auto;
 }
 
 
