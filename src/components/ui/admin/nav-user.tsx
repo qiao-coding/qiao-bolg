@@ -20,7 +20,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/shadcnComponents/navigation/sidebar"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
 

@@ -19,56 +19,56 @@ import {
 } from "@/components/ui/shadcnComponents/navigation/sidebar"
 import { NavProjects } from "@/components/ui/admin/nav-projects"
 import { NavUser } from "@/components/ui/admin/nav-user"
-
-// 导航数据
-const data = {
-  user: {
-    name: "管理员",
-    username: "admin@example.com",
-    avatar: "/avatars/admin.jpg",
-  },
- projects: [
-    {
-      name: "仪表盘",
-      url: "/admin",
-      icon: PieChart,
-    },
-    {
-      name: "笔记管理",
-      url: "/admin/notes",
-      icon: NotebookTabs,
-    },
-    {
-      name: '说说管理',
-      url: '/admin/miscellaneous',
-      icon: MessageCircle,
-    },
-    {
-      name: '友链管理',
-      url: '/admin/friend-links',
-      icon: LinkIcon,
-    },
-    {
-      name: '关于设置',
-      url: '/admin/about',
-      icon: Leaf,
-    },
-    {
-      name: '博客设置',
-      icon: SettingsIcon,
-      url: '/admin/blog',
-    },
-    {
-      name: '管理员设置',
-      url: '/admin/admin-settings',
-      icon: UserCog2,
-    }
-
-  ],
-}
+import { useT } from "@/i18n/LocaleContext";
 
 // AppSidebar 组件定义
 export default function AppAdminSidebar() {
+  const t = useT();
+  const data = {
+    user: {
+      name: t('admin.admin'),
+      username: "admin@example.com",
+      avatar: "/avatars/admin.jpg",
+    },
+   projects: [
+      {
+        name: t('admin.dashboard'),
+        url: "/admin",
+        icon: PieChart,
+      },
+      {
+        name: t('admin.notesManagement'),
+        url: "/admin/notes",
+        icon: NotebookTabs,
+      },
+      {
+        name: t('admin.miscellaneousManagement'),
+        url: '/admin/miscellaneous',
+        icon: MessageCircle,
+      },
+      {
+        name: t('admin.friendLinksManagement'),
+        url: '/admin/friend-links',
+        icon: LinkIcon,
+      },
+      {
+        name: t('admin.aboutSettings'),
+        url: '/admin/about',
+        icon: Leaf,
+      },
+      {
+        name: t('admin.blogSettings'),
+        icon: SettingsIcon,
+        url: '/admin/blog',
+      },
+      {
+        name: t('admin.adminSettings'),
+        url: '/admin/admin-settings',
+        icon: UserCog2,
+      }
+    ],
+  }
+
   const [userData, setUserData] = React.useState<{
     name: string;
     username: string;
@@ -80,7 +80,7 @@ export default function AppAdminSidebar() {
     setUserData(userData);
   }, []);
 
-  
+
 
   return (
     <Sidebar
@@ -89,12 +89,12 @@ export default function AppAdminSidebar() {
     >
       <SidebarContent className="flex flex-col gap-0">
         <div className="flex items-center justify-center
-         p-6   bg-sky-200/40  dark:bg-slate-600/40 
+         p-6   bg-sky-200/40  dark:bg-slate-600/40
         ">
           <GalleryVerticalEnd className="h-7 w-7 mr-3 text-primary" />
-          <h1 className="text-xl font-bold bg-gradient-to-r from-primary 
+          <h1 className="text-xl font-bold bg-gradient-to-r from-primary
           to-primary/70 bg-clip-text text-transparent">
-            管理后台
+            {t('admin.panelTitle')}
           </h1>
         </div>
 

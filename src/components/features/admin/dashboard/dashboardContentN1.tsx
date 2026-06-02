@@ -1,7 +1,7 @@
 'use client'
 // 仪表盘内容组件 - 展示管理员仪表盘上的内容卡片
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { Note, NotesPage } from '@/types/note/type';
 
 export default function DashboardContentN1() {

@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import Image from "next/image";
 import { Note, NotesPage } from "@/types/note/type";
+import { useT } from "@/i18n/LocaleContext";
 
 
 const HomeArticles = () => {
+  const t = useT();
   const [articles, setArticles] = useState<NotesPage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,8 +43,8 @@ const HomeArticles = () => {
           const allArticles: NotesPage[] = [...(resData as NotesPage[]).map((note: NotesPage) => ({
             id: note.id,
             uid: note.uid,
-            title: note.title || '无分类',
-            author: note.author || '未知作者',
+            title: note.title || t('home.uncategorized'),
+            author: note.author || t('home.unknownAuthor'),
             dateStart: note.dateStart || '',
             dateEnd: note.dateEnd || '',
             pageTags: Array.isArray(note.pageTags) ? note.pageTags : [],
@@ -64,7 +66,7 @@ const HomeArticles = () => {
           setError(`API错误: ${response.status}`);
         }
       } catch (error) {
-        setError(`网络错误: ${error instanceof Error ? error.message : '未知错误'}`);
+        setError(`${error instanceof Error ? error.message : t('common.blogName')}`);
       } finally {
         setLoading(false);
       }
@@ -116,7 +118,7 @@ const HomeArticles = () => {
             <span className={`text-xs flex-shrink-0 ml-2
                text-gray-500 dark:text-gray-200 
                `}>
-                最后更新：
+                {t('home.lastUpdate')}
               {article.dateEnd}
             </span>
           </div>
@@ -145,7 +147,7 @@ const HomeArticles = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
           <div className="loading loading-spinner loading-lg"></div>
-          <p className={`mt-4 text-white`}>加载中...</p>
+          <p className={`mt-4 text-white`}>{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -156,16 +158,16 @@ const HomeArticles = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <h2 className={`text-4xl font-bold mb-4 text-white`}>最新笔记</h2>
+          <h2 className={`text-4xl font-bold mb-4 text-white`}>{t('home.newestNotes')}</h2>
           <div className={`border px-4 py-3 rounded mb-8 bg-red-500/20 text-red-500`}>
-            <p className="font-bold">获取笔记失败</p>
+            <p className="font-bold">{t('home.fetchError')}</p>
             <p>{error}</p>
           </div>
           <button
             onClick={() => window.location.reload()}
             className="btn btn-error"
           >
-            重新加载
+            {t('home.reload')}
           </button>
         </div>
       </div>
@@ -177,11 +179,11 @@ const HomeArticles = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <h2 className={`text-3xl font-bold mb-4 `}>最新笔记</h2>
-          <p className={`text-lg mb-8 `}>暂无笔记数据</p>
+          <h2 className={`text-3xl font-bold mb-4 `}>{t('home.newestNotes')}</h2>
+          <p className={`text-lg mb-8 `}>{t('home.noNotes')}</p>
           <div className={`rounded-lg p-8 bg-red-500/20 text-red-500`}>
-            <p className={``}>数据库中没有找到笔记数据</p>
-            <p className={`text-sm mt-2 `}>请检查数据库连接或运行数据库种子脚本</p>
+            <p className={``}>{t('home.noNotesInDb')}</p>
+            <p className={`text-sm mt-2 `}>{t('home.checkDb')}</p>
           </div>
         </div>
       </div>
@@ -193,9 +195,9 @@ const HomeArticles = () => {
     <div className="container mx-auto px-4 py-8 min-h-screen">
       <div className="text-center mb-8 text-black dark:text-white">
         <h2 className={`text-3xl font-bold mb-3 `}>
-          最近更新笔记
+          {t('home.latestNotes')}
         </h2>
-        <p className={`text-sm mt-2 `}>找到 {articles.length} 篇笔记</p>
+        <p className={`text-sm mt-2 `}>{t('home.foundNotes', { count: articles.length })}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:w-[80vw] gap-4 m-auto">

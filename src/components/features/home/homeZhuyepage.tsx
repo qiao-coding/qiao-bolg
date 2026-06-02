@@ -8,9 +8,11 @@ import { FaBilibili } from "react-icons/fa6";
 import HomeCard from "./homeCard";
 import { useBlogDataContext } from "@/components/layout/BlogDataProvider";
 import { useEffect, useMemo, useState } from "react";
+import { useT } from "@/i18n/LocaleContext";
 
 
 export function HomeZhuyepage() {
+    const t = useT();
     const { data: session } = useSession()
     const { blogData } = useBlogDataContext();
     const [image, setImage] = useState('/user_img/up.jpg');
@@ -197,7 +199,7 @@ export function HomeZhuyepage() {
                     })}
                 >
                     <p className="text-sm mt-3 text-center font-medium drop-shadow-lg pb-3 text-black/70 dark:text-white">
-                        查看文章
+                        {t('home.viewArticles')}
                     </p>
                     <span className="text-4xl relative left-2 text-black/70 dark:text-white/70">
                         <FaAngleDoubleDown />

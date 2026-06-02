@@ -4,7 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/overlay/dropdown-menu';
 import { format } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
+import { zhCN, enUS } from 'date-fns/locale';
+import { useLocale } from '@/i18n/LocaleContext';
 import { FriendType } from '@/types/friend/type';
 
 
@@ -30,9 +31,11 @@ export function FriendLinksTable({
   onDelete: (id: number) => void;
   onSortChange: (field: 'createdAt' | 'name' | 'status') => void;
 }) {
+  const locale = useLocale();
+
   const formatDate = (dateString: string) => {
     try {
-      return format(new Date(dateString), 'yyyy-MM-dd HH:mm', { locale: zhCN });
+      return format(new Date(dateString), 'yyyy-MM-dd HH:mm', { locale: locale === 'zh' ? zhCN : enUS });
     } catch {
       return dateString;
     }

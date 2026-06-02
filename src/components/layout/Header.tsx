@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import React, {  useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
@@ -10,6 +10,8 @@ import { SearchBox } from "../features/search/SearchBox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/shadcnComponents/overlay/dropdown-menu";
 import { debounce } from "../logic/public/debounce";
 import { useBlogDataContext } from "./BlogDataProvider";
+import { LanguageSwitcher } from "../features/i18n/LanguageSwitcher";
+import { useT } from '@/i18n/LocaleContext';
 
 const Header = () => {
   const { blogData } = useBlogDataContext();
@@ -17,13 +19,14 @@ const Header = () => {
   const { data: session } = useSession()
   const [HeaderStyle, setHeaderStyle] = useState(false);
   const scrollRef = useRef(null);
+  const t = useT();
 
   const HbtnStyle = [
-    { id: 1, title: '主页', href: "/", icons: '/header_img/zhuye.svg' },
-    { id: 2, title: '笔记', href: "/notes", icons: '/header_img/bijiben.svg' },
-    { id: 3, title: '友链', href: "/friend", icons: '/header_img/youlian.svg' },
-    { id: 5, title: '说说', href: "/miscellaneous", icons: '/header_img/shuoshuo.svg' },
-    { id: 6, title: '关于', href: "/about", icons: '/header_img/leaf.svg' },
+    { id: 1, title: t('common.nav.home'), href: "/", icons: '/header_img/zhuye.svg' },
+    { id: 2, title: t('common.nav.notes'), href: "/notes", icons: '/header_img/bijiben.svg' },
+    { id: 3, title: t('common.nav.friend'), href: "/friend", icons: '/header_img/youlian.svg' },
+    { id: 5, title: t('common.nav.miscellaneous'), href: "/miscellaneous", icons: '/header_img/shuoshuo.svg' },
+    { id: 6, title: t('common.nav.about'), href: "/about", icons: '/header_img/leaf.svg' },
   ]
 
 
@@ -155,6 +158,7 @@ const Header = () => {
             <SearchBox />
           </div>
           <ThemeSwitcher />
+          <LanguageSwitcher />
 
           {session ? (
             <DropdownMenu>
@@ -184,7 +188,7 @@ const Header = () => {
                   {session && (
                     <li>
                       <Link href="/adminLogin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200 hover:text-sky-600 dark:hover:text-sky-400 transition-colors duration-200">
-                        后台管理
+                        {t('common.adminPanel')}
                       </Link>
                     </li>
                   )}
@@ -195,7 +199,7 @@ const Header = () => {
                         type="submit"
                         className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-red-400 text-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200"
                       >
-                        退出登录？
+                        {t('common.logout')}
                       </button>
                     </li>
                   )}
@@ -209,7 +213,7 @@ const Header = () => {
               href="/Login"
               className="btn cursor-target btn-dash btn-error hover:text-white transition-all duration-700 ease-in-out"
             >
-              登录
+              {t('common.login')}
             </Link>
           )}
 

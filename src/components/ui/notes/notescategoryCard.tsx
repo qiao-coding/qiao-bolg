@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/shadcnComponents/
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { Eye, CalendarPlus, LucideCalendarCheck2, Edit, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { Note } from '@/types/note/type';
 
 import { NoteCategoryCardHeader } from '../../features/admin/notes/categoryCardHeader';

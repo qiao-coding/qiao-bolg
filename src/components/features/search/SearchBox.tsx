@@ -3,12 +3,14 @@
 // 搜索框组件 - 提供全局搜索功能
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { Button } from '../../ui/shadcnComponents/forms/button';
 import { SearchResult, SearchBoxProps } from '../../../types/components/features/search/SearchBox.type';
 import { NoteSearchResponse } from '../../../types/note/type';
+import { useT } from '@/i18n/LocaleContext';
 
 export function SearchBox({ className }: SearchBoxProps) {
+    const t = useT();
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -154,7 +156,7 @@ export function SearchBox({ className }: SearchBoxProps) {
                             >
                                 <input
                                     ref={inputRef}
-                                    placeholder="搜索笔记..."
+                                    placeholder={t('search.placeholder')}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     onKeyDown={handleKeyDown}
@@ -175,7 +177,7 @@ export function SearchBox({ className }: SearchBoxProps) {
                                     className="bg-sky-500 hover:bg-sky-600 text-white
                    rounded-l-none h-full min-h-10"
                                 >
-                                    查找
+                                    {t('search.search')}
                                 </Button>
                             </motion.div>
                         </motion.div>
@@ -195,11 +197,11 @@ export function SearchBox({ className }: SearchBoxProps) {
                     >
                         {isLoading ? (
                             <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
-                                搜索中...
+                                {t('search.searching')}
                             </div>
                         ) : searchResults.length === 0 ? (
                             <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
-                                {searchQuery.trim() ? '未找到相关笔记' : '输入关键词搜索笔记'}
+                                {searchQuery.trim() ? t('search.noResults') : t('search.hint')}
                             </div>
                         ) : (
                             <section className="space-y-1">
@@ -223,7 +225,7 @@ export function SearchBox({ className }: SearchBoxProps) {
                                             </div>
                                         )}
                                         <div className="text-xs text-sky-600 dark:text-sky-400 mt-1">
-                                            {result.type === 'note' ? '笔记' : '页面'}
+                                            {result.type === 'note' ? t('search.typeNote') : t('search.typePage')}
                                         </div>
                                     </Link>
                                 ))}

@@ -1,5 +1,5 @@
 'use client'
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { ArrowLeft, ImageIcon, Palette } from 'lucide-react';
 import ThemePage from '@/components/ui/public/themePage';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcnComponents/overlay/dropdown-menu';

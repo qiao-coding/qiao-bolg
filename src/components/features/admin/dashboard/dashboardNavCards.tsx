@@ -3,7 +3,7 @@ import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/shadcnC
 import { api_friend } from "@/hooks/friend/api_friend";
 import { api_miscellaneous } from "@/hooks/miscellaneous/api_miscellaneous";
 import { api_notes } from "@/hooks/note/api_notes";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   BookOpen,
   Link as LinkIcon,

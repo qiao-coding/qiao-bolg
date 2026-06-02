@@ -10,9 +10,10 @@ import {
 import { Input } from "@/components/ui/shadcnComponents/forms/input"
 import { Label } from "@/components/ui/shadcnComponents/forms/label"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { AlertCircle, X } from "lucide-react"
+import { useT } from "@/i18n/LocaleContext"
 
 export function LoginFormAdmin({
   className,
@@ -24,6 +25,7 @@ export function LoginFormAdmin({
   const [error, setError] = useState<string | null>(null)
   const [isShaking, setIsShaking] = useState(false)
   const router = useRouter()
+  const t = useT()
 
   const handleLogin = async(e:React.FormEvent) => {
     e.preventDefault();
@@ -45,11 +47,11 @@ export function LoginFormAdmin({
         router.push('/admin');
         router.refresh()
       }else{
-        throw new Error(data.error||'登录失败，请检查账号和密码');
+        throw new Error(data.error||t('admin.loginFailed'));
       }
     } catch (error) {
       setIsLoading(false)
-      const errorMessage = error instanceof Error ? error.message : '登录失败，请稍后重试'
+      const errorMessage = error instanceof Error ? error.message : t('admin.loginRetry')
       setError(errorMessage)
       setIsShaking(true)
       setTimeout(() => setIsShaking(false), 600)
@@ -73,7 +75,7 @@ export function LoginFormAdmin({
       >
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-xl">后台管理登录</CardTitle>
+            <CardTitle className="text-xl">{t('admin.loginTitle')}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin}>
@@ -82,11 +84,11 @@ export function LoginFormAdmin({
                 </div>
                 <div className="grid gap-6">
                   <div className="grid gap-3">
-                    <Label htmlFor="email">账号</Label>
+                    <Label htmlFor="email">{t('admin.account')}</Label>
                     <Input
                       id="email"
                       type="text"
-                      placeholder="请输入账号"
+                      placeholder={t('admin.accountPlaceholder')}
                       required
                       className="cursor-target"
                       value={user}
@@ -96,7 +98,7 @@ export function LoginFormAdmin({
                   </div>
                   <div className="grid gap-3">
                     <div className="flex items-center">
-                      <Label htmlFor="password">密码</Label>
+                      <Label htmlFor="password">{t('admin.password')}</Label>
                     </div>
                     <Input
                       id="password"
@@ -109,7 +111,7 @@ export function LoginFormAdmin({
                     />
                   </div>
                   <Button type="submit" className="w-full cursor-pointer cursor-target" disabled={isLoading}>
-                  {isLoading? '登录中...':'登录'}
+                  {isLoading ? t('admin.loginLoading') : t('common.login')}
                   </Button>
                 </div>
               </div>

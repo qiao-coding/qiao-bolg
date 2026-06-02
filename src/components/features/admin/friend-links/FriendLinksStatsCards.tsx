@@ -3,15 +3,18 @@ import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display
 import { Globe, CheckCircle2, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
+import { zhCN, enUS } from 'date-fns/locale';
+import { useLocale } from '@/i18n/LocaleContext';
 import { FriendType } from '@/types/friend/type';
 
 
 
 export function FriendLinksStatsCards({ friends }: { friends: FriendType[] }) {
+  const locale = useLocale();
+
   const formatDate = (dateString: string) => {
     try {
-      return format(new Date(dateString), 'yyyy-MM-dd HH:mm', { locale: zhCN });
+      return format(new Date(dateString), 'yyyy-MM-dd HH:mm', { locale: locale === 'zh' ? zhCN : enUS });
     } catch {
       return dateString;
     }

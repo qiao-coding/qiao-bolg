@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 import Image from "next/image";
 import { Card } from "@/components/ui/shadcnComponents/data-display/card";
