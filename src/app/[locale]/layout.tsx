@@ -7,7 +7,6 @@ import { prisma } from "@/lib/prisma";
 import { ClientProviders } from "@/components/layout/ClientProviders";
 import { BlogDataProvider } from "@/components/layout/BlogDataProvider";
 import { LocaleProvider, type Locale } from '@/i18n/LocaleContext';
-import { zh } from '@/i18n/dictionaries';
 
 export async function generateMetadata({
   params,
@@ -59,8 +58,10 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  const messages = (await import(`@/messages/${locale}.json`)).default;
+
   return (
-    <NextIntlClientProvider messages={zh} locale={locale}>
+    <NextIntlClientProvider messages={messages} locale={locale}>
       <LocaleProvider locale={locale as Locale}>
         <SessionProvider>
           <BlogDataProvider>

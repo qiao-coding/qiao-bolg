@@ -28,15 +28,12 @@ function Home() {
   );
 }
 
-//ssg构建
 export const generateStaticParams = () => {
-  return [{ id: 1 }];
-};// 变静态文件，提前构建
+  return [{ locale: 'zh' }, { locale: 'en' }];
+};
 
-// 动态路由参数
 export const dynamicParams = false;
 
-// 重新验证时间
 export const revalidate = false;
 
 export default Home;
