@@ -106,7 +106,11 @@ export default function ContentsPageClient({ note }: ContentsPageClientProps) {
                       <h2 className="font-serif text-base text-card-foreground group-hover:text-primary transition-colors truncate">
                         {page.title}
                       </h2>
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-0.5 mt-1 text-xs text-muted-foreground/60">
+                      {/* 可见链接 — AI 可读 */}
+                      <p className="text-[11px] text-muted-foreground/50 font-mono mt-0.5 select-all">
+                        /notes/{note.id}/{page.uid}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-0.5 mt-0.5 text-xs text-muted-foreground/60">
                         {page.author && (
                           <span>{page.author}</span>
                         )}
