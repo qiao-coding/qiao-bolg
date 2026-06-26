@@ -27,6 +27,12 @@ export async function GET() {
         en: `/en/notes/${note?.id}/${p.uid}`,
       },
 
+      // 目录页 URL
+      contentsUrl: {
+        zh: `/zh/notes/${note?.id}/contents`,
+        en: `/en/notes/${note?.id}/contents`,
+      },
+
       dateStart: p.dateStart,
       dateEnd: p.dateEnd,
     };

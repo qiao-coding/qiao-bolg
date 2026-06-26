@@ -50,7 +50,21 @@ export default function NoteDetailClient({ note, notesID }: NoteDetailClientProp
             </svg>
             <span>返回列表</span>
           </Link>
-          <ThemePage />
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/notes/${notesID}/contents`}
+              className="flex items-center text-sm
+               text-[#8A94A6] dark:text-white/65
+               hover:text-[#4A6FA5] transition-colors cursor-target gap-1"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
+              目录
+            </Link>
+            <ThemePage />
+          </div>
         </header>
         <motion.main
           initial={{ opacity: 0, y: 150, scale: 1 }}
