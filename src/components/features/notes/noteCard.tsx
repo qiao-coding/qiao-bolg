@@ -80,33 +80,6 @@ const NotesCard = ({
           </div>
         </div>
       </div>
-
-      {/* 目录卡片 — 样式与主体区分 */}
-      <Link
-        href={`/notes/${id}/contents`}
-        onClick={(e) => e.stopPropagation()}
-        className="block border-t border-border/30 bg-muted/30 dark:bg-muted/10
-          hover:bg-primary/5 transition-colors group/dir cursor-pointer"
-      >
-        <div className="flex items-center gap-3 px-4 py-3">
-          <div className="flex-shrink-0 w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center">
-            <BookOpen className="w-4 h-4 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-card-foreground group-hover/dir:text-primary transition-colors">
-              {title} 目录
-            </p>
-            <p className="text-xs text-muted-foreground/60 flex items-center gap-1 mt-0.5">
-              <FileText className="w-3 h-3" />
-              {page?.length ?? 0} 篇笔记 &middot; 自动生成
-            </p>
-          </div>
-          <svg className="w-4 h-4 text-muted-foreground/30 group-hover/dir:text-primary group-hover/dir:translate-x-0.5 transition-all"
-            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-      </Link>
     </Card>
   );
 };

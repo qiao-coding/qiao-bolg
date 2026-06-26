@@ -47,9 +47,6 @@ export default function ContentsPageClient({ note }: ContentsPageClientProps) {
         >
           {/* 目录头部 — 文档风格 */}
           <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-              <BookOpen className="w-7 h-7 text-primary" />
-            </div>
             <h1 className="text-3xl sm:text-4xl font-serif font-bold text-card-foreground mb-3 tracking-tight">
               {note.title}
             </h1>
