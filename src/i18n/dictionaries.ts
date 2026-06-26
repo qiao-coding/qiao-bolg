@@ -1,6 +1,6 @@
 export const zh = {
   common: {
-    nav: { home: '主页', notes: '笔记', friend: '友链', miscellaneous: '说说', about: '关于' },
+    nav: { home: '主页', notes: '笔记', prompts: '提示词', friend: '友链', miscellaneous: '说说', about: '关于' },
     login: '登录',
     logout: '退出登录？',
     adminPanel: '后台管理',
@@ -227,11 +227,31 @@ export const zh = {
     tagPlaceholder: '添加标签后按回车确认',
     titlePlaceholder: '请输入笔记标题',
   },
+  prompts: {
+    pageTitle: '提示词库',
+    role: '角色',
+    stage: '阶段',
+    whenToUse: '适用时机',
+    inputs: '输入',
+    outputs: '输出',
+    forbidden: '禁止事项',
+    promptBody: '提示词正文',
+    nextPrompt: '下一步',
+    relatedPrompts: '相关提示词',
+    copyPrompt: '复制提示词',
+    copied: '已复制',
+    prevPrompt: '上一篇',
+    nextPromptSingle: '下一篇',
+    noPrompts: '暂无提示词',
+    workflowOrder: '推荐流程',
+    exampleUsage: '示例使用',
+    acceptanceCriteria: '验收标准',
+  },
 };
 
 export const en: typeof zh = {
   common: {
-    nav: { home: 'Home', notes: 'Notes', friend: 'Friends', miscellaneous: 'Moments', about: 'About' },
+    nav: { home: 'Home', notes: 'Notes', prompts: 'Prompts', friend: 'Friends', miscellaneous: 'Moments', about: 'About' },
     login: 'Login',
     logout: 'Log out?',
     adminPanel: 'Admin Panel',
@@ -457,6 +477,26 @@ export const en: typeof zh = {
     operationFailed: 'Operation failed',
     tagPlaceholder: 'Add a tag and press Enter to confirm',
     titlePlaceholder: 'Enter note title',
+  },
+  prompts: {
+    pageTitle: 'Prompt Library',
+    role: 'Role',
+    stage: 'Stage',
+    whenToUse: 'When to use',
+    inputs: 'Inputs',
+    outputs: 'Outputs',
+    forbidden: 'Forbidden',
+    promptBody: 'Prompt Body',
+    nextPrompt: 'Next',
+    relatedPrompts: 'Related',
+    copyPrompt: 'Copy Prompt',
+    copied: 'Copied',
+    prevPrompt: 'Previous',
+    nextPromptSingle: 'Next',
+    noPrompts: 'No prompts found',
+    workflowOrder: 'Workflow Order',
+    exampleUsage: 'Example Usage',
+    acceptanceCriteria: 'Acceptance Criteria',
   },
 };
 
