@@ -84,7 +84,7 @@ const HomeArticles = () => {
     return articles.map((article, index) => (
       <article
         key={`${article.noteId}-${article.id}-${index}`}
-        onClick={() => article.noteId && handleArticleClick(article.noteId, article?.uid)}
+        onClick={() => article.noteId && handleArticleClick(String(article.noteId), article?.uid)}
 
         className={`
           group backdrop-blur-sm rounded-lg border transition-all duration-300 

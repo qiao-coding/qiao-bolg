@@ -2,7 +2,7 @@ export type Note = {
   id: number;
   title: string;
   tags?: string[];
-  titlePicture?: string;
+  titlePicture?: string | null;
   createdAt?: string;
   updatedAt?: string;
   page?: NotesPage[];
@@ -26,7 +26,7 @@ export type NotesPage = {
   dateEnd: string;
   pageId?: string;
   pageTags: string[];
-  noteId?: string;
+  noteId?: number | null | string;
   note?: Note;
 };
 

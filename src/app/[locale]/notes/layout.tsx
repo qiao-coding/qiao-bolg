@@ -1,15 +1,5 @@
-"use client";
-
-import { useEffect } from "react";
+import NotesScrollbarClient from './NotesScrollbarClient';
 
 export default function NotesLayout({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    const html = document.documentElement;
-    html.classList.add("notes-scrollbar");
-    return () => {
-      html.classList.remove("notes-scrollbar");
-    };
-  }, []);
-
-  return <>{children}</>;
+  return <NotesScrollbarClient>{children}</NotesScrollbarClient>;
 }

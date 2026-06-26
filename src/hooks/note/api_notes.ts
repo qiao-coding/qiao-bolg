@@ -185,8 +185,6 @@ function createNotes() {
         }
     }
 
-
-
     return {
         getNote,
         getNoteList,
