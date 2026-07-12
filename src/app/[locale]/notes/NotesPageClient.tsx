@@ -1,10 +1,12 @@
 'use client'
 // 学习笔记页面客户端组件 - 展示笔记列表
 import NextRouter from "@/components/layout/NextRouter";
+import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import NotesCard from "@/components/features/notes/noteCard";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
+import { motion } from "framer-motion";
 import { useT } from "@/i18n/LocaleContext";
 import { Note } from "@/types/note/type";
 
@@ -16,43 +18,56 @@ export default function NotesPageClient({ notes }: NotesPageClientProps) {
   const t = useT();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-50 dark:from-slate-900 dark:to-slate-800"
-         style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}>
+    <TechBackgroundNoGrid>
       <NextRouter>
-        <main className="max-w-[720px] mx-auto pt-28 pb-24 px-6" aria-labelledby="notes-title">
-          {/* 标题区 */}
-          <header className="text-center mb-16">
-            <Title>{t('notes.pageTitle')}</Title>
-            <p className="text-muted-foreground text-sm font-mono mt-2">
-              {notes.length} 篇笔记集
-            </p>
-          </header>
+        <motion.div
+          initial={{ opacity: 0, y: 150 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <main className="max-w-[720px] mx-auto pt-28 pb-24 px-6" aria-labelledby="notes-title">
+            {/* 标题区 */}
+            <header className="mb-10">
+              <Title>{t('notes.pageTitle')}</Title>
+            </header>
 
-          {/* 笔记列表 */}
-          {notes.length > 0 ? (
-            <nav aria-label="笔记列表" className="border-t border-border/60" role="list">
-              {notes.map((note, index) => (
-                <NotesCard key={note.id} note={note} index={index} />
-              ))}
-            </nav>
-          ) : (
-            <section
-              className="flex flex-col justify-center items-center py-20"
-              aria-live="polite"
-            >
-              <p className="text-2xl text-muted-foreground font-bold">
-                {t('notes.noMatch')}
+            {/* 笔记列表 - 独立卡片 + 交错动画 */}
+            {notes.length > 0 ? (
+              <div className="flex flex-col gap-3" role="list">
+                {notes.map((note, index) => (
+                  <motion.div
+                    key={note.id}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: index * 0.06,
+                      ease: "easeOut",
+                    }}
+                  >
+                    <NotesCard note={note} index={index} />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <section
+                className="flex flex-col justify-center items-center py-20"
+                aria-live="polite"
+              >
+                <p className="text-2xl text-muted-foreground font-bold">
+                  {t('notes.noMatch')}
+                </p>
+              </section>
+            )}
+
+            {/* 页脚 */}
+            <footer className="mt-12 text-center">
+              <p className="text-xs text-muted-foreground/50 font-mono">
+                {notes.length} collections
               </p>
-            </section>
-          )}
-
-          {/* 页脚 */}
-          <footer className="mt-16 pt-8 border-t border-border/60 text-center">
-            <p className="text-xs text-muted-foreground/60 font-mono">
-              {notes.length} collections &mdash; notes archive
-            </p>
-          </footer>
-        </main>
+            </footer>
+          </main>
+        </motion.div>
       </NextRouter>
 
       {/* 返回顶部 */}
@@ -67,6 +82,6 @@ export default function NotesPageClient({ notes }: NotesPageClientProps) {
           <ArrowUpIcon aria-hidden="true" />
         </Button>
       </footer>
-    </div>
+    </TechBackgroundNoGrid>
   );
 }

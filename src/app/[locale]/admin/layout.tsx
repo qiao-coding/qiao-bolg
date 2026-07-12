@@ -17,6 +17,7 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import AppAdminSidebar from "@/components/features/admin/appAdmin_Sidebar";
 import { zh } from '@/i18n/dictionaries';
+import { AIChatWidget } from '@/components/features/ai-assistant/AIChatWidget';
 
 
 
@@ -48,11 +49,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   })();
 
 
-  const adminUserCheck = await prisma.adminUser.findUnique({
-    where: {
-      username: session?.user?.email ?? undefined
-    }
-  })
+  const adminUserCheck = session?.user?.email
+    ? await prisma.adminUser.findUnique({
+        where: { username: session.user.email }
+      })
+    : null
 
   const yanzheng = adminUserCheck?.isDynamicEmail
     ? !session || !adminInfo : !session
@@ -109,6 +110,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <main className="min-h-screen mt-15">
           {children}
         </main>
+        <AIChatWidget />
       </SidebarInset>
     </SidebarProvider>
   )

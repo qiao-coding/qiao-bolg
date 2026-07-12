@@ -8,7 +8,7 @@ import Title from "@/components/ui/public/title";
 import { Note, NotesPage } from "@/types/note/type";
 import { NoteListCard } from "@/components/features/notes/noteListCard";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
-import { ArrowUpIcon } from "lucide-react";
+import { ArrowLeft, ArrowUpIcon, List } from "lucide-react";
 import { motion } from "framer-motion";
 import ThemePage from "@/components/ui/public/themePage";
 
@@ -20,93 +20,85 @@ interface NoteDetailClientProps {
 export default function NoteDetailClient({ note, notesID }: NoteDetailClientProps) {
   const router = useRouter();
 
-  // 处理点击笔记页面跳转
   const handleUid = (notePageID: string) => {
     router.push(`/notes/${notesID}/${notePageID}`);
   };
 
   return (
     <TechBackgroundNoGrid>
-      <NextRouter showHeader={false} >
-        <header className="flex justify-between mb-5 container mx-auto px-4 sm:px-6 py-4 flex">
-          <Link
-            href="/notes"
-            className="flex items-center
-             text-[#8A94A6] dark:text-white/65
-             hover:text-[#4A6FA5] transition-colors cursor-target"
-          >
-            <svg
-              className="mr-2 w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            <span>返回列表</span>
-          </Link>
-          <div className="flex items-center gap-3">
+      <NextRouter showHeader={false}>
+        {/* Header */}
+        <header className="sticky top-0 z-30
+                           bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm
+                           border-b border-border/30">
+          <div className="container mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <Link
-              href={`/notes/${notesID}/contents`}
-              className="flex items-center text-sm
-               text-[#8A94A6] dark:text-white/65
-               hover:text-[#4A6FA5] transition-colors cursor-target gap-1"
+              href="/notes"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground
+                         hover:text-primary transition-colors"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                  d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-              目录
+              <ArrowLeft className="w-4 h-4" />
+              <span>返回列表</span>
             </Link>
-            <ThemePage />
+            <div className="flex items-center gap-3">
+              <Link
+                href={`/notes/${notesID}/contents`}
+                className="flex items-center gap-1.5 text-sm text-muted-foreground
+                           hover:text-primary transition-colors"
+              >
+                <List className="w-4 h-4" />
+                目录
+              </Link>
+              <ThemePage />
+            </div>
           </div>
         </header>
+
         <motion.main
-          initial={{ opacity: 0, y: 150, scale: 1 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="max-w-[720px] mx-auto pt-28 pb-24 px-6"
         >
-          <header>
-            <Title>{note && note.title}</Title>
+          {/* 标题 */}
+          <header className="mb-10">
+            <Title>{note?.title}</Title>
           </header>
 
-          <section className="min-h-screen">
-            {note && <NoteListCard
-              note={note}
-              handleUid={handleUid}
-            />}
-          </section>
+          {/* 页面列表 */}
+          {note && (
+            <NoteListCard note={note} handleUid={handleUid} />
+          )}
         </motion.main>
       </NextRouter>
 
-      <nav className=" hidden lg:flex  z-50
-       flex flex-col
-       fixed right-[5%] lg:right-[10%] top-[15%]
-         md:right-[-20%] sm:right-[-20%]
-         h-50
-          " aria-label="笔记目录导航">
-        <span className="text-amber-50 text-base my-4 opacity-70 ">
-          <p className="mx-1 text-sky-500 dark:text-slate-300 text-3xl font-bold">笔记目录</p>
-        </span>
-        <PageNavigation
-          notesPage={note?.page as NotesPage[]}
-          pageStyle='text-amber-50 opacity-70'
-          activeStyle='text-blue-400 font-bold' />
-      </nav>
+      {/* 桌面端右侧页面导航 */}
+      {note?.page && note.page.length > 0 && (
+        <nav
+          className="hidden lg:flex flex-col fixed right-[5%] top-[20%] z-40"
+          aria-label="笔记目录导航"
+        >
+          <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm
+                          rounded-xl border border-border/40 shadow-sm p-4">
+            <p className="text-sm font-semibold text-foreground mb-3">
+              笔记目录
+            </p>
+            <PageNavigation
+              notesPage={note.page as NotesPage[]}
+              pageStyle="text-muted-foreground text-sm"
+              activeStyle="text-primary font-semibold"
+            />
+          </div>
+        </nav>
+      )}
 
-      <footer
-        className="fixed bottom-[3%] left-[3%] "
-      >
+      {/* 返回顶部 */}
+      <footer className="fixed bottom-[3%] left-[3%]">
         <Button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           variant="outline"
           aria-label="返回顶部"
-          className="bg-card/60 text-black dark:text-white"
+          className="bg-card/60 text-foreground"
         >
           <span className="hidden md:inline-block">返回顶部</span>
           <ArrowUpIcon />

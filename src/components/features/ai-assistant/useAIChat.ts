@@ -1,0 +1,224 @@
+"use client";
+
+import { useState, useCallback, useRef, useEffect } from "react";
+import type { ChatMessage, SSEEvent } from "./types";
+
+const STORAGE_KEY = "ai_chat_history";
+const MAX_MESSAGES = 50;
+
+function loadHistory(): ChatMessage[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.slice(-MAX_MESSAGES) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(messages: ChatMessage[]) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(messages.slice(-MAX_MESSAGES))
+    );
+  } catch {
+    // localStorage full or unavailable
+  }
+}
+
+function genId() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+export function useAIChat() {
+  const [messages, setMessages] = useState<ChatMessage[]>(loadHistory);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
+
+  // Persist on change
+  useEffect(() => {
+    saveHistory(messages);
+  }, [messages]);
+
+  const sendMessage = useCallback(
+    async (text: string) => {
+      if (!text.trim() || isStreaming) return;
+
+      const userMsg: ChatMessage = {
+        id: genId(),
+        role: "user",
+        content: text.trim(),
+      };
+
+      const assistantMsg: ChatMessage = {
+        id: genId(),
+        role: "assistant",
+        content: "",
+      };
+
+      setMessages((prev) => [...prev, userMsg, assistantMsg]);
+      setIsStreaming(true);
+
+      const controller = new AbortController();
+      abortRef.current = controller;
+
+      try {
+        const allMessages = [...messages, userMsg].map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+
+        const res = await fetch("/api/ai/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: allMessages }),
+          signal: controller.signal,
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantMsg.id
+                ? { ...m, content: "authError" }
+                : m
+            )
+          );
+          setIsStreaming(false);
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const reader = res.body?.getReader();
+        if (!reader) throw new Error("No response body");
+
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n\n");
+          buffer = lines.pop() ?? "";
+
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            const jsonStr = line.slice(6);
+            try {
+              const event: SSEEvent = JSON.parse(jsonStr);
+              handleSSEEvent(event, assistantMsg.id, setMessages);
+            } catch {
+              // skip malformed events
+            }
+          }
+        }
+
+        // Process remaining buffer
+        if (buffer.startsWith("data: ")) {
+          try {
+            const event: SSEEvent = JSON.parse(buffer.slice(6));
+            handleSSEEvent(event, assistantMsg.id, setMessages);
+          } catch {
+            // skip
+          }
+        }
+      } catch (err) {
+        if ((err as Error).name === "AbortError") return;
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantMsg.id
+              ? { ...m, content: m.content || "error" }
+              : m
+          )
+        );
+      } finally {
+        setIsStreaming(false);
+        abortRef.current = null;
+      }
+    },
+    [messages, isStreaming]
+  );
+
+  const clearHistory = useCallback(() => {
+    setMessages([]);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, []);
+
+  const cancelStreaming = useCallback(() => {
+    abortRef.current?.abort();
+  }, []);
+
+  return { messages, isStreaming, sendMessage, clearHistory, cancelStreaming };
+}
+
+// ---------------------------------------------------------------------------
+// SSE event handler (mutates state via setter)
+// ---------------------------------------------------------------------------
+function handleSSEEvent(
+  event: SSEEvent,
+  assistantId: string,
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>
+) {
+  switch (event.type) {
+    case "text":
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === assistantId
+            ? { ...m, content: m.content + event.content }
+            : m
+        )
+      );
+      break;
+
+    case "tool_call":
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: event.id,
+          role: "tool",
+          content: JSON.stringify(event.args),
+          toolCallId: event.id,
+          toolName: event.name,
+        },
+      ]);
+      break;
+
+    case "tool_result":
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.toolCallId === event.id
+            ? {
+                ...m,
+                isToolResult: true,
+                content: JSON.stringify(event.result),
+              }
+            : m
+        )
+      );
+      break;
+
+    case "error":
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === assistantId && !m.content
+            ? { ...m, content: "error" }
+            : m
+        )
+      );
+      break;
+
+    case "done":
+      // stream complete — nothing extra needed
+      break;
+  }
+}
