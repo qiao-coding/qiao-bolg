@@ -83,11 +83,7 @@ export default function NoteDetailClient({ note, notesID }: NoteDetailClientProp
             <p className="text-sm font-semibold text-foreground mb-3">
               笔记目录
             </p>
-            <PageNavigation
-              notesPage={note.page as NotesPage[]}
-              pageStyle="text-muted-foreground text-sm"
-              activeStyle="text-primary font-semibold"
-            />
+            <PageNavigation notesPage={note.page as NotesPage[]} />
           </div>
         </nav>
       )}
