@@ -107,7 +107,7 @@ export default function NotePageDetailClient({ notesPage }: NotePageDetailClient
                       本页目录
                     </summary>
                     <div className="px-4 pb-4">
-                      <NoteToc items={tocItems} />
+                      <NoteToc items={tocItems} instanceId="toc-mobile" />
                     </div>
                   </details>
                 )}
@@ -138,7 +138,7 @@ export default function NotePageDetailClient({ notesPage }: NotePageDetailClient
               {tocItems.length > 0 && (
                 <aside className="hidden xl:block xl:sticky mx-auto xl:top-24 xl:w-full xl:shrink-0">
                   <div className="max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain pr-1 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}>
-                    <NoteToc items={tocItems} />
+                    <NoteToc items={tocItems} instanceId="toc-desktop" />
                   </div>
                 </aside>
               )}

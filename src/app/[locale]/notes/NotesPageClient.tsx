@@ -1,16 +1,12 @@
 'use client'
-// 学习笔记页面客户端组件 - 展示笔记列表和侧边栏导航
+// 学习笔记页面客户端组件 - 展示笔记列表
 import NextRouter from "@/components/layout/NextRouter";
-import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
-import NotesSideber from "@/components/ui/notes/noteSideber";
-import { motion } from "framer-motion";
-import { Note } from "@/types/note/type";
 import NotesCard from "@/components/features/notes/noteCard";
-import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 import { useT } from "@/i18n/LocaleContext";
+import { Note } from "@/types/note/type";
 
 interface NotesPageClientProps {
   notes: Note[];
@@ -18,80 +14,59 @@ interface NotesPageClientProps {
 
 export default function NotesPageClient({ notes }: NotesPageClientProps) {
   const t = useT();
-  const { data: session } = useSession();
 
   return (
-    <TechBackgroundNoGrid>
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-50 dark:from-slate-900 dark:to-slate-800"
+         style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}>
       <NextRouter>
-        <motion.main
-          initial={{ opacity: 0, y: 150, scale: 1 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          aria-labelledby="notes-title"
-        >
-          {/* 笔记列表内容区域 */}
-          <section className="py-12 px-4 sm:px-6 lg:px-8
-          min-h-screen max-w-5xl mx-auto pt-28">
-            <header>
-              <Title>{t('notes.pageTitle')}</Title>
-            </header>
-            <section className="flex justify-center w-full">
-              {notes.length > 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="grid grid-cols-1 gap-6 w-[90vw]
-                   md:w-[65vw] lg:w-[50vw] m-auto"
-                  role="list"
-                  aria-label="笔记列表"
-                >
-                  {notes.map((note) => (
-                    <motion.article
-                      key={note.id}
-                      className="cursor-pointer w-full"
-                      role="listitem"
-                      whileHover={{ translateY: -15, transition: { duration: 0.3 } }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <NotesCard note={note} />
-                    </motion.article>
-                  ))}
-                </motion.div>
-              ) : (
-                <section
-                  className="flex flex-col justify-center items-center py-20"
-                  aria-live="polite"
-                >
-                  <p className="text-3xl text-sky-400 dark:text-white font-bold">
-                    {t('notes.noMatch')}
-                  </p>
-                </section>
-              )}
-              {notes.length > 0 && session && (
-                <aside
-                  className="hidden lg:block lg:w-[200px] xl:w-[250px] px-0 ml-8"
-                  aria-label="笔记侧边栏"
-                >
-                  <NotesSideber />
-                </aside>
-              )}
+        <main className="max-w-[720px] mx-auto pt-28 pb-24 px-6" aria-labelledby="notes-title">
+          {/* 标题区 */}
+          <header className="text-center mb-16">
+            <Title>{t('notes.pageTitle')}</Title>
+            <p className="text-muted-foreground text-sm font-mono mt-2">
+              {notes.length} 篇笔记集
+            </p>
+          </header>
+
+          {/* 笔记列表 */}
+          {notes.length > 0 ? (
+            <nav aria-label="笔记列表" className="border-t border-border/60" role="list">
+              {notes.map((note, index) => (
+                <NotesCard key={note.id} note={note} index={index} />
+              ))}
+            </nav>
+          ) : (
+            <section
+              className="flex flex-col justify-center items-center py-20"
+              aria-live="polite"
+            >
+              <p className="text-2xl text-muted-foreground font-bold">
+                {t('notes.noMatch')}
+              </p>
             </section>
-          </section>
-        </motion.main>
+          )}
+
+          {/* 页脚 */}
+          <footer className="mt-16 pt-8 border-t border-border/60 text-center">
+            <p className="text-xs text-muted-foreground/60 font-mono">
+              {notes.length} collections &mdash; notes archive
+            </p>
+          </footer>
+        </main>
       </NextRouter>
 
+      {/* 返回顶部 */}
       <footer className="fixed bottom-[3%] left-[3%]">
         <Button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           variant="outline"
           aria-label={t('common.backToTop')}
-          className="bg-card/60 text-black dark:text-white"
+          className="bg-card/60 text-foreground"
         >
           <span className="hidden md:inline-block">{t('common.backToTop')}</span>
           <ArrowUpIcon aria-hidden="true" />
         </Button>
       </footer>
-    </TechBackgroundNoGrid>
+    </div>
   );
 }

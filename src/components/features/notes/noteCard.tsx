@@ -1,86 +1,99 @@
 "use client";
 import { useRouter } from "@/i18n/navigation";
-import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { Card } from "@/components/ui/shadcnComponents/data-display/card";
 import { Note } from "@/types/note/type";
-import { BookOpen, FileText } from "lucide-react";
+import { BookOpen } from "lucide-react";
 
-const NotesCard = ({
-  note
-}: {
-  note: Note;
-}) => {
+const NotesCard = ({ note, index }: { note: Note; index: number }) => {
   const router = useRouter();
+  const { id, title, tags, titlePicture, page, createdAt } = note;
+  const pageCount = page?.length ?? 0;
 
-  const {id, title, tags, titlePicture, page} = note;
-
-  const handleNotesID = (notesID: number) => {
+  const handleClick = (notesID: number) => {
     router.push(`/notes/${notesID}`);
   };
 
+  const dateStr = createdAt
+    ? new Date(createdAt).toLocaleDateString("zh-CN")
+    : null;
+
   return (
-    <Card
-      key={id}
-      className="
-        my-0 py-0
-        w-full overflow-hidden
-        bg-white/60 dark:bg-gray-700/80
-        text-card-foreground
-        rounded-xl border border-border/50
-        shadow-sm hover:shadow-md transition-all duration-300
-        cursor-pointer hover:border-primary/30
-        hover:scale-[1.02] active:scale-[0.98]
-        dark:hover:shadow-primary/20
-        group backdrop-blur-sm
-      "
+    <article
+      onClick={() => handleClick(Number(id))}
+      className="flex items-center gap-5 px-2 py-3.5
+                 border-b border-border/60 cursor-pointer
+                 hover:bg-accent/20 transition-colors duration-200 group"
+      role="listitem"
     >
-      {/* 主体：封面 + 内容 */}
-      <div onClick={() => handleNotesID(Number(id))}
-        className="flex gap-2 md:flex-row-reverse cursor-pointer">
-        {/* 封面图片 */}
-        <div className="relative w-full md:flex-2 h-32 md:h-45 overflow-hidden">
-          {titlePicture ? (
-            <Image
-              fill
-              src={titlePicture}
-              alt={title}
-              className="object-cover group-hover:scale-110 transition-transform duration-300"
-              sizes="lg:80vw, md:25vw, 20vw"
-              loading="lazy"
-            />
-          ) : (
-            <div className="w-full h-full bg-muted flex items-center justify-center group-hover:bg-muted/80 transition-colors">
-              <span className="text-muted-foreground text-lg font-medium text-center px-2 line-clamp-2">{title}</span>
-            </div>
+      {/* 序号 */}
+      <span className="w-8 text-right font-mono text-sm text-muted-foreground shrink-0 hidden sm:block">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      {/* 封面缩略图 */}
+      {titlePicture ? (
+        <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0
+                        ring-1 ring-border/50 group-hover:ring-primary/30 transition-all">
+          <Image
+            fill
+            src={titlePicture}
+            alt={title}
+            className="object-cover group-hover:scale-110 transition-transform duration-300"
+            sizes="56px"
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <div className="w-14 h-14 rounded-lg bg-muted flex items-center justify-center shrink-0
+                        ring-1 ring-border/50 group-hover:ring-primary/30 transition-all">
+          <BookOpen className="w-5 h-5 text-muted-foreground" />
+        </div>
+      )}
+
+      {/* 主体信息 */}
+      <div className="flex-1 min-w-0">
+        <h3 className="text-base font-semibold text-foreground leading-snug
+                       group-hover:text-primary transition-colors line-clamp-1">
+          {title}
+        </h3>
+        <div className="flex items-center gap-3 mt-1 flex-wrap">
+          {/* 标签 */}
+          {tags && tags.length > 0 && (
+            <span className="flex gap-1">
+              {tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[10px] px-2 py-0.5 rounded-full
+                             bg-primary/10 text-primary border border-primary/20
+                             whitespace-nowrap"
+                >
+                  {tag}
+                </span>
+              ))}
+            </span>
+          )}
+          {/* 日期 */}
+          {dateStr && (
+            <span className="text-xs text-muted-foreground font-mono">
+              {dateStr}
+            </span>
           )}
         </div>
-
-        {/* 内容 */}
-        <div className="p-4 w-full flex md:flex-1 flex-col justify-between">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl font-semibold transition-colors line-clamp-2 group-hover:text-primary">
-              {title}
-            </h3>
-            <span className="text-xs px-2 py-1 rounded-sm font-medium bg-gray-700/60 text-white bg-sky-400/60 dark:bg-sky-700 md:absolute top-2 right-2">
-              共 {page?.length} 篇笔记
-            </span>
-          </div>
-
-          {/* 标签 */}
-          <div className="flex flex-wrap gap-1 mb-2">
-            {tags && tags.map((tag, index) => (
-              <span
-                key={index}
-                className="text-xs px-2 py-1 rounded-full font-medium bg-gray-700/60 text-white bg-sky-400/60 dark:bg-sky-700"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
-    </Card>
+
+      {/* 右侧：篇数 + 箭头 */}
+      <div className="flex items-center gap-2 shrink-0">
+        <span className="text-xs font-mono text-muted-foreground bg-muted/50
+                         px-2 py-0.5 rounded-full tabular-nums">
+          {pageCount} 篇
+        </span>
+        <span className="text-muted-foreground/40 text-lg leading-none
+                         group-hover:text-primary group-hover:translate-x-0.5
+                         transition-all duration-200">
+          &rarr;
+        </span>
+      </div>
+    </article>
   );
 };
 
