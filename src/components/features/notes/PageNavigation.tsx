@@ -58,12 +58,13 @@ export default function PageNavigation({
   }
 
   return (
-    <Collapsible defaultOpen>
+    <Collapsible defaultOpen className="transition-all duration-700 ease-out">
       <CollapsibleTrigger asChild>
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start gap-2 text-sm font-semibold group"
+          className="w-full justify-start gap-2 text-sm font-semibold group
+                     transition-all duration-700"
         >
           <ChevronRight className="size-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
           <FileText className="size-4" />
@@ -72,7 +73,7 @@ export default function PageNavigation({
       </CollapsibleTrigger>
 
       <CollapsibleContent>
-        <ScrollArea className="max-h-[60vh] mt-1">
+        <ScrollArea className="max-h-[60vh] mt-1 duration-700 ease-out">
           <div className="flex flex-col gap-0.5 pr-3 pl-2">
             {sorted.map((page) => {
               const id = page.uid || String(page.id)

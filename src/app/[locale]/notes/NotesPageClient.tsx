@@ -6,9 +6,10 @@ import Title from "@/components/ui/public/title";
 import NotesCard from "@/components/features/notes/noteCard";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
-import { motion } from "framer-motion";
 import { useT } from "@/i18n/LocaleContext";
 import { Note } from "@/types/note/type";
+import { RotatingCube } from "@/components/features/mol/RotatingCube";
+import { motion } from "framer-motion";
 
 interface NotesPageClientProps {
   notes: Note[];
@@ -21,49 +22,33 @@ export default function NotesPageClient({ notes }: NotesPageClientProps) {
     <TechBackgroundNoGrid>
       <NextRouter>
         <motion.div
-          initial={{ opacity: 0, y: 150 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 150, scale: 1 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <main className="max-w-[720px] mx-auto pt-28 pb-24 px-6" aria-labelledby="notes-title">
+          <main className="py-12 px-4 sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28" aria-labelledby="notes-title">
             {/* 标题区 */}
-            <header className="mb-10">
+            <header className="text-center mb-16">
               <Title>{t('notes.pageTitle')}</Title>
             </header>
 
-            {/* 笔记列表 - 独立卡片 + 交错动画 */}
+            {/* 笔记列表 */}
             {notes.length > 0 ? (
-              <div className="flex flex-col gap-3" role="list">
+              <nav aria-label="笔记列表" className="border-t border-border/60" role="list">
                 {notes.map((note, index) => (
-                  <motion.div
-                    key={note.id}
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: index * 0.06,
-                      ease: "easeOut",
-                    }}
-                  >
-                    <NotesCard note={note} index={index} />
-                  </motion.div>
+                  <NotesCard key={note.id} note={note} index={index} />
                 ))}
-              </div>
+              </nav>
             ) : (
-              <section
-                className="flex flex-col justify-center items-center py-20"
-                aria-live="polite"
-              >
-                <p className="text-2xl text-muted-foreground font-bold">
-                  {t('notes.noMatch')}
-                </p>
+              <section className="flex flex-col justify-center items-center" aria-live="polite">
+                <p className="text-3xl text-sky-400 dark:text-white font-bold">{t('notes.noMatch')}</p>
               </section>
             )}
 
             {/* 页脚 */}
-            <footer className="mt-12 text-center">
-              <p className="text-xs text-muted-foreground/50 font-mono">
-                {notes.length} collections
+            <footer className="mt-16 pt-8 border-t border-border/60 text-center">
+              <p className="text-xs text-muted-foreground/60 font-mono">
+                {notes.length} collections &mdash; notes archive
               </p>
             </footer>
           </main>
