@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
 import { useT } from "@/i18n/LocaleContext";
 import { Note } from "@/types/note/type";
-import { RotatingCube } from "@/components/features/mol/RotatingCube";
 import { motion } from "framer-motion";
 
 interface NotesPageClientProps {
