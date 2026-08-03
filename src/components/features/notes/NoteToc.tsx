@@ -88,25 +88,18 @@ export function NoteToc({ items, instanceId = "toc" }: { items: TocItem[]; insta
                   }
                 }}
               >
-                {/* 活动项背景 pill */}
+                {/* 活动项背景 pill + 左侧渐变指示点 —— 合并为单个 layoutId 容器，只做一次果冻动画 */}
                 {isActive && (
                   <motion.span
-                    layoutId={`${instanceId}-active-bg`}
+                    layoutId={`${instanceId}-active`}
                     className="absolute inset-0 rounded-lg bg-primary/8 border border-primary/15"
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
-                )}
-
-                {/* 左侧渐变指示点 */}
-                {isActive && (
-                  <motion.span
-                    layoutId={`${instanceId}-active-dot`}
-                    className="absolute -left-[1px] top-1/2 -translate-y-1/2
-                               w-1.5 h-1.5 rounded-full
-                               bg-gradient-to-b from-primary to-primary/50
-                               shadow-[0_0_6px_rgba(var(--primary)/0.3)]"
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
+                    transition={{ type: "spring", stiffness: 700, damping: 32 }}
+                  >
+                    <span className="absolute -left-[1px] top-1/2 -translate-y-1/2
+                                     w-1.5 h-1.5 rounded-full
+                                     bg-gradient-to-b from-primary to-primary/50
+                                     shadow-[0_0_6px_rgba(var(--primary)/0.3)]" />
+                  </motion.span>
                 )}
 
                 {/* 标题文字 */}
