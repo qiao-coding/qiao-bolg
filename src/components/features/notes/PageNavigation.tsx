@@ -8,7 +8,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/shadcnComponents/navigation/collapsible"
 import { Button } from "@/components/ui/shadcnComponents/forms/button"
-import { ScrollArea } from "@/components/ui/shadcnComponents/navigation/scroll-area"
 import type { NotesPage } from "@/types/note/type"
 
 export default function PageNavigation({
@@ -58,7 +57,7 @@ export default function PageNavigation({
   }
 
   return (
-    <Collapsible defaultOpen className="transition-all duration-700 ease-out">
+    <Collapsible defaultOpen={false} className="transition-all duration-700 ease-out">
       <CollapsibleTrigger asChild>
         <Button
           variant="ghost"
@@ -66,14 +65,14 @@ export default function PageNavigation({
           className="w-full justify-start gap-2 text-sm font-semibold group
                      transition-all duration-700"
         >
-          <ChevronRight className="size-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
-          <FileText className="size-4" />
+          <ChevronRight className="size-4 text-sky-500 dark:text-sky-300 transition-transform duration-200 group-data-[state=open]:rotate-90" />
+          <FileText className="size-4 text-sky-500 dark:text-sky-300" />
           笔记目录
         </Button>
       </CollapsibleTrigger>
 
       <CollapsibleContent>
-        <ScrollArea className="max-h-[60vh] mt-1 duration-700 ease-out">
+        <div className="max-h-[60vh] mt-1 overflow-y-auto custom-scrollbar duration-700 ease-out">
           <div className="flex flex-col gap-0.5 pr-3 pl-2">
             {sorted.map((page) => {
               const id = page.uid || String(page.id)
@@ -91,7 +90,7 @@ export default function PageNavigation({
               )
             })}
           </div>
-        </ScrollArea>
+        </div>
       </CollapsibleContent>
     </Collapsible>
   )

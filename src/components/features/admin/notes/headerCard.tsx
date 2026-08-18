@@ -37,19 +37,19 @@ export function NoteHeaderCard({
                 <Card 
                     key={index}
                     className="
-                     bg-white/80 dark:bg-card/80
-                      border border-border/40 shadow-lg 
+                     bg-sky-50/70 dark:bg-card/60
+                      border border-sky-100/70 dark:border-border/40 shadow-lg
                      "
                 >
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm font-medium text-muted-foreground mb-1">{item.title}</p>
-                                <h3 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent group-hover:from-primary/90 group-hover:to-primary transition-all duration-300">
+                                <h3 className="text-3xl font-bold bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent transition-all duration-300">
                                     {item.value}
                                 </h3>
                             </div>
-                            <div className="p-3 rounded-full bg-gradient-to-br from-primary/15 to-primary/10 group-hover:from-primary/20 group-hover:to-primary/15 transition-all duration-300">
+                            <div className="p-3 rounded-full bg-gradient-to-br from-sky-400/15 to-pink-400/10 transition-all duration-300">
                                 {item.icon}
                             </div>
                         </div>

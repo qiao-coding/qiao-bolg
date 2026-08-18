@@ -64,22 +64,24 @@ import React, { useCallback, useState } from "react";
     const displayLanguage = languageDisplayNames[language] || language.charAt(0).toUpperCase() + language.slice(1);
 
     return (
-      <div className="relative group  my-6 overflow-hidden rounded-lg border border-border">
-        <div className={`flex justify-between items-center px-4 py-2 bg-muted/90 dark:bg-muted/90 border-b border-border`}>
-          {/* 语言标签 */}
-          <div className="flex items-center gap-1.5">
-            <ChevronRight className="h-3 w-3 text-muted-foreground" />
-            <span className={`text-xs font-medium font-mono capitalize text-muted-foreground`}>
+      <div className="relative group my-6 overflow-hidden rounded-xl border border-border/60 bg-muted/30 shadow-sm dark:shadow-none">
+        {/* 代码块工具栏（蓝→粉渐变，二次元风） */}
+        <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-gradient-to-r from-sky-100 via-sky-50 to-pink-100 dark:from-sky-950/70 dark:via-slate-900/50 dark:to-pink-950/70 border-b border-border/60">
+          {/* 左侧：窗口圆点 + 语言标签 */}
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="flex items-center gap-1.5 shrink-0" aria-hidden="true">
+              <span className="size-2.5 rounded-full bg-[#ff5f56]" />
+              <span className="size-2.5 rounded-full bg-[#ffbd2e]" />
+              <span className="size-2.5 rounded-full bg-[#27c93f]" />
+            </span>
+            <ChevronRight className="h-3.5 w-3.5 text-pink-400 dark:text-pink-300 shrink-0" />
+            <span className="text-xs font-bold font-mono capitalize text-pink-600 dark:text-pink-300 truncate">
               {displayLanguage}
             </span>
           </div>
           <button
             onClick={handleCopy}
-            className="opacity-100 md:opacity-0 md:group-hover:opacity-100 
-            transition-all duration-200 bg-secondary
-             hover:bg-secondary/80 rounded-md px-2.5 
-             py-1 text-xs font-medium text-secondary-foreground 
-             flex items-center gap-1.5"
+            className="shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200 bg-secondary hover:bg-secondary/80 rounded-md px-2.5 py-1 text-xs font-medium text-secondary-foreground flex items-center gap-1.5"
             aria-label="复制代码"
           >
             {copied ? (
@@ -95,8 +97,8 @@ import React, { useCallback, useState } from "react";
             )}
           </button>
         </div>
-        <div className="hljs">
-          <pre className={`overflow-x-auto text-sm leading-relaxed m-0 !bg-transparent ${className || ''}`}>
+        <div className="hljs" style={{ padding: '1em 1.25em' }}>
+          <pre className={`overflow-x-auto font-mono text-[13px] leading-6 m-0 !bg-transparent [tab-size:2] ${className || ''}`}>
             {children}
           </pre>
         </div>

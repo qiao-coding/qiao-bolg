@@ -2,10 +2,10 @@
 // 笔记详情页面客户端组件 - 展示笔记标题和页面导航
 import NextRouter from "@/components/layout/NextRouter";
 import { Link, useRouter } from "@/i18n/navigation";
-import PageNavigation from "@/components/features/notes/PageNavigation";
+import { NoteDirectory } from "@/components/features/notes/NoteDirectory";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
-import { Note, NotesPage } from "@/types/note/type";
+import { Note } from "@/types/note/type";
 import { NoteListCard } from "@/components/features/notes/noteListCard";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
@@ -15,9 +15,10 @@ import ThemePage from "@/components/ui/public/themePage";
 interface NoteDetailClientProps {
   note: Note;
   notesID: string;
+  allNotes: Note[];
 }
 
-export default function NoteDetailClient({ note, notesID }: NoteDetailClientProps) {
+export default function NoteDetailClient({ note, notesID, allNotes }: NoteDetailClientProps) {
   const router = useRouter();
 
   // 处理点击笔记页面跳转
@@ -85,18 +86,13 @@ export default function NoteDetailClient({ note, notesID }: NoteDetailClientProp
       </NextRouter>
 
       <motion.nav
-        initial={{ opacity: 0, x: 60 }}
+        initial={{ opacity: 0, x: -60 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-        className="hidden min-w-50 lg:flex z-50 flex-col fixed right-[5%] lg:right-[10%] top-[15%] animate-fade-in duration-700"
+        className="hidden lg:flex z-50 fixed left-[4%] top-[15%] animate-fade-in duration-700"
         aria-label="笔记目录导航"
       >
-        <span className="text-amber-50 text-base my-4 opacity-70 transition-all duration-300">
-          <p className="mx-1 text-sky-500 dark:text-slate-300 text-3xl font-bold transition-colors duration-300">笔记目录</p>
-        </span>
-        <PageNavigation
-          notesPage={note?.page as NotesPage[]} 
-          />
+        <NoteDirectory notes={allNotes} activeNoteId={note?.id} />
       </motion.nav>
 
       <footer
@@ -106,7 +102,7 @@ export default function NoteDetailClient({ note, notesID }: NoteDetailClientProp
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           variant="outline"
           aria-label="返回顶部"
-          className="bg-card/60 text-black dark:text-white"
+          className="bg-sky-100/80 text-sky-700 hover:bg-sky-200/70 dark:bg-slate-700/60 dark:text-sky-200"
         >
           <span className="hidden md:inline-block">返回顶部</span>
           <ArrowUpIcon />

@@ -1,16 +1,14 @@
-// 管理员笔记页面组件 - 管理笔记分类和内容
+// 管理员笔记页面组件 - 目录树管理笔记分类和内容
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display/card';
-import { FileText } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhCN, enUS } from 'date-fns/locale';
 import { useLocale, useT } from '@/i18n/LocaleContext';
 import type { CreateNoteInput, Note } from '@/types/note/type';
 import { NoteHeaderCard } from '@/components/features/admin/notes/headerCard';
-import { NoteCategoryCard } from '@/components/ui/notes/notescategoryCard';
-import { Plus } from 'lucide-react';
+import { NoteTreeView } from '@/components/features/admin/notes/treeView/NoteTreeView';
 import {
   CardHeader,
   CardTitle
@@ -22,7 +20,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
 } from '@/components/ui/shadcnComponents/overlay/dialog';
 import { Button } from '@/components/ui/shadcnComponents/forms/button';
 import { Input } from '@/components/ui/shadcnComponents/forms/input';
@@ -36,10 +33,7 @@ export default function StudyNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
   // 新建笔记分类的标题输入
   const [addNotesPage, setAddNotesPage] = useState('');
-  
-  // 当前正在编辑的笔记对象
-  const [putNotesPage, setPutNotesPage] = useState<Note | null>(null);
-  
+
   // 新增笔记弹窗开关
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
 
@@ -72,9 +66,10 @@ export default function StudyNotes() {
 
 
   // 组件挂载时拉取笔记数据
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getNotes();
-  }, [notes.length]);
+  }, []);
 
   // 日期格式化工具函数
   const locale = useLocale();
@@ -88,7 +83,7 @@ export default function StudyNotes() {
   };
 
   // 提交新建笔记分类
-  const submitAddNote = async (e: React.FormEvent) => {
+  const submitAddNote = async (e: FormEvent) => {
     e.preventDefault();
     setIsAddDialogOpen(false);
 
@@ -111,12 +106,31 @@ export default function StudyNotes() {
     }
   };
 
-  // 删除笔记分类
+  // 重命名笔记分类
+  const handleUpdateNote = async (id: number, title: string) => {
+    const current = notes.find(note => note.id === id);
+    try {
+      const response = await api_notes.putNote({
+        id,
+        title,
+        tags: current?.tags || [],
+        createdAt: current?.createdAt || '',
+        updatedAt: new Date().toISOString(),
+        titlePicture: current?.titlePicture || '',
+      });
+      if (response) {
+        setNotes(prev => prev.map(note => note.id === id ? { ...note, title } : note));
+      }
+    } catch (error) {
+      console.error('更新笔记分类失败:', error);
+    }
+  };
+
+  // 删除笔记分类（连带删除其下页面）
   const handleDeleteNote = async (id: number) => {
     try {
       const response = await api_notes.deleteNote(id);
       if (response) {
-        // 成功后从列表移除
         setNotes(prev => prev.filter(note => note.id !== id));
       }
     } catch (error) {
@@ -124,41 +138,46 @@ export default function StudyNotes() {
     }
   };
 
-
-  // 更新笔记分类
-  const handleUpdateNote = async (id: number) => {
-
-    if (!putNotesPage) {
-      return;
+  // 删除笔记页面
+  const handleDeletePage = async (pageId: string) => {
+    try {
+      await api_notes.deleteNotePage(pageId);
+      setNotes(prev => prev.map(note => ({
+        ...note,
+        page: (note.page || []).filter(p => p.pageId !== pageId),
+      })));
+    } catch (error) {
+      console.error('删除笔记失败:', error);
     }
+  };
 
-    // 构造更新后的笔记对象
-    const newPutNote: Note = {
-      id: id,
-      title: putNotesPage?.title || '',
-      createdAt: notes.find(note => note.id === id)?.createdAt || '',
-      updatedAt: new Date().toISOString(),
-      titlePicture: '',
-    };
+  // 移动笔记页面到其他分类（乐观更新 + 失败回滚）
+  const handleMovePage = async (pageId: string, fromNoteId: number, toNoteId: number) => {
+    const from = notes.find(n => n.id === fromNoteId);
+    const page = from?.page?.find(p => p.pageId === pageId);
+    if (!page || fromNoteId === toNoteId) return;
+
+    // 乐观更新
+    setNotes(prev => prev.map(n => {
+      if (n.id === fromNoteId) return { ...n, page: (n.page || []).filter(p => p.pageId !== pageId) };
+      if (n.id === toNoteId) return { ...n, page: [...(n.page || []), page] };
+      return n;
+    }));
 
     try {
-      const response = await api_notes.putNote(newPutNote);
-      if (response) {
-        // 成功后更新本地列表
-        setNotes(prev => prev.map(note => note.id === id ? { ...note, title: newPutNote.title } : note));
-        setPutNotesPage(null);
-      }
+      await api_notes.putNotePage({ ...page, noteId: toNoteId });
     } catch (error) {
-      console.error('更新笔记分类失败:', error);
+      console.error('移动笔记失败:', error);
+      await getNotes(); // 回滚重拉
     }
   };
 
 
   return (
-    <main className="min-h-screen 
+    <main className="min-h-screen
     bg-sky-100/60 dark:bg-gray-900/60
     text-foreground p-6">
-      {/* 顶部筛选与统计卡片 */}
+      {/* 顶部统计卡片 */}
       <section className="mb-6">
         <NoteHeaderCard
           notes={notes}
@@ -166,90 +185,62 @@ export default function StudyNotes() {
         />
       </section>
 
-      {/* 主区域 */}
+      {/* 目录树主区域 */}
       <section className="space-y-6">
         <Card className="
-        bg-white/80 dark:bg-card/60 rounded-lg border border-border/40 shadow-xl
-        border border-border/40 
-        shadow-xl hover:shadow-2xl ">
-          {/* 新增笔记分类头部 */}
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 px-6 pt-6">
+        rounded-lg border border-border/40 shadow-xl
+        hover:shadow-2xl ">
+          <CardHeader className="px-6 pt-6 pb-4">
             <header>
-              <CardTitle className="text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              <CardTitle className="text-xl font-bold bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent">
                 {t('admin.notesCategory')}
               </CardTitle>
             </header>
-            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  size="sm"
-                  className="gap-1 cursor-pointer bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>{t('admin.newCategory')}</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px] backdrop-blur-sm bg-card/90 dark:bg-card/90 border border-border/40 shadow-2xl">
-                <form onSubmit={submitAddNote}>
-                  <DialogHeader>
-                    <DialogTitle className="text-lg font-semibold">{t('admin.newCategoryTitle')}</DialogTitle>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid gap-3">
-                      <Label htmlFor="name-1" className="font-medium">{t('admin.title')}</Label>
-                      <Input
-                        id="name-1"
-                        name="name"
-                        onChange={(e) => setAddNotesPage(e.target.value)}
-                        className="border-border/50 focus:border-primary/50 transition-colors"
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      type="submit"
-                      className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary transition-all duration-300"
-                    >
-                      {t('admin.add')}
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
           </CardHeader>
 
-          {/* 笔记分类列表 */}
-          <CardContent className="p-6 border-0 shadow-none 
-          bg-transparent
-          ">
-            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
-             xl:grid-cols-4 gap-6">
-              {notes.map((note) => (
-                <NoteCategoryCard
-                  key={note.id}
-                  note={note}
-                  formatDate={formatDate}
-                  handleUpdateNote={handleUpdateNote}
-                  handleDeleteNote={handleDeleteNote}
-                  setPutNotesPage={setPutNotesPage}
-                  putNotesPage={putNotesPage || note}
-                />
-              ))}
-            </section>
-
-            {/* 空状态提示 */}
-            {notes.length === 0 && (
-              <section className="text-center py-16 bg-gradient-to-br from-card/60 to-card/40 rounded-lg border border-dashed border-border/60 shadow-inner">
-                <FileText className="mx-auto h-16 w-16 text-muted-foreground/40" />
-                <p className="mt-4 text-lg text-muted-foreground font-medium">
-                  {t('admin.noCategory')}
-                </p>
-                <p className="text-sm text-muted-foreground/70 mt-2">{t('admin.clickToCreate')}</p>
-              </section>
-            )}
+          <CardContent className="p-6 pt-0 border-0 shadow-none bg-transparent">
+            <NoteTreeView
+              notes={notes}
+              formatDate={formatDate}
+              onCreateCategory={() => setIsAddDialogOpen(true)}
+              onRenameCategory={handleUpdateNote}
+              onDeleteCategory={handleDeleteNote}
+              onDeletePage={handleDeletePage}
+              onMovePage={handleMovePage}
+            />
           </CardContent>
         </Card>
       </section>
+
+      {/* 新建分类弹窗 */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] backdrop-blur-sm bg-card/90 dark:bg-card/90 border border-border/40 shadow-2xl">
+          <form onSubmit={submitAddNote}>
+            <DialogHeader>
+              <DialogTitle className="text-lg font-semibold">{t('admin.newCategoryTitle')}</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-3">
+                <Label htmlFor="name-1" className="font-medium">{t('admin.title')}</Label>
+                <Input
+                  id="name-1"
+                  name="name"
+                  onChange={(e) => setAddNotesPage(e.target.value)}
+                  className="border-border/50 focus:border-primary/50 transition-colors"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="submit"
+                className="text-white bg-gradient-to-r from-sky-400 to-pink-400 hover:from-sky-500 hover:to-pink-500 transition-all duration-300"
+              >
+                {t('admin.add')}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

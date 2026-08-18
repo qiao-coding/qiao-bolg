@@ -15,16 +15,16 @@ export function NotePageHeader({ setIsImageBackground }: { setIsImageBackground:
       <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
         <Link
           href="/notes"
-          className="flex items-center transition-colors text-muted-foreground hover:text-primary"
+          className="flex items-center transition-colors text-sky-600/80 dark:text-sky-200/80 hover:text-sky-500 dark:hover:text-sky-200"
         >
           <ArrowLeft className="mr-2 w-5 h-5" />
           <span>返回列表</span>
         </Link>
 
-        <div className="flex items-center gap-4 text-black dark:text-white ">
+        <div className="flex items-center gap-4 text-sky-700 dark:text-sky-200">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="px-2">
+            <Button variant="ghost" size="sm" className="px-2 text-sky-700 dark:text-sky-200 hover:bg-sky-100/70 dark:hover:bg-slate-700/50">
               切换背景
             </Button>
           </DropdownMenuTrigger>

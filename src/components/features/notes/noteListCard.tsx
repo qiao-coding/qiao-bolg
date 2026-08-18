@@ -49,12 +49,12 @@ export function NoteListCard(
                 >
                     {/* 鼠标悬停时的动画效果 */}
                     <motion.div
-                        whileHover={{ scale: 1.05, transition: { duration: 0.3 }, translateY: -10 }}
+                        whileHover={{ scale: 1.02, y: -6, transition: { duration: 0.3 } }}
                     >
                         {/* 卡片主体 */}
                         <div
                             onClick={() => handleUid(note.uid || '')}
-                            className="group bg-card/70 rounded-xl shadow-lg 
+                            className="group rounded-xl shadow-lg
                     hover:shadow-xl transition-all duration-300 overflow-hidden
                      border border-border/50 hover:border-primary/30"
                         >

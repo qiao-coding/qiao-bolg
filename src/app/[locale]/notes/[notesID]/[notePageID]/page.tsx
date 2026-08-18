@@ -34,10 +34,17 @@ export default async function NotePageDetail({
 
   // Serialize Prisma Date objects to strings for client component props
   const notesPage = JSON.parse(JSON.stringify(rawPage));
+  const serializedNote = JSON.parse(JSON.stringify(note));
+
+  // 供左侧目录树展示所有笔记分类
+  const allNotes = await prisma.note.findMany({ include: { page: true } });
+  const serializedAllNotes = JSON.parse(JSON.stringify(allNotes));
 
   return (
     <NotePageDetailClient
+      note={serializedNote}
       notesPage={notesPage}
+      allNotes={serializedAllNotes}
     />
   );
 }
