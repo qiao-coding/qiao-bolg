@@ -2,7 +2,6 @@
 // 笔记详情页面客户端组件 - 展示笔记标题和页面导航
 import NextRouter from "@/components/layout/NextRouter";
 import { Link, useRouter } from "@/i18n/navigation";
-import { NoteDirectory } from "@/components/features/notes/NoteDirectory";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import { Note } from "@/types/note/type";
@@ -15,10 +14,9 @@ import ThemePage from "@/components/ui/public/themePage";
 interface NoteDetailClientProps {
   note: Note;
   notesID: string;
-  allNotes: Note[];
 }
 
-export default function NoteDetailClient({ note, notesID, allNotes }: NoteDetailClientProps) {
+export default function NoteDetailClient({ note, notesID }: NoteDetailClientProps) {
   const router = useRouter();
 
   // 处理点击笔记页面跳转
@@ -84,16 +82,6 @@ export default function NoteDetailClient({ note, notesID, allNotes }: NoteDetail
           </section>
         </motion.main>
       </NextRouter>
-
-      <motion.nav
-        initial={{ opacity: 0, x: -60 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-        className="hidden lg:flex z-50 fixed left-[4%] top-[15%] animate-fade-in duration-700"
-        aria-label="笔记目录导航"
-      >
-        <NoteDirectory notes={allNotes} activeNoteId={note?.id} />
-      </motion.nav>
 
       <footer
         className="fixed bottom-[3%] left-[3%] "

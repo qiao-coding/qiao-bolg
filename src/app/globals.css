@@ -283,7 +283,7 @@ html {
   font-size: 0.875rem;
   margin: 0; /* 外层容器 my-6 负责间距，避免边框盒内出现空隙 */
 }
-.markdown-body thead { background: var(--md-grad); }
+.markdown-body thead { background: var(--md-pink); }
 .markdown-body th {
   padding: 0.6em 0.9em;
   text-align: left;
@@ -299,7 +299,7 @@ html {
   vertical-align: middle;
 }
 .markdown-body tbody tr:nth-child(even) {
-  background: var(--md-blue-soft);
+  background: var(--md-pink-soft);
 }
 .markdown-body tbody tr:hover { background: var(--md-pink-soft); }
 
