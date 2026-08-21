@@ -44,17 +44,17 @@ export function NoteListPageContentCard(
 
 
     return (
-        <Card className="py-0 border border-border/40
-         overflow-hidden 
-         transition-all duration-500 hover:shadow-2xl 
-         backdrop-blur-sm bg-card/80 dark:bg-card/80">
+        <Card className="py-0 relative overflow-hidden rounded-[28px]
+         border border-white/70 bg-card/72 backdrop-blur-md
+         shadow-[0_24px_70px_rgba(255,132,189,0.14)] transition-all duration-500 hover:shadow-2xl
+         dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
 
             <CardContent className="space-y-8 p-8">
 
                 {/* 标题 */}
                 <div className="space-y-3">
                     <Label htmlFor="title" className="text-lg font-semibold flex items-center gap-3  px-4 py-2 rounded-lg border border-border/20">
-                        <FileText className="h-5 w-5 text-primary/80" />
+                        <FileText className="h-5 w-5 text-brand-blue-deep dark:text-brand-blue" />
                         标题
                     </Label>
                     <Input
@@ -73,7 +73,7 @@ export function NoteListPageContentCard(
                     <Label htmlFor="title" className="text-lg 
                     font-semibold flex items-center gap-3  px-4 py-2
                      rounded-lg border border-border/20">
-                        <Tag className="h-5 w-5 text-primary/80" />
+                        <Tag className="h-5 w-5 text-brand-blue-deep dark:text-brand-blue" />
                         标签
                     </Label>
                     <div className="border border-border/30 rounded-xl p-4 bg-gradient-to-br from-card/50 to-card/30">
@@ -85,14 +85,14 @@ export function NoteListPageContentCard(
              pt-4 pb-4 mb-4 px-6">
                     {notePage && (
                         <div className="flex gap-4 mt-2">
-                            <p className="text-sm text-primary/70 flex items-center gap-2 bg-gradient-to-r from-primary/5 to-primary/10 px-3 py-1 rounded-lg border border-border/20">
+                            <p className="text-sm text-brand-blue-deep flex items-center gap-2 bg-brand-blue-soft/60 px-3 py-1 rounded-full border border-brand-blue/20 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]">
                                 <Calendar className="h-3.5 w-3.5 " />
                                 创建时间:  {new Date(notePage.dateStart || '').toLocaleDateString()}
                             </p>
-                            <p className="text-sm text-primary/70 
-                        flex items-center gap-2 
-                        bg-gradient-to-r from-primary/5 to-primary/10
-                         px-3 py-1 rounded-lg border border-border/20">
+                            <p className="text-sm text-brand-blue-deep
+                        flex items-center gap-2
+                        bg-brand-blue-soft/60
+                         px-3 py-1 rounded-full border border-brand-blue/20 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]">
                                 <Calendar className="h-3.5 w-3.5 " />
                                 更新时间:  {new Date(notePage.dateEnd || '').toLocaleDateString()}
                             </p>
@@ -133,14 +133,14 @@ export function NoteListPageContentCard(
                         variant="ghost"
                         onClick={handleCancel}
                         disabled={isSaving}
-                        className="min-w-[120px] border border-border/40 hover:bg-background/80 hover:border-primary/30 transition-all duration-300 h-11 rounded-xl"
+                        className="min-w-[120px] h-11 rounded-full border border-brand-blue/25 bg-white/78 text-brand-blue-deep shadow-sm transition-transform hover:-translate-y-0.5 dark:border-[#8fb7df]/24 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]"
                     >
                         取消
                     </Button>
                     <Button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="min-w-[120px] bg-sky-400/70 dark:bg-slate-400/90 hover:from-primary/90 hover:to-primary transition-all duration-300 flex items-center gap-2 h-11 rounded-xl shadow-lg hover:shadow-xl"
+                        className="min-w-[120px] h-11 rounded-full bg-brand-grad px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5 flex items-center gap-2"
                     >
                         <Save className="h-4 w-4" />
                         {isSaving ? '保存中...' : '保存'}

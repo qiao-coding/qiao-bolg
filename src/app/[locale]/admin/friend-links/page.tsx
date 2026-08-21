@@ -295,11 +295,11 @@ const FriendLinksManagement= () => {
 
 
     return (
-        <div className="min-h-screen   bg-sky-100/60 dark:bg-gray-900/60 text-foreground">
-            <main className="p-6">
+        <div className="text-foreground">
+            <main className="space-y-6">
                 <FriendLinksStatsCards friends={friends} />
 
-                <Card>
+                <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <header>
                             <CardTitle>友链列表</CardTitle>
@@ -315,10 +315,7 @@ const FriendLinksManagement= () => {
                             </Link>
                             <Button
                                 size="sm"
-                                className="gap-1 p-4 text-white
-                                 bg-sky-400/60 dark:bg-slate-500
-                                 hover:bg-sky-400/80 dark:hover:bg-slate-400
-                                 "
+                                className="h-10 gap-1 rounded-full bg-brand-grad px-4 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5"
                                 onClick={() => setIsAddDialogOpen(true)}
                             >
                                 <Plus className="h-4 w-4" />
@@ -338,16 +335,16 @@ const FriendLinksManagement= () => {
                         {isLoading ? (
                             <section className="flex justify-center items-center p-12">
                                 <div className="flex flex-col items-center gap-2">
-                                    <div className="w-8 h-8 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin" />
-                                    <p className="text-slate-500 dark:text-slate-400">加载中...</p>
+                                    <div className="w-8 h-8 rounded-full border-4 border-brand-pink-soft border-t-brand-pink-deep animate-spin" />
+                                    <p className="text-muted-foreground">加载中...</p>
                                 </div>
                             </section>
                         ) : filteredAndSearchedItems.length === 0 ? (
                             <section className="flex flex-col items-center justify-center p-12 text-center">
-                                <div className="w-16 h-16 mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                    <Globe className="h-8 w-8 text-slate-400 dark:text-slate-500" />
+                                <div className="w-16 h-16 mb-4 rounded-full bg-brand-pink-soft dark:bg-[#f0b8d4]/10 flex items-center justify-center">
+                                    <Globe className="h-8 w-8 text-brand-pink-deep/60" />
                                 </div>
-                                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">暂无友链</h3>
+                                <h3 className="text-lg font-medium text-foreground mb-2">暂无友链</h3>
                             </section>
                         ) : (
                             <FriendLinksTable

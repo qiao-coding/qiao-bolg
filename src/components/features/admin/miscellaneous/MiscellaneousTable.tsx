@@ -28,14 +28,14 @@ export function MiscellaneousTable({
   onSortChange: () => void;
 }) {
   return (
-    <div className="rounded-md border">
+    <div className="rounded-[28px] border border-border/40 overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[40px]">
               <input
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                className="h-4 w-4 rounded border-gray-300 accent-brand-pink focus:ring-brand-pink-deep cursor-pointer"
                 checked={selectedItems.length > 0 && selectedItems.length === items.length}
                 onChange={onToggleSelectAll}
               />
@@ -77,7 +77,7 @@ export function MiscellaneousTable({
                 <TableCell>
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                    className="h-4 w-4 rounded border-gray-300 accent-brand-pink focus:ring-brand-pink-deep cursor-pointer"
                     checked={selectedItems.includes(item.id)}
                     onChange={() => onToggleSelectItem(item.id)}
                   />

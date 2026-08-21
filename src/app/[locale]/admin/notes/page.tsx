@@ -199,9 +199,7 @@ export default function StudyNotes() {
 
 
   return (
-    <main className="min-h-screen
-    bg-sky-100/60 dark:bg-gray-900/60
-    text-foreground p-6">
+    <main className="text-foreground">
       {/* 顶部统计卡片 */}
       <section className="mb-6">
         <NoteHeaderCard
@@ -213,11 +211,10 @@ export default function StudyNotes() {
       {/* 目录树主区域 */}
       <section className="space-y-6">
         <Card className="
-        rounded-lg border border-border/40 shadow-xl
-        hover:shadow-2xl ">
+        relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)] hover:shadow-2xl">
           <CardHeader className="px-6 pt-6 pb-4">
             <header>
-              <CardTitle className="text-xl font-bold bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent">
+              <CardTitle className="text-xl font-bold text-brand-grad">
                 {t('admin.notesCategory')}
               </CardTitle>
             </header>
@@ -240,7 +237,7 @@ export default function StudyNotes() {
 
       {/* 新建分类弹窗 */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] backdrop-blur-sm bg-card/90 dark:bg-card/90 border border-border/40 shadow-2xl">
+        <DialogContent className="sm:max-w-[425px] backdrop-blur-md bg-card/95 border border-white/60 rounded-[28px] shadow-[0_24px_70px_rgba(255,132,189,0.14)] dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/95">
           <form onSubmit={submitAddNote}>
             <DialogHeader>
               <DialogTitle className="text-lg font-semibold">{t('admin.newCategoryTitle')}</DialogTitle>
@@ -259,7 +256,7 @@ export default function StudyNotes() {
             <DialogFooter>
               <Button
                 type="submit"
-                className="text-white bg-gradient-to-r from-sky-400 to-pink-400 hover:from-sky-500 hover:to-pink-500 transition-all duration-300"
+                className="rounded-full bg-brand-grad text-white shadow-[0_10px_22px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5"
               >
                 {t('admin.add')}
               </Button>

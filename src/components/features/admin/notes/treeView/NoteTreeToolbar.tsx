@@ -30,7 +30,7 @@ export function NoteTreeToolbar({
     <div className="mb-4 space-y-3">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <FolderTree className="h-4 w-4 text-sky-500 dark:text-sky-300" />
+          <FolderTree className="h-4 w-4 text-brand-blue dark:text-brand-blue" />
           <span>{totalCategories} {t('admin.notesCategory')}</span>
           <span className="text-muted-foreground/50">·</span>
           <span>{t('admin.notesTree.pageCount', { count: totalPages })}</span>
@@ -47,7 +47,7 @@ export function NoteTreeToolbar({
           <Button
             size="sm"
             onClick={onCreateCategory}
-            className="gap-1 cursor-pointer text-white bg-gradient-to-r from-sky-400 to-pink-400 hover:from-sky-500 hover:to-pink-500 transition-all duration-300 shadow-lg shadow-sky-200/60 hover:shadow-xl"
+            className="h-9 gap-1 cursor-pointer rounded-full bg-brand-grad px-4 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5"
           >
             <Plus className="h-4 w-4" />
             {t('admin.newCategory')}
@@ -60,7 +60,7 @@ export function NoteTreeToolbar({
         <Input
           type="text"
           placeholder={t('admin.searchPlaceholder')}
-          className="pl-10 border-border/40 focus:border-primary/50 transition-colors"
+          className="pl-10 border-border/40 focus:border-brand-pink-deep transition-colors"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
         />

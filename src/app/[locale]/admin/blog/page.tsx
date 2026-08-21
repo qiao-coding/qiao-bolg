@@ -243,14 +243,14 @@ export default function AdminBlogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60 py-8">
-      <div className="container mx-auto px-4">
+    <div>
+      <div className="space-y-8">
         <div className="mb-8 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{t('admin.blogManagement')}</h1>
+          <h1 className="text-3xl font-bold text-brand-grad">{t('admin.blogManagement')}</h1>
           <Button
             onClick={handleSave}
             disabled={isSaving}
-            className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-brand-grad px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5"
           >
             <Save className="h-4 w-4 mr-2" />
             {isSaving ? t('admin.saving') : t('admin.saveChanges')}

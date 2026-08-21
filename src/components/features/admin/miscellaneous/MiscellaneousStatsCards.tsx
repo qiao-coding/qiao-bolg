@@ -25,15 +25,15 @@ export function MiscellaneousStatsCards({ miscellaneous }: { miscellaneous: Misc
         whileHover={{ y: -5 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
-        <Card className="hover:shadow-md transition-shadow duration-300">
+        <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md transition-shadow duration-300 hover:shadow-2xl dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">总说说数</p>
                 <h3 className="text-2xl font-bold mt-1">{miscellaneous.length}</h3>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full">
-                <MessageCircle className="h-6 w-6 text-blue-600 dark:text-blue-300" />
+              <div className="p-3 bg-brand-blue-soft dark:bg-[#b9d7f2]/10 rounded-full">
+                <MessageCircle className="h-6 w-6 text-brand-blue-deep dark:text-brand-blue" />
               </div>
             </div>
           </CardContent>
@@ -44,7 +44,7 @@ export function MiscellaneousStatsCards({ miscellaneous }: { miscellaneous: Misc
         whileHover={{ y: -5 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
-        <Card className="hover:shadow-md transition-shadow duration-300">
+        <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md transition-shadow duration-300 hover:shadow-2xl dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>

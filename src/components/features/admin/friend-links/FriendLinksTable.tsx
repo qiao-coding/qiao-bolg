@@ -51,16 +51,16 @@ export function FriendLinksTable({
   };
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-[28px] border border-border/40 overflow-hidden">
       <Table>
-        <TableHeader className="bg-slate-50 dark:bg-slate-900">
+        <TableHeader className="bg-brand-blue-soft/50 dark:bg-[#26334d]/60">
           <TableRow>
             <TableHead className="w-[40px]">
               <input
                 type="checkbox"
                 checked={selectedItems.length > 0 && selectedItems.length === friends.length}
                 onChange={onToggleSelectAll}
-                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                className="h-4 w-4 rounded border-slate-300 accent-brand-pink focus:ring-brand-pink-deep"
               />
             </TableHead>
             <TableHead className="w-[150px]">友链名称</TableHead>
@@ -84,14 +84,14 @@ export function FriendLinksTable({
           {friends.map((friend) => (
             <TableRow
               key={friend.id}
-              className={`group border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors ${!friend.status ? 'opacity-60' : ''}`}
+              className={`group border-b border-border/40 hover:bg-brand-pink-soft/30 dark:hover:bg-[#b9d7f2]/10 transition-colors ${!friend.status ? 'opacity-60' : ''}`}
             >
               <TableCell>
                 <input
                   type="checkbox"
                   checked={selectedItems.includes(friend.id)}
                   onChange={() => onToggleSelectItem(friend.id)}
-                  className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                  className="h-4 w-4 rounded border-slate-300 accent-brand-pink focus:ring-brand-pink-deep"
                 />
               </TableCell>
               <TableCell className="font-medium">
@@ -100,14 +100,14 @@ export function FriendLinksTable({
                     <img
                       src={friend.avatar}
                       alt={friend.name}
-                      className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700"
+                      className="w-8 h-8 rounded-full object-cover border border-border/40"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-                      <User className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                    <div className="w-8 h-8 rounded-full bg-brand-pink-soft dark:bg-[#f0b8d4]/10 flex items-center justify-center">
+                      <User className="h-4 w-4 text-brand-pink-deep dark:text-brand-pink" />
                     </div>
                   )}
-                  <span className="text-slate-900 dark:text-white">{friend.name}</span>
+                  <span className="text-foreground">{friend.name}</span>
                 </div>
               </TableCell>
               <TableCell className="hidden md:table-cell">
@@ -115,15 +115,15 @@ export function FriendLinksTable({
                   href={friend.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-indigo-600 dark:text-indigo-400 hover:underline line-clamp-1"
+                  className="text-brand-blue-deep dark:text-brand-blue hover:underline line-clamp-1"
                 >
                   {friend.url}
                 </a>
               </TableCell>
-              <TableCell className="hidden lg:table-cell text-slate-500 dark:text-slate-400 line-clamp-2">
+              <TableCell className="hidden lg:table-cell text-muted-foreground line-clamp-2">
                 {friend.bio || '暂无简介'}
               </TableCell>
-              <TableCell className="text-slate-500 dark:text-slate-400 text-sm">
+              <TableCell className="text-muted-foreground text-sm">
                 {formatDate(friend.createdAt)}
               </TableCell>
               <TableCell className="text-right">

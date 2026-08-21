@@ -13,7 +13,7 @@ export function FriendLinksDeleteDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="backdrop-blur-md bg-card/95 border border-white/60 rounded-[28px] shadow-[0_24px_70px_rgba(255,132,189,0.14)] dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/95">
         <DialogHeader>
           <DialogTitle className="text-red-600 dark:text-red-400">确认删除</DialogTitle>
           <DialogDescription>

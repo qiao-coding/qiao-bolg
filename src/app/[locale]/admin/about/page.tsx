@@ -91,12 +91,12 @@ export default function AdminAboutPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60 py-8">
-      <div className="container mx-auto px-4 grid grid-cols-1  gap-8" >
+    <main>
+      <div className="grid grid-cols-1 gap-8" >
 
 
         {/* 个人简介编辑区域 */}
-        <section className="bg-white/80 py-8 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-xl shadow-sm">
+        <section className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 py-8 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <span>个人简介</span>
@@ -119,7 +119,7 @@ export default function AdminAboutPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-medium">详细信息</h3>
-                    <Button type="button" onClick={addDetailItem} variant="outline" size="sm">
+                    <Button type="button" onClick={addDetailItem} variant="outline" size="sm" className="rounded-full border border-brand-blue/25 bg-white/78 px-3 py-1.5 text-xs font-medium text-brand-blue-deep shadow-sm dark:border-[#8fb7df]/24 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]">
                       添加项目
                     </Button>
                   </div>
@@ -128,7 +128,7 @@ export default function AdminAboutPage() {
                     <motion.div
                       key={index}
                       className="grid grid-cols-1 md:grid-cols-2 gap-4
-                       p-2 border rounded-lg"
+                       rounded-2xl border border-border/50 bg-card/60 p-3"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
@@ -168,9 +168,9 @@ export default function AdminAboutPage() {
 
                 <div className="flex justify-end pt-4">
                   <Button 
-                    onClick={handleSave} 
+                    onClick={handleSave}
                     disabled={isSaving}
-                    className="flex items-center gap-2"
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-brand-grad px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5"
                   >
                     {isSaving ? (
                       <>

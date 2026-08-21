@@ -148,12 +148,12 @@ const MiscellaneousManagement: React.FC = () => {
 
   return (
     <motion.div 
-      className="min-h-screen  bg-sky-100/60 dark:bg-gray-900/60 text-foreground"
+      className="text-foreground"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <main className="p-6">
+      <main className="space-y-6">
         <MiscellaneousStatsCards miscellaneous={miscellaneous} />
 
         <motion.div
@@ -161,14 +161,14 @@ const MiscellaneousManagement: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
         >
-          <Card>
+          <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle>{t('admin.talkList')}</CardTitle>
               </div>
               <Button
                 size="sm"
-                className="gap-1 hover:shadow-md transition-shadow"
+                className="h-10 gap-1 rounded-full bg-brand-grad px-4 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5"
                 onClick={() => setIsAddDialogOpen(true)}
               >
                 <Plus className="h-4 w-4" />

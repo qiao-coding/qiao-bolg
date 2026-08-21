@@ -19,7 +19,7 @@ export function MiscellaneousAddDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md backdrop-blur-md bg-card/95 border border-white/60 rounded-[28px] shadow-[0_24px_70px_rgba(255,132,189,0.14)] dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/95">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -40,7 +40,7 @@ export function MiscellaneousAddDialog({
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               取消
             </Button>
-            <Button onClick={onSubmit} disabled={!content.trim()}>
+            <Button onClick={onSubmit} disabled={!content.trim()} className="rounded-full bg-brand-grad px-5 text-white shadow-[0_10px_22px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5">
               发布
             </Button>
           </DialogFooter>
@@ -65,7 +65,7 @@ export function MiscellaneousEditDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md backdrop-blur-md bg-card/95 border border-white/60 rounded-[28px] shadow-[0_24px_70px_rgba(255,132,189,0.14)] dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/95">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -86,7 +86,7 @@ export function MiscellaneousEditDialog({
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               取消
             </Button>
-            <Button onClick={onSubmit} disabled={!content.trim()}>
+            <Button onClick={onSubmit} disabled={!content.trim()} className="rounded-full bg-brand-grad px-5 text-white shadow-[0_10px_22px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5">
               保存
             </Button>
           </DialogFooter>
@@ -107,7 +107,7 @@ export function MiscellaneousDeleteDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="backdrop-blur-md bg-card/95 border border-white/60 rounded-[28px] shadow-[0_24px_70px_rgba(255,132,189,0.14)] dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/95">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

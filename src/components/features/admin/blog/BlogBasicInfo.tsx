@@ -24,10 +24,10 @@ export function BlogBasicInfo({
   onDynamicTiltCardChange
 }: BlogBasicInfoProps) {
   return (
-    <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+    <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Home className="h-5 w-5 text-sky-500/60" />
+          <Home className="h-5 w-5 text-brand-blue" />
           博客基本信息
         </CardTitle>
       </CardHeader>
@@ -69,11 +69,11 @@ export function BlogBasicInfo({
               <Input
                 id="enableDynamicTitle"
                 type="checkbox"
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4 rounded accent-brand-pink"
                 checked={blogData.homePage.isDynamicTitle}
                 onChange={(e) => onDynamicTitleChange(e.target.checked)}
               />
-              <span className="text-sm text-gray-600 dark:text-gray-300">
+              <span className="text-sm text-muted-foreground">
                 开启后，主页标题会随着登录者的GitHub用户名动态变化。
               </span>
             </div>
@@ -84,11 +84,11 @@ export function BlogBasicInfo({
               <Input
                 id="enableDynamicTiltCard"
                 type="checkbox"
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4 rounded accent-brand-pink"
                 checked={blogData.homePage.isDynamicTiltCard}
                 onChange={(e) => onDynamicTiltCardChange(e.target.checked)}
               />
-              <span className="text-sm text-gray-600 dark:text-gray-300">
+              <span className="text-sm text-muted-foreground">
                 开启后，主页的倾斜卡卡片的图像会根据登录者GitHub的头像的动态变化。
               </span>
             </div>

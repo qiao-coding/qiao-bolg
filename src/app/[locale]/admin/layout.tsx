@@ -1,23 +1,11 @@
-import ThemePage from "@/components/ui/public/themePage";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-
-} from "@/components/ui/shadcnComponents/navigation/breadcrumb"
-import { Separator } from "@/components/ui/shadcnComponents/navigation/separator"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/shadcnComponents/navigation/sidebar"
 import React from "react";
 import { auth } from "../../../../auth";
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
-import AppAdminSidebar from "@/components/features/admin/appAdmin_Sidebar";
 import { zh } from '@/i18n/dictionaries';
 import { AIChatWidget } from '@/components/features/ai-assistant/AIChatWidget';
+import { AppAdminHeader } from "@/components/features/admin/AppAdminHeader";
 
 
 
@@ -62,20 +50,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   if (yanzheng) {
     return (
-      <div className="flex justify-center items-center h-screen bg-slate-100 dark:bg-slate-800">
-        <div className="flex flex-col justify-center items-center ">
+      <div className="flex min-h-screen items-center justify-center bg-brand-paper text-foreground">
+        <div className="flex flex-col items-center justify-center">
           <RotatingCube />
-          <p className="text-3xl text-sky-400 dark:text-white font-bold">
+          <p className="mt-6 text-3xl font-bold text-brand-blue-deep dark:text-[#dbe9f8]">
             {zh.admin.permissionDenied}
           </p>
-          <div className="flex mt-7 justify-center items-center gap-5">
-            <Link
-              href="/"
-              className="text-sky-400 dark:text-white font-bold mt-4
-              hover:text-sky-600 dark:hover:text-sky-300"
-            >{zh.common.backToHome}</Link>
-          </div>
-
+          <Link
+            href="/"
+            className="mt-7 text-brand-blue-deep dark:text-[#dbe9f8] font-bold hover:text-brand-pink-deep dark:hover:text-[#ffddec]"
+          >{zh.common.backToHome}</Link>
         </div>
       </div>
     )
@@ -84,34 +68,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
 
   return (
-    <SidebarProvider className="bg-sky-100/40  dark:bg-slate-600/40">
-      <AppAdminSidebar />
-      <SidebarInset className=" text-foreground">
-        <header className="flex absolute  justify-between  items-center gap-2 border-b border-border">
-          <div className="flex  shrink-0 top-0 fixed w-full h-16 z-2 
-          items-center flex-2 px-4 bg-sky-200/60 
-           dark:bg-slate-600/40  ">
-            <SidebarTrigger className="-ml-1" />
-            <Separator
-              orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4 "
-            />
-
-            {/* 面包屑导航 */}
-            <Breadcrumb className="fixed top-5 right-10">
-              <BreadcrumbList>
-                <div className="">
-                  <ThemePage />
-                </div>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-        </header>
-        <main className="min-h-screen mt-15">
-          {children}
-        </main>
-        <AIChatWidget />
-      </SidebarInset>
-    </SidebarProvider>
+    <div className="min-h-screen w-full bg-brand-paper text-foreground">
+      <div className="blog-theme-bg relative min-h-screen w-full overflow-hidden">
+        <div className="blog-theme-decor pointer-events-none absolute inset-0" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,132,189,0.045)_1px,transparent_1px),linear-gradient(rgba(255,132,189,0.035)_1px,transparent_1px)] bg-[size:40px_40px] opacity-45 dark:bg-[linear-gradient(90deg,rgba(185,215,242,0.045)_1px,transparent_1px),linear-gradient(rgba(185,215,242,0.035)_1px,transparent_1px)] dark:opacity-35" />
+        <div className="relative">
+          <AppAdminHeader />
+          <main className="mx-auto max-w-6xl px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+            {children}
+          </main>
+          <AIChatWidget />
+        </div>
+      </div>
+    </div>
   )
 }
