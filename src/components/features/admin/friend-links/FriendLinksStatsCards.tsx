@@ -33,21 +33,21 @@ export function FriendLinksStatsCards({ friends }: { friends: FriendType[] }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card>
+      <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">总友链数</p>
               <h3 className="text-2xl font-bold mt-1">{friends.length}</h3>
             </div>
-            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-              <Globe className="h-6 w-6 text-blue-600 dark:text-blue-300" />
+            <div className="p-3 bg-brand-blue-soft dark:bg-[#b9d7f2]/10 rounded-full">
+              <Globe className="h-6 w-6 text-brand-blue-deep dark:text-brand-blue" />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -61,7 +61,7 @@ export function FriendLinksStatsCards({ friends }: { friends: FriendType[] }) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -70,8 +70,8 @@ export function FriendLinksStatsCards({ friends }: { friends: FriendType[] }) {
                 {latestFriend ? formatDate(latestFriend.createdAt) : '暂无'}
               </h3>
             </div>
-            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
-              <Clock className="h-6 w-6 text-purple-600 dark:text-purple-300" />
+            <div className="p-3 bg-brand-pink-soft dark:bg-[#f0b8d4]/10 rounded-full">
+              <Clock className="h-6 w-6 text-brand-pink-deep dark:text-brand-pink" />
             </div>
           </div>
         </CardContent>

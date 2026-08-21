@@ -64,21 +64,21 @@ export function DashboardNavCards() {
     {
       title: "笔记分类",
       value: adminCardData.notesCount,
-      icon: <BookOpen className="h-6 w-6 text-blue-500" />,
+      icon: <BookOpen className="h-6 w-6 text-brand-blue" />,
       color: "blue",
       link: "/admin/notes"
     },
     {
       title: "友链",
       value: adminCardData.friendsCount,
-      icon: <LinkIcon className="h-6 w-6 text-yellow-500" />,
+      icon: <LinkIcon className="h-6 w-6 text-brand-pink" />,
       color: "yellow",
       link: "/admin/friend-links"
     },
     {
       title: "说说",
       value: adminCardData.miscellaneousCount,
-      icon: <MessageCircle className="h-6 w-6 text-pink-500" />,
+      icon: <MessageCircle className="h-6 w-6 text-brand-blue-deep" />,
       color: "pink",
       link: "/admin/miscellaneous"
     }
@@ -86,10 +86,10 @@ export function DashboardNavCards() {
 
   if (isLoading) {
     return (
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 px-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {[...Array(3)].map((_, index) => (
           <div key={index} className="animate-pulse">
-            <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+            <div className="h-32 rounded-[28px] bg-brand-blue-soft/40 dark:bg-[#b9d7f2]/10"></div>
           </div>
         ))}
       </div>
@@ -108,18 +108,18 @@ export function DashboardNavCards() {
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 px-4">
       {statCards.map((card, index) => (
         <Link key={index} href={card.link || "#"} passHref>
-          <Card 
-            className="hover:shadow-lg transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 cursor-pointer"
+          <Card
+            className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md transition-all duration-300 cursor-pointer hover:shadow-2xl dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]"
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              <CardTitle className="text-sm font-medium text-foreground">
                 {card.title}
               </CardTitle>
               {card.icon}
             </CardHeader>
             <CardFooter className="flex-col items-start gap-1.5">
-              <div className="text-2xl font-bold text-slate-800 dark:text-white">{card.value}</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <div className="text-2xl font-bold text-foreground">{card.value}</div>
+              <p className="text-xs text-muted-foreground">
                 总数
               </p>
             </CardFooter>

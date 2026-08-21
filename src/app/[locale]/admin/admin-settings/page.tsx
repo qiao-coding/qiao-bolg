@@ -111,17 +111,17 @@ export default function AdminUsersPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-cover bg-center bg-sky-100/60 dark:bg-gray-900/60 py-8">
-      <div className="container mx-auto px-4 grid grid-cols-1  gap-8" >
+    <main>
+      <div className="grid grid-cols-1 gap-8" >
 
         {/* 添加管理员表单区域 */}
-        <section className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+        <section className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
           <header className="p-6 pb-4">
             <h2 className="flex items-center gap-2 text-xl font-semibold">
               <Plus className="h-5 w-5" />
               {t('admin.adminUsers')}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               {t('admin.addAdminDesc')}
             </p>
           </header>
@@ -161,7 +161,7 @@ export default function AdminUsersPage() {
                 <input
                   id="enhancedProtection"
                   type="checkbox"
-                  className="w-4 h-4 accent-blue-600"
+                  className="w-4 h-4 accent-brand-pink"
                   defaultChecked={adminSettings.enhancedProtection}
                   checked={adminSettings.enhancedProtection}
                   onChange={(e) => setAdminSettings({ ...adminSettings, enhancedProtection: e.target.checked })}
@@ -173,12 +173,12 @@ export default function AdminUsersPage() {
                   {t('admin.enhancedProtection')}
                 </Label>
               </div>
-              <p className="text-xs text-gray-500 mt-1">{t('admin.enhancedProtectionHint')}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t('admin.enhancedProtectionHint')}</p>
             </div>
             <Button
               onClick={handleAdminSave}
               disabled={isAdminLoading}
-              className="w-auto bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
+              className="w-auto rounded-full bg-brand-grad px-6 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5"
             >
               {isAdminLoading ? t('admin.saving') : t('admin.saveAdmin')}
             </Button>
@@ -186,19 +186,19 @@ export default function AdminUsersPage() {
         </section>
 
         {/* 管理员列表区域 */}
-        <section className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+        <section className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
           <header className="p-6 pb-4">
             <h2 className="flex items-center gap-2 text-xl font-semibold">
               {t('admin.adminListCount', { count: adminUsers.length })}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               {t('admin.adminListDesc')}
             </p>
           </header>
           <div>
             <div className="p-6 space-y-3 max-h-96 overflow-y-auto">
               {adminUsers.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <p>{t('admin.noAdmin')}</p>
                 </div>
               ) : (
@@ -207,14 +207,14 @@ export default function AdminUsersPage() {
                     key={user.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    className="flex items-center justify-between p-3 rounded-2xl bg-brand-blue-soft/50 dark:bg-[#26334d]/60"
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <div className="font-medium text-gray-900 dark:text-white">{user.username}</div>
+                        <div className="font-medium text-foreground">{user.username}</div>
 
                       </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      <div className="text-sm text-muted-foreground mt-1">
                         {t('admin.createdAt')}{new Date(user.createdAt).toLocaleString()}
                       </div>
                     </div>

@@ -13,10 +13,10 @@ interface HomeIconsProps {
 
 export function HomeIcons({ homeIcons, onHomeIconChange }: HomeIconsProps) {
   return (
-    <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+    <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Link className="h-5 w-5 text-purple-500" />
+          <Link className="h-5 w-5 text-brand-pink" />
           主页图标链接
         </CardTitle>
       </CardHeader>

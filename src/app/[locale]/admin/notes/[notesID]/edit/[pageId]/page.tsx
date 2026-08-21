@@ -117,12 +117,10 @@ export default function NoteEditPage() {
   // 加载状态
   if (loading) {
     return (
-      <main className="min-h-screen      
-      bg-sky-200/60 dark:bg-slate-600/80
-      p-6 flex flex-col items-center justify-center">
+      <main className="flex flex-col items-center justify-center py-16">
         <Card className="w-full py-0 max-w-4xl shadow-lg border border-border/20 overflow-hidden transition-all duration-500 hover:shadow-xl">
-          <CardHeader className="bg-gradient-to-r py-6 from-primary/10 to-primary/5 border-b border-border/10">
-            <CardTitle className="flex items-center gap-2 text-primary">
+          <CardHeader className="border-b border-border/20 bg-brand-blue-soft/40 dark:bg-[#b9d7f2]/10 py-6">
+            <CardTitle className="flex items-center gap-2 text-brand-blue-deep dark:text-[#dbe9f8]">
               <FileText className="h-5 w-5" />
               加载笔记内容...
             </CardTitle>
@@ -138,7 +136,7 @@ export default function NoteEditPage() {
   // 错误状态
   if (error) {
     return (
-      <main className="min-h-screen bg-background p-6 flex flex-col items-center justify-center">
+      <main className="flex flex-col items-center justify-center py-16">
         <Card className="w-full max-w-2xl px-6 py-8">
           <Alert variant="destructive" className="mb-4">
             <AlertTitle>错误</AlertTitle>
@@ -157,8 +155,7 @@ export default function NoteEditPage() {
   }
 
   return (
-    <main className="min-h-screen      bg-sky-200/60 dark:bg-slate-600/80
- backdrop-blur-sm text-foreground p-4 sm:p-6 transition-colors duration-300  mx-auto">
+    <main className="text-foreground transition-colors duration-300">
       {/* 页面标题栏 */}
       <header className="flex items-center mb-8">
         <div className="flex items-center gap-4">
@@ -169,7 +166,7 @@ export default function NoteEditPage() {
             className="rounded-full w-full p-2 hover:bg-primary/10 hover:text-primary transition-colors duration-300 group"
           >
             <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform duration-300" />
-            <h1 className="text-3xl cursor-pointer font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">返回列表</h1>
+            <h1 className="text-3xl cursor-pointer font-bold text-brand-grad">返回列表</h1>
           </Button>
         </div>
       </header>

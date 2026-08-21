@@ -155,12 +155,10 @@ export default function StudyNotesDetail() {
   };
 
   return (
-    <main className="min-h-screen 
-     bg-sky-100/60 dark:bg-slate-600/80
-     text-foreground p-6 lg:pt-16">
+    <main className="text-foreground">
       <NoteListHeader title={notes?.title || ''} />
 
-      <Card className="backdrop-blur-sm bg-card/80 dark:bg-card/80 border border-border/40 shadow-xl hover:shadow-2xl transition-all duration-300">
+      <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)] transition-all duration-300 hover:shadow-2xl">
         {/* 添加笔记卡片头部组件 */}
         <NoteListCardHeader
           title="笔记列表"
@@ -174,7 +172,7 @@ export default function StudyNotesDetail() {
           onSubmit={submitAddNote}
         />
 
-        <CardContent className='bg-card/80 dark:bg-card/80'>
+        <CardContent>
           {/* 搜索区域 */}
           <section className="flex flex-col md:flex-row md:items-center gap-4 mb-6 p-4">
             <div className="relative flex-grow">
@@ -206,7 +204,7 @@ export default function StudyNotesDetail() {
           
           {/* 分页信息区域 */}
           <footer className="flex items-center justify-between mt-6">
-            <div className="text-sm text-muted-foreground bg-gradient-to-r from-primary/10 to-primary/5 px-3 py-2 rounded-lg border border-border/20">
+            <div className="text-sm text-muted-foreground rounded-full bg-brand-blue-soft/60 text-brand-blue-deep border border-brand-blue/20 px-3 py-2 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]">
               共 {notesPage.length} 条 {notes?.title} 笔记
             </div>
           </footer>

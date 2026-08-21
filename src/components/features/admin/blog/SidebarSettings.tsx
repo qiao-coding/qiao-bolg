@@ -23,10 +23,10 @@ export function SidebarSettings({
   onDynamicEmailChange
 }: SidebarSettingsProps) {
   return (
-    <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+    <Card className="relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <User className="h-5 w-5 text-orange-500" />
+          <User className="h-5 w-5 text-brand-blue-deep" />
           侧边栏设置
         </CardTitle>
       </CardHeader>
@@ -55,7 +55,7 @@ export function SidebarSettings({
           </div>
 
           <div>
-            <h3 className="text-lg font-medium mb-3">联系信息</h3>
+            <h3 className="text-lg font-medium mb-3 text-foreground">联系信息</h3>
             <div className="space-y-4">
               {notesSidebar.socialLinks.map((contact) => (
                 <div key={contact.id} className="flex gap-2">
@@ -83,11 +83,11 @@ export function SidebarSettings({
               <Input
                 id="useGithubName"
                 type="checkbox"
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4 rounded accent-brand-pink"
                 checked={notesSidebar.isDynamicName}
                 onChange={(e) => onDynamicNameChange(e.target.checked)}
               />
-              <span className="text-sm text-gray-600 dark:text-gray-300">
+              <span className="text-sm text-muted-foreground">
                 使用默认呢称（如GitHub昵称）
               </span>
             </div>
@@ -98,11 +98,11 @@ export function SidebarSettings({
               <Input
                 id="hideEmail"
                 type="checkbox"
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4 rounded accent-brand-pink"
                 checked={notesSidebar.isDynamicEmail}
                 onChange={(e) => onDynamicEmailChange(e.target.checked)}
               />
-              <span className="text-sm text-gray-600 dark:text-gray-300">
+              <span className="text-sm text-muted-foreground">
                 隐藏邮箱地址
               </span>
             </div>

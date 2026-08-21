@@ -147,7 +147,7 @@ export function NoteTreeView({
       {filteredNotes.length === 0 ? (
         <NoteTreeEmpty hasAnyNotes={notes.length > 0} onResetSearch={() => setSearchQuery('')} />
       ) : (
-        <div className="max-h-[65vh] min-h-[240px] rounded-lg border border-border/40 bg-card/50 p-2 custom-scrollbar overflow-y-auto">
+        <div className="max-h-[65vh] min-h-[240px] rounded-[28px] border border-border/40 bg-card/50 p-2 custom-scrollbar overflow-y-auto">
           {filteredNotes.map((note) => (
             <NoteTreeFolder
               key={note.id}

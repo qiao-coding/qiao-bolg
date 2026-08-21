@@ -23,7 +23,7 @@ import { Note } from "@/types/note/type"
 const chartConfig = {
   desktop: {
     label: "相关笔记",
-    color: "#3b82f6",
+    color: "var(--brand-pink)",
   }
 } satisfies ChartConfig
 
@@ -50,11 +50,11 @@ export function DashboardContentChart() {
   }))
 
   return (
-    <Card className="pt-0 mx-4 w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-300">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b border-slate-200/50 dark:border-slate-700/50 py-5 sm:flex-row">
+    <Card className="pt-0 mx-4 w-full relative overflow-hidden rounded-[28px] border border-white/70 bg-card/72 backdrop-blur-md shadow-[0_24px_70px_rgba(255,132,189,0.14)] transition-all duration-300 hover:shadow-2xl dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)]">
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b border-border/40 py-5 sm:flex-row dark:border-[#8fb7df]/20">
         <div className="grid flex-1 gap-1">
-          <CardTitle className="text-slate-800 dark:text-white">笔记分布图</CardTitle>
-          <CardDescription className="text-slate-600 dark:text-slate-400">
+          <CardTitle className="text-foreground">笔记分布图</CardTitle>
+          <CardDescription className="text-muted-foreground">
             展示笔记的分布情况
           </CardDescription>
         </div>
@@ -71,13 +71,13 @@ export function DashboardContentChart() {
               top: 20,
             }}
           >
-            <CartesianGrid vertical={false} stroke="#e2e8f0" strokeDasharray="3 3" />
+            <CartesianGrid vertical={false} stroke="var(--border)" strokeDasharray="3 3" />
             <XAxis
               dataKey="month"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tick={{ fill: '#64748b', fontSize: 12 }}
+              tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
             />
             <ChartTooltip
               cursor={false}
@@ -88,16 +88,16 @@ export function DashboardContentChart() {
                 />
               }
             />
-            <Bar 
-              dataKey="desktop" 
-              fill="#3b82f6" 
+            <Bar
+              dataKey="desktop"
+              fill="var(--brand-pink)"
               radius={8}
               strokeWidth={2}
             >
               <LabelList
                 position="top"
                 offset={12}
-                className="fill-slate-700 dark:fill-slate-300"
+                className="fill-[var(--muted-foreground)]"
                 fontSize={12}
               />
             </Bar>

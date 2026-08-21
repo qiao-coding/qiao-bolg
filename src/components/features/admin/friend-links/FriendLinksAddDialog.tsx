@@ -22,7 +22,7 @@ export function FriendLinksAddDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md backdrop-blur-md bg-card/95 border border-white/60 rounded-[28px] shadow-[0_24px_70px_rgba(255,132,189,0.14)] dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/95">
         <DialogHeader>
           <DialogTitle>添加新友链</DialogTitle>
           <DialogDescription>
@@ -31,7 +31,7 @@ export function FriendLinksAddDialog({
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">友链名称</label>
+            <label className="text-sm font-medium text-foreground">友链名称</label>
             <Input
               placeholder="请输入友链名称"
               value={formData.name}
@@ -40,7 +40,7 @@ export function FriendLinksAddDialog({
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">友链URL</label>
+            <label className="text-sm font-medium text-foreground">友链URL</label>
             <Input
               placeholder="请输入友链URL，以http(s)://开头"
               value={formData.url}
@@ -49,7 +49,7 @@ export function FriendLinksAddDialog({
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">头像URL（可选）</label>
+            <label className="text-sm font-medium text-foreground">头像URL（可选）</label>
             <Input
               placeholder="请输入头像图片URL"
               value={formData.avatar || ''}
@@ -58,12 +58,12 @@ export function FriendLinksAddDialog({
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">简介（可选）</label>
+            <label className="text-sm font-medium text-foreground">简介（可选）</label>
             <textarea
               placeholder="请输入友链简介"
               value={formData.bio || ''}
               onChange={(e) => onFormChange({ ...formData, bio: e.target.value })}
-              className="min-h-[80px] w-full rounded-md border border-slate-300 bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              className="min-h-[80px] w-full rounded-md border border-border/40 bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-pink-deep focus:border-brand-pink-deep"
             />
           </div>
           <div className="flex items-center justify-between">
@@ -85,7 +85,7 @@ export function FriendLinksAddDialog({
           </Button>
           <Button
             onClick={onSubmit}
-            className="bg-sky-600 hover:bg-sky-700 text-white"
+            className="rounded-full bg-brand-grad px-5 text-white shadow-[0_10px_22px_rgba(255,143,199,0.28)] transition-transform hover:-translate-y-0.5"
             disabled={!formData.name.trim() || !formData.url.trim()}
           >
             添加

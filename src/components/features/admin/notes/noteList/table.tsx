@@ -94,17 +94,17 @@ export function NoteListTable({
   };
 
   return (
-    <div className="rounded-lg 
-    border border-border/40 shadow-sm 
-    bg-card/50
+    <div className="rounded-[28px]
+    border border-border/40 shadow-sm
+    bg-card/50 overflow-hidden
     ">
       <Table>
-        <TableHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
+        <TableHeader className="bg-brand-blue-soft/50 dark:bg-[#26334d]/60">
           <TableRow className="hover:bg-primary/5 transition-colors duration-200">
             <TableHead className="w-[40px] border-r border-border/30">
               <input
                 type="checkbox"
-                className="h-4 w-4 rounded border-border/60 text-primary focus:ring-primary/50 focus:border-primary/50 transition-colors"
+                className="h-4 w-4 rounded border-border/60 accent-brand-pink focus:ring-brand-pink-deep transition-colors"
                 checked={selectedNotes.length > 0 && selectedNotes.length === pages.length}
                 onChange={onToggleSelectAll}
               />
@@ -114,14 +114,14 @@ export function NoteListTable({
               onClick={() => onSortChange('title')}
             >
               <div className="flex items-center gap-2">
-                <FileText className="h-4 w-4 text-primary/80" />
+                <FileText className="h-4 w-4 text-brand-blue-deep dark:text-brand-blue" />
                 <span className="font-medium">标题</span>
                 {renderSortIcon('title')}
               </div>
             </TableHead>
             <TableHead className="border-r border-border/30">
               <div className="flex items-center gap-2">
-                <Tag className="h-4 w-4 text-primary/80" />
+                <Tag className="h-4 w-4 text-brand-blue-deep dark:text-brand-blue" />
                 <span className="font-medium">标签</span>
               </div>
             </TableHead>
@@ -130,7 +130,7 @@ export function NoteListTable({
               onClick={() => onSortChange('dateStart')}
             >
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-primary/80" />
+                <Calendar className="h-4 w-4 text-brand-blue-deep dark:text-brand-blue" />
                 <span className="font-medium">创建时间</span>
                 {renderSortIcon('dateStart')}
               </div>
@@ -152,8 +152,8 @@ export function NoteListTable({
                   <input
                     type="checkbox"
                     className="h-4 w-4
-                     rounded border-border/60 text-primary
-                      cursor-pointer focus:ring-primary/50 focus:border-primary/50 transition-colors"
+                     rounded border-border/60 accent-brand-pink
+                      cursor-pointer focus:ring-brand-pink-deep transition-colors"
                     checked={selectedNotes.includes(page.id)}
                     onChange={() => onToggleSelectItem(page.id)}
                   />
@@ -164,7 +164,7 @@ export function NoteListTable({
                 <TableCell className="border-r border-border/30">
                   <div className="flex flex-wrap gap-1">
                     {page.pageTags.map((tag: string) => (
-                      <Badge key={tag} variant="secondary" className="bg-gradient-to-r from-primary/10 to-primary/5 text-primary/90 border border-primary/20 hover:from-primary/15 hover:to-primary/10 transition-colors duration-200">
+                      <Badge key={tag} variant="secondary" className="bg-brand-pink-soft text-brand-pink-deep border border-brand-pink/30 dark:bg-[#f0b8d4]/15 dark:text-[#ffddec] transition-colors duration-200">
                         {tag}
                       </Badge>
                     ))}
@@ -179,9 +179,9 @@ export function NoteListTable({
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="backdrop-blur-sm bg-card/90 dark:bg-card/90 border border-border/40 shadow-lg">
+                    <DropdownMenuContent align="end" className="backdrop-blur-md bg-card/95 border border-white/60 shadow-lg dark:border-[#8fb7df]/20">
                       <DropdownMenuItem className="hover:bg-primary/10 transition-colors duration-200">
-                        <Edit3 className="h-4 w-4 mr-2 text-primary/80" />
+                        <Edit3 className="h-4 w-4 mr-2 text-brand-blue-deep dark:text-brand-blue" />
                         <Link href={`/admin/notes/${noteId}/edit/${page.pageId}`} className="w-full text-left">
                           编辑
                         </Link>
@@ -196,7 +196,7 @@ export function NoteListTable({
                             删除
                           </DropdownMenuItem>
                         </DialogTrigger>
-                        <DialogContent className="backdrop-blur-sm bg-card/90 dark:bg-card/90 border border-border/40 shadow-2xl">
+                        <DialogContent className="backdrop-blur-md bg-card/95 border border-white/60 rounded-[28px] shadow-[0_24px_70px_rgba(255,132,189,0.14)] dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/95">
                           <DialogHeader>
                             <DialogTitle>确认删除</DialogTitle>
                             <DialogDescription>
