@@ -31,6 +31,7 @@ function setup(overrides: Partial<Parameters<typeof NoteTreeView>[0]> = {}) {
     onCreateCategory: vi.fn(),
     onRenameCategory: vi.fn(),
     onDeleteCategory: vi.fn(),
+    onCreatePage: vi.fn(),
     onDeletePage: vi.fn(),
     onMovePage: vi.fn(),
     ...overrides,

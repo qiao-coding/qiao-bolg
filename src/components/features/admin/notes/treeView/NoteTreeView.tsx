@@ -15,6 +15,7 @@ interface NoteTreeViewProps {
   onCreateCategory: () => void;
   onRenameCategory: (id: number, title: string) => void;
   onDeleteCategory: (id: number) => void;
+  onCreatePage: (noteId: number, title: string) => void;
   onDeletePage: (pageId: string) => void;
   onMovePage: (pageId: string, fromNoteId: number, toNoteId: number) => void;
 }
@@ -30,6 +31,7 @@ export function NoteTreeView({
   onCreateCategory,
   onRenameCategory,
   onDeleteCategory,
+  onCreatePage,
   onDeletePage,
   onMovePage,
 }: NoteTreeViewProps) {
@@ -160,6 +162,7 @@ export function NoteTreeView({
               onDrop={handleFolderDrop}
               onRenameCategory={onRenameCategory}
               onDeleteCategory={onDeleteCategory}
+              onCreatePage={onCreatePage}
               onDeletePage={onDeletePage}
               onMovePage={onMovePage}
               onPageDragStart={handlePageDragStart}

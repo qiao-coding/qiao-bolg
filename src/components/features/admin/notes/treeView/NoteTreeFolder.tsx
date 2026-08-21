@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { ChevronRight, Folder, Pencil, Trash2 } from 'lucide-react';
+import { ChevronRight, FilePlus, Folder, Pencil, Trash2 } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { Collapsible, CollapsibleTrigger } from '@/components/ui/shadcnComponents/navigation/collapsible';
@@ -24,6 +24,7 @@ interface NoteTreeFolderProps {
   onDrop: (e: React.DragEvent, id: number) => void;
   onRenameCategory: (id: number, title: string) => void;
   onDeleteCategory: (id: number) => void;
+  onCreatePage: (noteId: number, title: string) => void;
   onDeletePage: (pageId: string) => void;
   onMovePage: (pageId: string, fromNoteId: number, toNoteId: number) => void;
   onPageDragStart: (e: React.DragEvent, page: NotesPage, noteId: number) => void;
@@ -42,6 +43,7 @@ export function NoteTreeFolder({
   onDrop,
   onRenameCategory,
   onDeleteCategory,
+  onCreatePage,
   onDeletePage,
   onMovePage,
   onPageDragStart,
@@ -53,6 +55,7 @@ export function NoteTreeFolder({
   const chevronRef = useRef<SVGSVGElement>(null);
   const prevOpen = useRef<boolean | null>(null);
   const [draftTitle, setDraftTitle] = useState(note.title);
+  const [draftPageTitle, setDraftPageTitle] = useState('');
 
   useEffect(() => {
     setDraftTitle(note.title);
@@ -131,6 +134,22 @@ export function NoteTreeFolder({
     .map((n) => ({ id: n.id, title: n.title }));
 
   const folderMenuItems: MenuItem[] = [
+    {
+      label: t('admin.notesTree.newPage'),
+      icon: <FilePlus className="h-4 w-4" />,
+      inputDialog: {
+        title: t('admin.notesTree.newPageTitle'),
+        label: t('admin.title'),
+        placeholder: t('admin.notesTree.newPagePlaceholder'),
+        value: draftPageTitle,
+        onChange: setDraftPageTitle,
+        confirmText: t('admin.add'),
+        onConfirm: (value: string) => {
+          if (value.trim()) onCreatePage(note.id, value.trim());
+          setDraftPageTitle('');
+        },
+      },
+    },
     {
       label: t('admin.edit'),
       icon: <Pencil className="h-4 w-4" />,

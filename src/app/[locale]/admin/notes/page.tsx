@@ -6,7 +6,8 @@ import { Card, CardContent } from '@/components/ui/shadcnComponents/data-display
 import { format } from 'date-fns';
 import { zhCN, enUS } from 'date-fns/locale';
 import { useLocale, useT } from '@/i18n/LocaleContext';
-import type { CreateNoteInput, Note } from '@/types/note/type';
+import { useSession } from 'next-auth/react';
+import type { CreateNoteInput, Note, NotesPage } from '@/types/note/type';
 import { NoteHeaderCard } from '@/components/features/admin/notes/headerCard';
 import { NoteTreeView } from '@/components/features/admin/notes/treeView/NoteTreeView';
 import {
@@ -29,6 +30,7 @@ import { api_notes } from '@/hooks/note/api_notes';
 
 export default function StudyNotes() {
   const t = useT();
+  const { data: session } = useSession();
   // 笔记列表状态
   const [notes, setNotes] = useState<Note[]>([]);
   // 新建笔记分类的标题输入
@@ -126,6 +128,29 @@ export default function StudyNotes() {
     }
   };
 
+  // 新建笔记页面（POST）
+  const handleCreatePage = async (noteId: number, title: string) => {
+    const newNotesPage: NotesPage = {
+      id: new Date().getTime(),
+      uid: crypto.randomUUID(),
+      title,
+      content: '',
+      author: session?.user?.name || '',
+      dateStart: new Date().toLocaleString('sv-SE'),
+      dateEnd: new Date().toLocaleString('sv-SE'),
+      pageTags: [],
+      noteId,
+      pageId: crypto.randomUUID(),
+    };
+
+    try {
+      await api_notes.postNotePage(newNotesPage);
+      await getNotes();
+    } catch (error) {
+      console.error('新建笔记失败:', error);
+    }
+  };
+
   // 删除笔记分类（连带删除其下页面）
   const handleDeleteNote = async (id: number) => {
     try {
@@ -205,6 +230,7 @@ export default function StudyNotes() {
               onCreateCategory={() => setIsAddDialogOpen(true)}
               onRenameCategory={handleUpdateNote}
               onDeleteCategory={handleDeleteNote}
+              onCreatePage={handleCreatePage}
               onDeletePage={handleDeletePage}
               onMovePage={handleMovePage}
             />
