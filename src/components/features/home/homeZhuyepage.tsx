@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { Link } from "@/i18n/navigation";
 import { useBlogDataContext } from "@/components/layout/BlogDataProvider";
 import { useT } from "@/i18n/LocaleContext";
+import { AgentQueryBox } from "@/components/features/search/AgentQueryBox";
 
 export function HomeZhuyepage() {
     const t = useT();
@@ -83,6 +84,8 @@ export function HomeZhuyepage() {
                                     {t('home.viewArticles')}
                                 </button>
                             </div>
+
+                            <AgentQueryBox />
 
                             {blogData?.homeIcons && blogData.homeIcons.length > 0 && (
                                 <nav className="flex flex-wrap gap-2" aria-label="社交链接">

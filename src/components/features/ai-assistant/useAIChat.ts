@@ -2,14 +2,14 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { ChatMessage, SSEEvent } from "./types";
+import { getApiKey } from "@/lib/ai/apiKey";
 
-const STORAGE_KEY = "ai_chat_history";
 const MAX_MESSAGES = 50;
 
-function loadHistory(): ChatMessage[] {
+function loadHistory(storageKey: string): ChatMessage[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed.slice(-MAX_MESSAGES) : [];
@@ -18,13 +18,10 @@ function loadHistory(): ChatMessage[] {
   }
 }
 
-function saveHistory(messages: ChatMessage[]) {
+function saveHistory(storageKey: string, messages: ChatMessage[]) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(messages.slice(-MAX_MESSAGES))
-    );
+    localStorage.setItem(storageKey, JSON.stringify(messages.slice(-MAX_MESSAGES)));
   } catch {
     // localStorage full or unavailable
   }
@@ -34,15 +31,18 @@ function genId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function useAIChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>(loadHistory);
+export function useAIChat(opts?: { endpoint?: string; storageKey?: string }) {
+  const endpoint = opts?.endpoint ?? "/api/ai/chat";
+  const storageKey = opts?.storageKey ?? "ai_chat_history";
+
+  const [messages, setMessages] = useState<ChatMessage[]>(() => loadHistory(storageKey));
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   // Persist on change
   useEffect(() => {
-    saveHistory(messages);
-  }, [messages]);
+    saveHistory(storageKey, messages);
+  }, [messages, storageKey]);
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -72,20 +72,20 @@ export function useAIChat() {
           content: m.content,
         }));
 
-        const res = await fetch("/api/ai/chat", {
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        const apiKey = getApiKey();
+        if (apiKey) headers["x-api-key"] = apiKey;
+
+        const res = await fetch(endpoint, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify({ messages: allMessages }),
           signal: controller.signal,
         });
 
         if (res.status === 401 || res.status === 403) {
           setMessages((prev) =>
-            prev.map((m) =>
-              m.id === assistantMsg.id
-                ? { ...m, content: "authError" }
-                : m
-            )
+            prev.map((m) => (m.id === assistantMsg.id ? { ...m, content: "authError" } : m))
           );
           setIsStreaming(false);
           return;
@@ -134,9 +134,7 @@ export function useAIChat() {
         if ((err as Error).name === "AbortError") return;
         setMessages((prev) =>
           prev.map((m) =>
-            m.id === assistantMsg.id
-              ? { ...m, content: m.content || "error" }
-              : m
+            m.id === assistantMsg.id ? { ...m, content: m.content || "error" } : m
           )
         );
       } finally {
@@ -144,15 +142,15 @@ export function useAIChat() {
         abortRef.current = null;
       }
     },
-    [messages, isStreaming]
+    [messages, isStreaming, endpoint, storageKey]
   );
 
   const clearHistory = useCallback(() => {
     setMessages([]);
     if (typeof window !== "undefined") {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(storageKey);
     }
-  }, []);
+  }, [storageKey]);
 
   const cancelStreaming = useCallback(() => {
     abortRef.current?.abort();
@@ -173,9 +171,7 @@ function handleSSEEvent(
     case "text":
       setMessages((prev) =>
         prev.map((m) =>
-          m.id === assistantId
-            ? { ...m, content: m.content + event.content }
-            : m
+          m.id === assistantId ? { ...m, content: m.content + event.content } : m
         )
       );
       break;
@@ -197,11 +193,7 @@ function handleSSEEvent(
       setMessages((prev) =>
         prev.map((m) =>
           m.toolCallId === event.id
-            ? {
-                ...m,
-                isToolResult: true,
-                content: JSON.stringify(event.result),
-              }
+            ? { ...m, isToolResult: true, content: JSON.stringify(event.result) }
             : m
         )
       );
@@ -209,11 +201,7 @@ function handleSSEEvent(
 
     case "error":
       setMessages((prev) =>
-        prev.map((m) =>
-          m.id === assistantId && !m.content
-            ? { ...m, content: "error" }
-            : m
-        )
+        prev.map((m) => (m.id === assistantId && !m.content ? { ...m, content: "error" } : m))
       );
       break;
 

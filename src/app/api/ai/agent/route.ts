@@ -2,36 +2,38 @@ import { auth } from "../../../../../auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { noteTools, noteExecutors } from "../tools/notes";
+import { blogTools, blogExecutors } from "../tools/blog";
+import { contentTools, contentExecutors } from "../tools/content";
 import { runAgent } from "../lib/runAgent";
 import { buildSystemPrompt } from "../lib/persona";
 
 // ---------------------------------------------------------------------------
 // System prompt
 // ---------------------------------------------------------------------------
-const SYSTEM_PROMPT = `You are an AI assistant for a personal blog admin panel. Your primary job is to help the user manage their notes.
+const AGENT_SYSTEM_PROMPT = `You are an AI agent that manages a personal blog (「小小乔の小站」) for the admin. You can read and write blog data through tools.
 
-You have access to tools that let you:
-- List all note categories (with page counts)
-- Get details of a single note category (with all its pages)
-- Create a new note category
-- Update a note category's title
-- Delete a note category (cascades to its pages — warn the user before deleting)
-- Create a new page inside a note category
-- Update an existing page's content or metadata
-- Delete a page from a note category
-- Search notes and pages by keyword
+Your capabilities:
+1. Notes — list, get, create, update, delete note categories and their pages; search notes by keyword.
+2. Blog settings — get/update the blog name, home page hero (mainTitle, subTitle, dynamic flags), home icons list, notes sidebar (name, email, social links).
+3. Friend links — list, add, update, delete friends.
+4. About page — read and update the about description and its details list.
+5. Miscellaneous — list, add, update, delete short statuses/quotes.
 
-Guidelines:
-- When listing notes, present the results clearly with title, tag, and page count.
-- When the user asks to "create" or "add" something, confirm what was created.
-- When the user asks to "delete" something, ask for confirmation before proceeding.
-- When searching, tell the user how many results were found.
-- If a tool call fails, explain the error to the user in plain language.
+Hard rules:
+- When the user asks to DELETE anything (note, page, friend, miscellaneous), ASK FOR EXPLICIT CONFIRMATION FIRST. Describe exactly what will be deleted (name/ID). Do not call the delete tool until the user confirms. New/create/update operations can be done directly.
+- For create/update operations, confirm what was changed after it succeeds.
+- If a tool call fails, explain the error in plain language.
 - Keep responses concise and in the same language the user is using (Chinese or English).
-- If the user asks for something unrelated to note management, politely redirect them to note management tasks.`;
+- If the user asks something outside your tools, politely say you cannot do it and list what you can do.`;
 
 // ---------------------------------------------------------------------------
-// POST handler
+// Tool registry: notes + blog settings + blog content
+// ---------------------------------------------------------------------------
+const TOOLS = [...noteTools, ...blogTools, ...contentTools];
+const EXECUTORS = { ...noteExecutors, ...blogExecutors, ...contentExecutors };
+
+// ---------------------------------------------------------------------------
+// POST handler (SSE)
 // ---------------------------------------------------------------------------
 export async function POST(req: NextRequest) {
   // --- Auth check ---
@@ -67,10 +69,10 @@ export async function POST(req: NextRequest) {
 
   // --- SSE stream ---
   const stream = runAgent({
-    systemPrompt: await buildSystemPrompt(SYSTEM_PROMPT),
+    systemPrompt: await buildSystemPrompt(AGENT_SYSTEM_PROMPT),
     messages,
-    tools: noteTools,
-    executors: noteExecutors,
+    tools: TOOLS,
+    executors: EXECUTORS,
     apiKey,
   });
 
