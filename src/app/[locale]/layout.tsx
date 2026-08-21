@@ -12,13 +12,13 @@ import type { BlogData } from '@/types/blog/type';
 async function getInitialBlogData(locale: string): Promise<BlogData | null> {
   const defaults = {
     zh: {
-      blogName: "HaoWhiteの小站",
-      mainTitle: "HaoWhite Blog",
+      blogName: "小小乔の小站",
+      mainTitle: "xiaoxiaoqiao Blog",
       subTitle: "把日常学习、代码记录和一点点生活感，安静地收在这里。",
     },
     en: {
-      blogName: "HaoWhite's Blog",
-      mainTitle: "HaoWhite Blog",
+      blogName: "小小乔の小站",
+      mainTitle: "xiaoxiaoqiao Blog",
       subTitle: "Personal notes, code records, and small moments of life.",
     },
   };
@@ -117,7 +117,7 @@ export async function generateMetadata({
     });
 
     return {
-      title: blogSetting?.blogName || "haowhite",
+      title: blogSetting?.blogName || "xiaoxiaoqiao",
       icons: '/user_img/up.jpg',
       alternates: {
         languages: {
@@ -129,7 +129,7 @@ export async function generateMetadata({
   } catch (error) {
     console.error("Failed to get blog settings:", error);
     return {
-      title: "haowhite",
+      title: "xiaoxiaoqiao",
       icons: '/user_img/up.jpg',
       alternates: {
         languages: {

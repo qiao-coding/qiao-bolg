@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 export const useBlogData = () => {
   const [blogData, setBlogData] = useState<BlogDataStruct>({
     homePage: {
-      mainTitle: 'Hi! HaoWhite 🥰',
+      mainTitle: 'Hi! xiaoxiaoqiao 🥰',
       subTitle: '愿生活的每一天，都有惊喜!',
       isDynamicTitle: true,
       isDynamicTiltCard: true,

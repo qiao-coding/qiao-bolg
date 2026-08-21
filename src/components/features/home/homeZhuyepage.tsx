@@ -22,9 +22,9 @@ export function HomeZhuyepage() {
 
     const title = useMemo(() => {
         if (blogData?.homePage?.isDynamicTitle) {
-            return session?.user?.name ? `Hi, ${session.user.name}` : 'HaoWhite Blog';
+            return session?.user?.name ? `Hi, ${session.user.name}` : 'xiaoxiaoqiao Blog';
         }
-        return blogData?.homePage?.mainTitle || 'HaoWhite Blog';
+        return blogData?.homePage?.mainTitle || 'xiaoxiaoqiao Blog';
     }, [blogData?.homePage?.isDynamicTitle, blogData?.homePage?.mainTitle, session?.user?.name]);
 
     const getIconComponent = (name: string) => {
@@ -112,7 +112,7 @@ export function HomeZhuyepage() {
                             <div className="relative size-24 overflow-hidden rounded-3xl border-4 border-white bg-muted shadow-[0_12px_28px_rgba(103,183,255,0.22)]">
                                 <Image
                                     src={heroImage}
-                                    alt={session?.user?.name || 'HaoWhite avatar'}
+                                    alt={session?.user?.name || 'xiaoxiaoqiao avatar'}
                                     fill
                                     sizes="80px"
                                     className="object-cover"
@@ -120,7 +120,7 @@ export function HomeZhuyepage() {
                                 />
                             </div>
                             <div className="min-w-0">
-                                <p className="text-lg font-black text-foreground">HaoWhite</p>
+                                <p className="text-lg font-black text-foreground">xiaoxiaoqiao</p>
                                 <p className="mt-1 text-sm leading-6 text-muted-foreground">前端、笔记、折腾记录</p>
                             </div>
                         </div>

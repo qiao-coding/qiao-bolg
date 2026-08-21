@@ -40,18 +40,18 @@ export async function GET() {
     const getDefaultData = (lang: string) => {
       const defaultTexts = {
         zh: {
-          blogName: "HaoWhiteの小站",
-          mainTitle: "Hi! HaoWhite 🥰",
+          blogName: "小小乔の小站",
+          mainTitle: "Hi! xiaoxiaoqiao 🥰",
           subTitle: "愿生活的每一天，都有惊喜!",
         },
         en: {
-          blogName: "HaoWhite's Blog",
-          mainTitle: "Hi! HaoWhite 🥰",
+          blogName: "小小乔の小站",
+          mainTitle: "Hi! xiaoxiaoqiao 🥰",
           subTitle: "May every day of life bring surprises!",
         },
         jp: {
-          blogName: "HaoWhiteのブログ",
-          mainTitle: "こんにちは！HaoWhite 🥰",
+          blogName: "小小乔の小站",
+          mainTitle: "こんにちは！xiaoxiaoqiao 🥰",
           subTitle: "生活の毎日に驚きがありますように！",
         }
       };

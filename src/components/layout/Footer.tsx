@@ -16,7 +16,7 @@ const Footer = () => {
         <div>
           <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <span>© 2025 - {year} • {blogData?.blogName || 'HanWhite'}</span>
+              <span>© 2025 - {year} • {blogData?.blogName || 'xiaoxiaoqiao'}</span>
               {session?.user?.name && <span className="text-muted-foreground/70">|</span>}
               {session?.user?.name && <span>{session.user.name}</span>}
             </div>

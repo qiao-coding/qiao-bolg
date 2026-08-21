@@ -32,7 +32,7 @@ export default function LoginPage() {
         self-center font-medium text-foreground">
 
           <span className="text-brand-blue dark:text-brand-pink font-semibold">
-            {blogData?.blogName || 'HaoWhite'}
+            {blogData?.blogName || 'xiaoxiaoqiao'}
           </span>
           {t('admin.adminLogin')}
         </header>

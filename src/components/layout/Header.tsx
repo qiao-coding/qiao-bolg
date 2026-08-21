@@ -106,7 +106,7 @@ const Header = () => {
             href="/"
             className="text-sm lg:text-base font-semibold tracking-wide text-foreground transition-colors duration-300 hover:text-brand-blue-deep"
           >
-            {blogData?.blogName || 'HaoWhite'}
+            {blogData?.blogName || 'xiaoxiaoqiao'}
           </Link>
         </div>
 
