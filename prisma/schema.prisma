@@ -32,7 +32,7 @@ model NotesPage {
   pageId    String      @unique
   title     String
   content   String
-  author    String   @default("HaoWhite")
+  author    String   @default("xiaoxiaoqiao")
   dateStart String
   dateEnd   String
   pageTags  String[]

@@ -1,16 +1,31 @@
 "use client";
-import { useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import Image from "next/image";
 import { Note } from "@/types/note/type";
-import { BookOpen } from "lucide-react";
+import { BookOpen, ChevronRight } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const NotesCard = ({ note, index }: { note: Note; index: number }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const pendingRefreshPath = useRef<string | null>(null);
   const { id, title, tags, titlePicture, page, createdAt } = note;
   const pageCount = page?.length ?? 0;
 
+  useEffect(() => {
+    if (
+      pendingRefreshPath.current &&
+      (pathname === pendingRefreshPath.current || pathname.endsWith(pendingRefreshPath.current))
+    ) {
+      pendingRefreshPath.current = null;
+      router.refresh();
+    }
+  }, [pathname, router]);
+
   const handleClick = (notesID: number) => {
-    router.push(`/notes/${notesID}`);
+    const targetPath = `/notes/${notesID}`;
+    pendingRefreshPath.current = targetPath;
+    router.push(targetPath);
   };
 
   const dateStr = createdAt
@@ -20,40 +35,35 @@ const NotesCard = ({ note, index }: { note: Note; index: number }) => {
   return (
     <article
       onClick={() => handleClick(Number(id))}
-      className="flex items-center gap-5 px-2 py-3.5
-                 border-b border-border/60 cursor-pointer
-                 hover:bg-accent/20 transition-colors duration-200 group"
+      className="group flex cursor-pointer items-center gap-5 px-2 py-4 transition-colors duration-200 hover:bg-white/55 dark:hover:bg-[#26334d]"
       role="listitem"
     >
       {/* 序号 */}
-      <span className="w-8 text-right font-mono text-sm text-muted-foreground shrink-0 hidden sm:block">
+      <span className="hidden w-10 shrink-0 text-center font-mono text-sm text-muted-foreground sm:block">
         {String(index + 1).padStart(2, "0")}
       </span>
 
       {/* 封面缩略图 */}
       {titlePicture ? (
-        <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0
-                        ring-1 ring-border/50 group-hover:ring-primary/30 transition-all">
+        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-brand-pink/15 bg-white transition-colors group-hover:border-brand-pink/35 dark:border-[#8fb7df]/24 dark:bg-[#26334d]">
           <Image
             fill
             src={titlePicture}
             alt={title}
-            className="object-cover group-hover:scale-110 transition-transform duration-300"
-            sizes="56px"
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            sizes="64px"
             loading="lazy"
           />
         </div>
       ) : (
-        <div className="w-14 h-14 rounded-lg bg-muted flex items-center justify-center shrink-0
-                        ring-1 ring-border/50 group-hover:ring-primary/30 transition-all">
-          <BookOpen className="w-5 h-5 text-muted-foreground" />
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-brand-pink/15 bg-brand-pink-soft/45 transition-colors group-hover:border-brand-pink/35 dark:border-[#8fb7df]/24 dark:bg-[#b9d7f2]/10">
+          <BookOpen className="h-5 w-5 text-muted-foreground" />
         </div>
       )}
 
       {/* 主体信息 */}
       <div className="flex-1 min-w-0">
-        <h3 className="text-base font-semibold text-foreground leading-snug
-                       group-hover:text-primary transition-colors line-clamp-1">
+        <h3 className="line-clamp-1 text-base font-semibold leading-snug text-foreground transition-colors group-hover:text-brand-pink-deep">
           {title}
         </h3>
         <div className="flex items-center gap-3 mt-1 flex-wrap">
@@ -63,9 +73,7 @@ const NotesCard = ({ note, index }: { note: Note; index: number }) => {
               {tags.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
-                  className="text-[10px] px-2 py-0.5 rounded-full
-                             bg-primary/10 text-primary border border-primary/20
-                             whitespace-nowrap"
+                  className="whitespace-nowrap rounded-md border border-brand-pink/15 bg-brand-pink-soft/45 px-2 py-0.5 text-[10px] text-brand-pink-deep dark:border-[#8fb7df]/20 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]"
                 >
                   {tag}
                 </span>
@@ -83,15 +91,10 @@ const NotesCard = ({ note, index }: { note: Note; index: number }) => {
 
       {/* 右侧：篇数 + 箭头 */}
       <div className="flex items-center gap-2 shrink-0">
-        <span className="text-xs font-mono text-muted-foreground bg-muted/50
-                         px-2 py-0.5 rounded-full tabular-nums">
+        <span className="rounded-md bg-white/55 px-2 py-0.5 text-xs tabular-nums text-muted-foreground dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]">
           {pageCount} 篇
         </span>
-        <span className="text-muted-foreground/40 text-lg leading-none
-                         group-hover:text-primary group-hover:translate-x-0.5
-                         transition-all duration-200">
-          &rarr;
-        </span>
+        <ChevronRight className="size-5 text-muted-foreground/45 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-brand-pink-deep" />
       </div>
     </article>
   );

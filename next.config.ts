@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
         hostname: 'avatars.githubusercontent.com',
         port: '',
         pathname: '/u/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'q1.qlogo.cn',
+        port: '',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'q.qlogo.cn',
+        port: '',
+        pathname: '/**'
       }
     ]
   },

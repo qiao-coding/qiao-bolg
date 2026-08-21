@@ -1,8 +1,6 @@
 'use client'
 import Image from 'next/image';
-import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/shadcnComponents/data-display/card";
-import { useEffect, useState } from "react";
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
@@ -13,38 +11,18 @@ import { Miscellaneous } from '@/types/miscellaneous/type';
 
 // 创建单独的TimelineItem组件以支持独立的动画延迟
 function TimelineItem({ item }: { item: Miscellaneous }) {
-  // 为每个卡片生成随机的延迟时间，实现错位动画效果
-  const [delay, setDelay] = useState(0);
-
   const { data: session } = useSession()
 
-  useEffect(() => {
-    setDelay(Math.random() * 0.5);
-  }, []);
-
   return (
-    <motion.div
-      className="mb-6"
-      initial={{ opacity: 0, y: 30, scale: 0.8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.6,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1],
-        scale: { duration: 0.4, ease: "easeOut" }
-      }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-    >
+    <div className="mb-5">
       <Card className="overflow-hidden h-full border
-       border-gray-200 dark:border-gray-700 shadow-sm  
-       hover:shadow-md
-       bg-card/70
-        dark:bg-gray-800 rounded-xl"
+       border-border/70 shadow-sm
+       bg-card/85 rounded-lg"
       >
         <CardContent className="p-6 md:p-8">
           <div className="flex items-start gap-4">
             <div className="relative">
-              <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-blue-500/30  group-hover:ring-blue-500/50">
+              <div className="relative w-10 h-10 rounded-md overflow-hidden ring-1 ring-border">
                 <Image
                   src={session?.user?.image || "/user_img/up.jpg"}
                   alt="User Image"
@@ -55,7 +33,7 @@ function TimelineItem({ item }: { item: Miscellaneous }) {
               </div>
             </div>
             <div className="flex-1">
-              <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-base md:text-lg mb-3">
+              <div className="text-foreground leading-relaxed text-base md:text-lg mb-3">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeHighlight, rehypeRaw]}
@@ -73,7 +51,7 @@ function TimelineItem({ item }: { item: Miscellaneous }) {
                       );
                     },
                     a: ({ ...props }) => <a
-                      className="text-[#4A6FA5] hover:text-[#3A5F95] underline dark:text-blue-400 dark:hover:text-blue-300"
+                      className="text-brand-blue-deep hover:text-brand-pink-deep underline"
                       {...props} />
                   }}
                 >
@@ -81,18 +59,18 @@ function TimelineItem({ item }: { item: Miscellaneous }) {
                 </ReactMarkdown>
               </div>
               <div className="flex items-center justify-between pt-2">
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <p className="text-sm font-medium text-muted-foreground">
                   记录于 {item.date}
                 </p>
                 <div className="flex items-center">
-                  <span className="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full transition-colors duration-300">#{item.id}</span>
+                  <span className="rounded-md bg-brand-pink-soft px-2 py-1 text-xs text-brand-pink-deep transition-colors duration-300">#{item.id}</span>
                 </div>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 }
 

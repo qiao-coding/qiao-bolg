@@ -1,25 +1,31 @@
 "use client";
-import { Link } from "@/i18n/navigation";
-import React, {  useEffect, useRef, useState } from "react";
+import { Link, usePathname } from "@/i18n/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
-import { motion } from "framer-motion";
+import { Menu, LogOut, LayoutDashboard } from "lucide-react";
 import { ThemeSwitcher } from "../features/theme/ThemeSwitcher";
 import { SearchBox } from "../features/search/SearchBox";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/shadcnComponents/overlay/dropdown-menu";
+import { LanguageSwitcher } from "../features/i18n/LanguageSwitcher";
+import { Button } from "../ui/shadcnComponents/forms/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/shadcnComponents/overlay/dropdown-menu";
 import { debounce } from "../logic/public/debounce";
 import { useBlogDataContext } from "./BlogDataProvider";
-import { LanguageSwitcher } from "../features/i18n/LanguageSwitcher";
 import { useT } from '@/i18n/LocaleContext';
 
 const Header = () => {
   const { blogData } = useBlogDataContext();
-  const { resolvedTheme } = useTheme();
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   const [HeaderStyle, setHeaderStyle] = useState(false);
   const scrollRef = useRef(null);
   const t = useT();
+  const pathname = usePathname();
 
   const HbtnStyle = [
     { id: 1, title: t('common.nav.home'), href: "/", icons: '/header_img/zhuye.svg' },
@@ -27,8 +33,11 @@ const Header = () => {
     { id: 3, title: t('common.nav.friend'), href: "/friend", icons: '/header_img/youlian.svg' },
     { id: 5, title: t('common.nav.miscellaneous'), href: "/miscellaneous", icons: '/header_img/shuoshuo.svg' },
     { id: 6, title: t('common.nav.about'), href: "/about", icons: '/header_img/leaf.svg' },
-  ]
+  ];
 
+  // 判断当前激活项（去掉 locale 前缀后比较路径）
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
   const handleScroll =
     debounce(() => {
@@ -38,7 +47,7 @@ const Header = () => {
       } else {
         setHeaderStyle(false);
       }
-    }, 100)
+    }, 100);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -48,112 +57,66 @@ const Header = () => {
   }, [handleScroll]);
 
   const headerStyleClass = HeaderStyle
-    ? "h-18 top-2 header-scrolled bg-sky-300/80 dark:bg-gray-700/80 w-[98vw]"
-    : "h-18  top-0 header-normal w-full";
+    ? "h-16 top-0 w-full bg-background/92 backdrop-blur-md border-b border-border/70 shadow-sm"
+    : "h-16 top-0 w-full bg-background/80 backdrop-blur-sm border-b border-border/50";
 
-  const menuItemStyleClass = !HeaderStyle ? "text-[14px] md:text-[16px]" : "text-[13px] md:text-[15px]";
-
-  const menuItemHoverStyleClass = resolvedTheme ? "text-sky-600 dark:text-sky-400" : "text-black dark:text-white";
-
-  const menuItemIconClass = ` rounded-full opacity-80`;
+  // 导航链接（桌面 + 移动共用，hover 微动效一致）
+  const renderNavLink = (item: (typeof HbtnStyle)[number]) => {
+    const active = isActive(item.href);
+    return (
+      <Link
+        key={item.id}
+        href={item.href}
+        className={`relative flex items-center gap-2 p-2 font-extrabold transition-colors duration-300
+          ${active
+            ? "text-brand-blue-deep dark:text-brand-blue"
+            : "text-muted-foreground hover:text-foreground"}`}
+        aria-current={active ? "page" : undefined}
+      >
+        <div className="flex items-center gap-2">
+          {item.icons && (
+            <Image
+              src={item.icons}
+              alt=""
+              className="rounded-full opacity-80"
+              width={20}
+              height={20}
+            />
+          )}
+          <span>{item.title}</span>
+        </div>
+        <span
+          className={`absolute -bottom-1 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-brand-blue transition-opacity duration-300 ${active ? "opacity-100" : "opacity-0"}`}
+        />
+      </Link>
+    );
+  };
 
   return (
     <div
-      className={`fixed z-50 mr-5 duration-800 mx-auto
-           rounded-full left-1/2 -translate-x-1/2
-          ${headerStyleClass}`}
+      className={`fixed z-50 mx-auto left-1/2 -translate-x-1/2 transition-all duration-300 ${headerStyleClass}`}
     >
       <div
         ref={scrollRef}
-        className={`navbar z-50 m-auto  duration-0 pr-0`}
+        className="mx-auto flex h-16 max-w-6xl items-center justify-between px-3 sm:px-5"
       >
-        <div className={`navbar-start  mx-auto duration-700 ${!HeaderStyle ? "ml-0" : "ml-5"}`}>
-          <div className="dropdown">
-            <div
-              tabIndex={0}
-              role="button"
-              className="cursor-target btn btn-ghost 
-                text-black dark:text-sky-300
-                hover:bg-sky-300/80 hover:dark:bg-gray-700/80 lg:hidden "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 "
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {" "}
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />{" "}
-              </svg>
-            </div>
-            <ul
-              tabIndex={0}
-              className={`bg-white z-30 
-                   dark:bg-gray-700/80 
-                   menu menu-sm dropdown-content 
-                    rounded-box z-1 mt-3 w-52 
-                     shadow bg-base-100 mt-4`}
-            >
-              {HbtnStyle.map((item) => (
-                <li key={item.id}>
-                  <Link href={item.href} className="
-                  cursor-target text-black dark:text-white
-                  ">
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className={`p-2 text-sm lg:text-base
-            text-black dark:text-white
-              font-bold cursor-target 
-              ${!HeaderStyle ? "text-[14px] md:text-[16px]" : "text-[15px] md:text-[18px]"} 
-              transition-all duration-300`}>
-            {blogData?.blogName || 'HaoWhite'}
-          </div>
+        {/* 左：博客名 */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/"
+            className="text-sm lg:text-base font-semibold tracking-wide text-foreground transition-colors duration-300 hover:text-brand-blue-deep"
+          >
+            {blogData?.blogName || 'xiaoxiaoqiao'}
+          </Link>
         </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1  ">
-            {HbtnStyle.map((item) => (
-              <li key={item.id}>
-                <Link
-                  href={item.href}
-                  className={`z-50 p-2 bg-transparent mr-4  bg-transparent cursor-target no-border font-extrabold  
-                      ${menuItemStyleClass}
-                      ${menuItemHoverStyleClass}
-                    `}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.04, rotate: -3, transition: { duration: 0.3 }, translateY: -10 }}
-                    className="flex items-center gap-2 cursor-target "
-                  >
-                    {item.icons && (
-                      <Image
-                        src={item.icons}
-                        alt=""
-                        className={menuItemIconClass}
-                        width={20}
-                        height={20}
-                      />
-                    )}
 
-                    <span className="text-black dark:text-white">{item.title}</span>
-                  </motion.div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className={`navbar-end pr-4 flex items-center gap-4 duration-700 
-            ${!HeaderStyle ? "mr-0" : "mr-5"}`}>
-            
+        {/* 中：桌面导航 */}
+        <nav className="hidden lg:flex items-center gap-1" aria-label="主导航">
+          {HbtnStyle.map((item) => renderNavLink(item))}
+        </nav>
+
+        {/* 右：搜索 + 主题 + 语言 + 用户 */}
+        <div className="flex items-center gap-2 sm:gap-4">
           <div className="hidden md:block">
             <SearchBox />
           </div>
@@ -162,64 +125,76 @@ const Header = () => {
 
           {session ? (
             <DropdownMenu>
-              <DropdownMenuTrigger>
-                {session && (
-                  <div className="btn btn-circle cursor-target 
-                     border-2
-                     border-sky-400 
-                     dark:border-sky-600
-                     hover:dark:border-sky-400 
-                     hover:border-yellow-400/80
-                     dark:hover:border-sky-400 transition-all duration-300
-                      ">
-                    <Image
-                      src={session.user?.image || '/user_img/up.jpg'}
-                      alt={session.user?.name || 'User Avatar'}
-                      className={menuItemIconClass}
-                      width={40}
-                      height={40}
-                      loading="lazy"
-                    />
-                  </div>
-                )}
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="用户菜单"
+                  className="cursor-pointer rounded-full border border-border bg-card p-0.5 transition-colors duration-300 hover:border-brand-blue"
+                >
+                  <Image
+                    src={session.user?.image || '/user_img/up.jpg'}
+                    alt={session.user?.name || 'User Avatar'}
+                    className="rounded-full opacity-80"
+                    width={36}
+                    height={36}
+                    loading="lazy"
+                  />
+                </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="mr-2 rounded-lg bg-white shadow-lg p-2 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                <ul className="space-y-1">
-                  {session && (
-                    <li>
-                      <Link href="/adminLogin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200 hover:text-sky-600 dark:hover:text-sky-400 transition-colors duration-200">
-                        {t('common.adminPanel')}
-                      </Link>
-                    </li>
-                  )}
-                  {session && (
-                    <li>
-                      <button
-                        onClick={() => signOut()}
-                        type="submit"
-                        className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-red-400 text-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200"
-                      >
-                        {t('common.logout')}
-                      </button>
-                    </li>
-                  )}
-                </ul>
+              <DropdownMenuContent align="end" className="mr-2 min-w-40 rounded-lg border-border bg-card/95">
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/adminLogin" className="flex items-center gap-2">
+                    <LayoutDashboard className="size-4" />
+                    {t('common.adminPanel')}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  asChild
+                  className="cursor-pointer text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 dark:text-red-400"
+                >
+                  <button
+                    type="button"
+                    onClick={() => signOut()}
+                    className="flex w-full items-center gap-2"
+                  >
+                    <LogOut className="size-4" />
+                    {t('common.logout')}
+                  </button>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
           ) : (
-
-            <Link
-              href="/Login"
-              className="btn cursor-target btn-dash btn-error hover:text-white transition-all duration-700 ease-in-out"
-            >
-              {t('common.login')}
+            <Link href="/Login">
+              <Button className="rounded-md bg-foreground text-background hover:bg-foreground/85">
+                {t('common.login')}
+              </Button>
             </Link>
           )}
 
+          {/* 移动端菜单 */}
+          <div className="lg:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="打开菜单" className="cursor-pointer">
+                  <Menu className="size-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="mr-2 min-w-52 rounded-lg border-border bg-card/95">
+                {HbtnStyle.map((item) => (
+                  <DropdownMenuItem key={item.id} asChild className="cursor-pointer">
+                    <Link href={item.href} className="flex items-center gap-2">
+                      <Image src={item.icons} alt="" width={18} height={18} />
+                      {item.title}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 

@@ -64,9 +64,9 @@ import React, { useCallback, useState } from "react";
     const displayLanguage = languageDisplayNames[language] || language.charAt(0).toUpperCase() + language.slice(1);
 
     return (
-      <div className="relative group my-6 overflow-hidden rounded-xl border border-border/60 bg-muted/30 shadow-sm dark:shadow-none">
-        {/* 代码块工具栏（蓝→粉渐变，二次元风） */}
-        <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-gradient-to-r from-sky-100 via-sky-50 to-pink-100 dark:from-sky-950/70 dark:via-slate-900/50 dark:to-pink-950/70 border-b border-border/60">
+      <div className="relative group my-6 overflow-hidden rounded-lg border border-brand-pink/15 bg-white shadow-sm dark:border-[#8fb7df]/24 dark:bg-[#172033] dark:shadow-none">
+        {/* 代码块工具栏 */}
+        <div className="flex items-center justify-between gap-3 border-b border-brand-pink/15 bg-[#fff0f7] px-4 py-2.5 dark:border-[#8fb7df]/24 dark:bg-[#26334d]">
           {/* 左侧：窗口圆点 + 语言标签 */}
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="flex items-center gap-1.5 shrink-0" aria-hidden="true">
@@ -74,8 +74,8 @@ import React, { useCallback, useState } from "react";
               <span className="size-2.5 rounded-full bg-[#ffbd2e]" />
               <span className="size-2.5 rounded-full bg-[#27c93f]" />
             </span>
-            <ChevronRight className="h-3.5 w-3.5 text-pink-400 dark:text-pink-300 shrink-0" />
-            <span className="text-xs font-bold font-mono capitalize text-pink-600 dark:text-pink-300 truncate">
+            <ChevronRight className="h-3.5 w-3.5 text-brand-pink-deep shrink-0 dark:text-[#b9d7f2]" />
+            <span className="text-xs font-semibold font-mono capitalize text-brand-pink-deep truncate dark:text-[#dbe9f8]">
               {displayLanguage}
             </span>
           </div>

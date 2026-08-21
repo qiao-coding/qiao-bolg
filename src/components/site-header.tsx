@@ -4,7 +4,7 @@
 // - 左侧：SidebarTrigger + 面包屑（笔记 → 分类 → 页面）
 // - 右侧：切换背景 + 主题切换
 import * as React from "react"
-import { ImageIcon, Palette } from "lucide-react"
+import { ImageIcon, LogOut, Palette } from "lucide-react"
 import { Button } from "@/components/ui/shadcnComponents/button"
 import { Separator } from "@/components/ui/shadcnComponents/separator"
 import { SidebarTrigger } from "@/components/ui/shadcnComponents/sidebar"
@@ -49,7 +49,7 @@ export function SiteHeader({
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/notes" className="flex items-center gap-1 text-sky-600/90 dark:text-sky-200/80 hover:text-sky-500 dark:hover:text-sky-200">
+                <Link href="/notes" className="flex items-center gap-1 text-brand-blue hover:text-brand-pink dark:text-sky-200 dark:hover:text-pink-300">
                   笔记
                 </Link>
               </BreadcrumbLink>
@@ -57,7 +57,7 @@ export function SiteHeader({
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href={`/notes/${note?.id}`} className="text-sky-600/90 dark:text-sky-200/80 hover:text-sky-500 dark:hover:text-sky-200">
+                <Link href={`/notes/${note?.id}`} className="text-brand-blue hover:text-brand-pink dark:text-sky-200 dark:hover:text-pink-300">
                   {note?.title}
                 </Link>
               </BreadcrumbLink>
@@ -69,18 +69,29 @@ export function SiteHeader({
           </BreadcrumbList>
         </Breadcrumb>
         <div className="ml-auto flex items-center gap-2">
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="px-2 text-foreground hover:bg-brand-pink/10 hover:text-brand-pink-deep dark:hover:bg-slate-700/50"
+          >
+            <Link href={note?.id ? `/notes/${note.id}` : "/notes"}>
+              <LogOut className="size-4" />
+              <span className="hidden sm:inline">退出阅读</span>
+            </Link>
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="px-2 text-sky-700 dark:text-sky-200 hover:bg-sky-100/70 dark:hover:bg-slate-700/50"
+                className="px-2 text-foreground hover:bg-brand-blue/10 dark:hover:bg-slate-700/50"
               >
                 <Palette className="size-4" />
                 <span className="hidden sm:inline">切换背景</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-sky-50 dark:bg-slate-700/80">
+            <DropdownMenuContent align="end" className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md">
               <DropdownMenuItem onClick={() => setIsImageBackground(false)}>
                 <Palette className="mr-2 size-4" />
                 纯色背景

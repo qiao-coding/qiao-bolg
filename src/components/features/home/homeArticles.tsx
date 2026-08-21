@@ -4,6 +4,8 @@ import { useRouter } from "@/i18n/navigation";
 import Image from "next/image";
 import { Note, NotesPage } from "@/types/note/type";
 import { useT } from "@/i18n/LocaleContext";
+import { Loader2, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/shadcnComponents/forms/button";
 
 
 const HomeArticles = () => {
@@ -21,18 +23,22 @@ const HomeArticles = () => {
 
 
   useEffect(() => {
+    const controller = new AbortController();
+    let isMounted = true;
+
     const fetchArticles = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/notes`);
+        const response = await fetch(`/api/notes`, { signal: controller.signal });
 
         if (response.ok) {
           const data = await response.json();
 
 
           const page: Note[] = data
+          if (!isMounted) return;
           setNotesPage(page)
 
 
@@ -63,17 +69,28 @@ const HomeArticles = () => {
 
           setArticles(allArticles.slice(0, 6));
         } else {
+          if (!isMounted) return;
           setError(`API错误: ${response.status}`);
         }
       } catch (error) {
+        if (!isMounted || (error instanceof DOMException && error.name === 'AbortError')) {
+          return;
+        }
         setError(`${error instanceof Error ? error.message : t('common.blogName')}`);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchArticles();
-  }, []);
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [t]);
 
 
 
@@ -87,36 +104,33 @@ const HomeArticles = () => {
         onClick={() => article.noteId && handleArticleClick(String(article.noteId), article?.uid)}
 
         className={`
-          group backdrop-blur-sm rounded-lg border transition-all duration-300 
-          cursor-target 
-          overflow-hidden 
-          hover:scale-102 hover:-translate-y-1 shadow-md hover:shadow-lg
-          bg-white/60 dark:bg-gray-700/80 cursor-pointer
+          group overflow-hidden rounded-3xl border border-white/80 bg-white/76
+          shadow-[0_14px_34px_rgba(255,132,189,0.12)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:border-brand-pink/45 hover:shadow-[0_18px_42px_rgba(255,143,199,0.18)] cursor-pointer dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/76 dark:shadow-[0_14px_34px_rgba(10,18,34,0.24)] dark:hover:border-[#8fb7df]/36
         `}
       >
-        <div className="relative h-32 overflow-hidden">
+        <div className="relative h-36 overflow-hidden bg-brand-grad-soft">
           <Image
             fill
             src={notesPage.find(n => n.id.toString() === article.noteId)?.titlePicture || "/note_img/pageData.png"}
             alt={article.title}
-            className="object-cover group-hover:scale-110 transition-transform duration-300"
+            className="object-cover opacity-95 transition-transform duration-300 group-hover:scale-[1.04]"
             sizes="lg:80vw, md:25vw, 20vw"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/78 to-transparent dark:from-background/70" />
         </div>
 
-        <div className="p-4 flex flex-col justify-between">
+        <div className="flex flex-col justify-between p-4">
           <div className="flex justify-between items-start mb-2">
-            <h3 className={`text-lg 
-            text-black dark:text-white
-               font-semibold transition-colors 
-               line-clamp-2 
-                group-hover:text-blue-400 `}>
+            <h3 className={`text-lg
+            text-foreground
+               font-semibold transition-colors
+               line-clamp-2
+                group-hover:text-brand-pink-deep `}>
               {article.title.length > 12 ? article.title.substring(0, 12) + '...' : article.title}
             </h3>
             <span className={`text-xs flex-shrink-0 ml-2
-               text-gray-500 dark:text-gray-200 
+               text-muted-foreground
                `}>
                 {t('home.lastUpdate')}
               {article.dateEnd}
@@ -129,7 +143,7 @@ const HomeArticles = () => {
             {(article.pageTags || []).map((tag: string, tagIndex: number) => (
               <span
                 key={`${article.id}-tag-${tagIndex}`}
-                className={`text-xs px-2 py-1 rounded-full font-medium bg-gray-700/60 text-white bg-sky-400/60 dark:bg-sky-700 `}
+                className={`rounded-full border border-brand-pink/25 bg-brand-pink-soft/80 px-2.5 py-1 text-xs font-semibold text-brand-pink-deep dark:border-[#8fb7df]/20 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8] `}
               >
                 {tag}
               </span>
@@ -139,15 +153,15 @@ const HomeArticles = () => {
         </div>
       </article>
     ));
-  }, [articles, handleArticleClick, notesPage]);
+  }, [articles, handleArticleClick, notesPage, t]);
 
    //加载状态
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <div className="loading loading-spinner loading-lg"></div>
-          <p className={`mt-4 text-white`}>{t('common.loading')}</p>
+          <Loader2 className="mx-auto size-8 animate-spin text-brand-blue" />
+          <p className={`mt-4 text-foreground`}>{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -158,17 +172,17 @@ const HomeArticles = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <h2 className={`text-4xl font-bold mb-4 text-white`}>{t('home.newestNotes')}</h2>
-          <div className={`border px-4 py-3 rounded mb-8 bg-red-500/20 text-red-500`}>
+          <h2 className={`text-3xl font-semibold mb-4 text-foreground`}>{t('home.newestNotes')}</h2>
+          <div className={`border px-4 py-3 rounded-md mb-8 bg-destructive/10 text-destructive`}>
             <p className="font-bold">{t('home.fetchError')}</p>
             <p>{error}</p>
           </div>
-          <button
+          <Button
+            variant="destructive"
             onClick={() => window.location.reload()}
-            className="btn btn-error"
           >
             {t('home.reload')}
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -181,7 +195,7 @@ const HomeArticles = () => {
         <div className="text-center">
           <h2 className={`text-3xl font-bold mb-4 `}>{t('home.newestNotes')}</h2>
           <p className={`text-lg mb-8 `}>{t('home.noNotes')}</p>
-          <div className={`rounded-lg p-8 bg-red-500/20 text-red-500`}>
+          <div className={`rounded-lg border border-border/70 bg-card/80 p-8 text-muted-foreground`}>
             <p className={``}>{t('home.noNotesInDb')}</p>
             <p className={`text-sm mt-2 `}>{t('home.checkDb')}</p>
           </div>
@@ -192,15 +206,21 @@ const HomeArticles = () => {
 
    
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen">
-      <div className="text-center mb-8 text-black dark:text-white">
-        <h2 className={`text-3xl font-bold mb-3 `}>
-          {t('home.latestNotes')}
-        </h2>
-        <p className={`text-sm mt-2 `}>{t('home.foundNotes', { count: articles.length })}</p>
+    <div className="container mx-auto px-4 pb-16 pt-4">
+      <div className="mx-auto mb-8 flex max-w-6xl flex-col gap-2 text-left text-foreground sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-brand-blue/25 bg-white/70 px-3 py-1 text-xs font-medium text-brand-blue-deep shadow-sm dark:border-[#8fb7df]/24 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]">
+            <Sparkles className="size-3.5" />
+            Recent diary
+          </p>
+          <h2 className={`text-3xl font-black mb-2 text-brand-grad `}>
+            {t('home.latestNotes')}
+          </h2>
+          <p className={`text-sm text-muted-foreground`}>{t('home.foundNotes', { count: articles.length })}</p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:w-[80vw] gap-4 m-auto">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         {articlesList}
       </div>
 

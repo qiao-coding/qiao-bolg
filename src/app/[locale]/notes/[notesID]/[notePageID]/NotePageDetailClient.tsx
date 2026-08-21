@@ -78,9 +78,8 @@ export default function NotePageDetailClient({
         backgroundAttachment: 'fixed',
       }}
     >
-      <div className="font-sans transition-colors duration-300
-       bg-sky-50/90 dark:bg-slate-800/90"
-      >
+      <div className="blog-theme-bg relative font-sans transition-colors duration-300">
+        <div className="blog-theme-decor pointer-events-none absolute inset-0" />
         {/* 路由组件 */}
         <NextRouter showHeader={false}>
           <SidebarProvider
@@ -101,7 +100,7 @@ export default function NotePageDetailClient({
             />
 
             {/* 右侧内容区 */}
-            <SidebarInset className="relative bg-sky-50/90 dark:bg-slate-800/90">
+            <SidebarInset className="relative bg-transparent">
               <SiteHeader
                 note={note}
                 notesPage={notesPage}
@@ -110,29 +109,32 @@ export default function NotePageDetailClient({
 
               {/* 点击目录跳转时右侧笔记区的 loading 对话框浮层 */}
               {isNavigating && (
-                <div className="absolute inset-0 z-20 flex items-center justify-center bg-sky-50/70 backdrop-blur-sm dark:bg-slate-800/60">
-                  <div className="flex items-center gap-3 rounded-xl border border-sky-200/70 bg-white/90 px-6 py-4 shadow-xl animate-fade-in dark:border-sky-500/30 dark:bg-slate-700/90">
-                    <Loader2 className="size-5 animate-spin text-sky-500 dark:text-sky-300" />
-                    <span className="text-sm text-sky-700 dark:text-sky-200">正在加载笔记…</span>
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/70 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 rounded-lg border border-brand-pink/20 bg-card/95 px-6 py-4 shadow-sm animate-fade-in dark:border-[#8fb7df]/24 dark:bg-[#202a3f]/95">
+                    <Loader2 className="size-5 animate-spin text-brand-pink dark:text-[#b9d7f2]" />
+                    <span className="text-sm text-muted-foreground">正在加载笔记…</span>
                   </div>
                 </div>
               )}
 
               {/* 桌面端双栏布局：内容 + TOC（仅当 TOC 有内容时显示第二栏） */}
-              <div className="container mx-auto px-4 sm:px-6 py-8 max-w-6xl">
+              <div className="container relative mx-auto px-4 py-8 sm:px-6 max-w-6xl">
                 <div className={tocItems.length > 0
                   ? "grid gap-8 xl:grid-cols-[minmax(0,1fr)_200px] xl:gap-10 xl:items-start"
                   : ""
                 }>
                   {/* 笔记页面主体 */}
                   <main
-                    className="min-h-screen min-w-0 custom-scrollbar"
+                    className="min-h-screen min-w-0 custom-scrollbar rounded-2xl border border-brand-pink/12 bg-[#fff8fc]/82 px-5 py-6 shadow-[0_18px_54px_rgba(255,132,189,0.08)] backdrop-blur-sm dark:border-[#8fb7df]/18 dark:bg-[#202a3f]/82 dark:shadow-[0_18px_54px_rgba(10,18,34,0.28)] sm:px-8"
                     key={notesPage.uid}
                   >
                     {/* 笔记页面标题 */}
                     <header className="mb-8 text-card-foreground">
-                      <h1 className="text-3xl sm:text-4xl font-bold mb-6 leading-tight animate-fade-in
-                                     text-sky-600 dark:text-sky-300">
+                      <p className="mb-3 inline-flex items-center rounded-md border border-brand-pink/15 bg-brand-pink-soft/35 px-2.5 py-1 text-xs text-brand-pink-deep dark:border-[#8fb7df]/24 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]">
+                        Reading note
+                      </p>
+                      <h1 className="text-3xl sm:text-4xl font-semibold mb-6 leading-tight animate-fade-in
+                                     text-foreground">
                         {notesPage.title}
                       </h1>
 
@@ -151,7 +153,7 @@ export default function NotePageDetailClient({
                             onClick={handleCopyContent}
                             variant="outline"
                             size="sm"
-                            className="gap-1.5 text-xs border-sky-200/70 bg-sky-50/60 text-sky-700 hover:bg-sky-100 dark:bg-slate-700/50 dark:text-sky-200 dark:border-sky-500/30"
+                            className="gap-1.5 rounded-md border-brand-pink/20 bg-white text-xs text-brand-pink-deep hover:bg-brand-pink-soft/35 dark:border-[#8fb7df]/24 dark:bg-[#26334d] dark:text-[#dbe9f8] dark:hover:bg-[#30405d]"
                           >
                             <Copy className="w-3.5 h-3.5" />
                             {copyDone ? '已复制' : '复制内容'}
@@ -162,7 +164,7 @@ export default function NotePageDetailClient({
 
                     {/* 移动端 TOC 折叠按钮 */}
                     {tocItems.length > 0 && (
-                      <details className="relative mb-6 mx-auto xl:hidden rounded-lg border border-sky-200/60 bg-sky-50/60 dark:border-sky-500/20 dark:bg-slate-700/40">
+                      <details className="relative mb-6 mx-auto rounded-md border border-brand-pink/12 bg-white xl:hidden dark:border-[#8fb7df]/24 dark:bg-[#26334d]">
                         <summary className="flex items-center gap-2  px-4 py-2.5 cursor-pointer text-sm text-muted-foreground hover:text-foreground transition-colors">
                           <ListTree className="size-4 shrink-0" />
                           本页目录
@@ -177,7 +179,7 @@ export default function NotePageDetailClient({
                     <NotePageContent content={notesPage.content} theme={theme as 'light' | 'dark'} onTocReady={handleTocReady} />
 
                     {/* 笔记页面标签 */}
-                    <section aria-labelledby="note-tags" className="mt-8 pt-6 border-t transition-all duration-300 border-border">
+                    <section aria-labelledby="note-tags" className="mt-8 border-t border-brand-pink-border/45 pt-6 transition-all duration-300 dark:border-[#8fb7df]/18">
                       <div className="flex flex-wrap items-center gap-3">
                         <span id="note-tags" className="text-sm text-muted-foreground">标签：</span>
                         {notesPage.pageTags && notesPage.pageTags.map((tag, index) => (
@@ -185,9 +187,7 @@ export default function NotePageDetailClient({
                             key={`tag-${tag}-${index}`}
                             className="inline-flex items-center text-sm px-3 py-1.5
                                      rounded-full transition-all duration-300
-                                     bg-sky-50 text-sky-700 border-[1.5px] border-sky-200/70
-                                     dark:bg-slate-700/60 dark:text-sky-200 dark:border-sky-500/30
-                                     hover:bg-sky-100 hover:shadow-md dark:hover:bg-slate-700"
+                                     bg-brand-pink-soft/35 text-brand-pink-deep border border-brand-pink/15 dark:border-[#8fb7df]/24 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8]"
                           >
                             {tag}
                           </span>
@@ -218,7 +218,7 @@ export default function NotePageDetailClient({
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             variant="outline"
             aria-label="返回顶部"
-            className="bg-sky-100/80 text-sky-700 hover:bg-sky-200/70 dark:bg-slate-700/60 dark:text-sky-200"
+            className="border-border bg-card/90 text-foreground hover:bg-accent"
           >
             {/* 返回顶部按钮文本 */}
             <span className="hidden md:inline-block">返回顶部</span>

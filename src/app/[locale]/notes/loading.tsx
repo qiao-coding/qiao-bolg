@@ -6,7 +6,7 @@ export default function NotesLoading() {
     <TechBackgroundNoGrid>
       <section className="flex flex-col justify-center items-center min-h-screen" aria-busy="true">
         <RotatingCube />
-        <p className="text-3xl text-sky-400 dark:text-white font-bold">加载中...</p>
+        <p className="text-lg font-medium text-muted-foreground">加载中...</p>
       </section>
     </TechBackgroundNoGrid>
   );

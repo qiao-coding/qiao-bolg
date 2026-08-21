@@ -45,7 +45,7 @@ function DefaultErrorFallback({ error, reset }: { error?: Error; reset: () => vo
       <div className="text-center">
         <h2 className="text-2xl font-bold text-red-600 mb-4">出现了一些问题</h2>
         {error && (
-          <p className="text-gray-600 mb-4">
+          <p className="text-muted-foreground mb-4">
             {process.env.NODE_ENV === 'development' 
               ? error.message 
               : '请刷新页面重试'
@@ -54,7 +54,7 @@ function DefaultErrorFallback({ error, reset }: { error?: Error; reset: () => vo
         )}
         <button
           onClick={reset}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          className="px-4 py-2 bg-brand-blue text-white rounded hover:bg-brand-pink transition-colors"
         >
           重试
         </button>

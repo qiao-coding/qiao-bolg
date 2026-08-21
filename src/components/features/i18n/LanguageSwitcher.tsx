@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { useLocale } from '@/i18n/LocaleContext';
+import { Button } from "@/components/ui/shadcnComponents/forms/button";
 
 export function LanguageSwitcher() {
   const pathname = usePathname();
@@ -14,12 +15,14 @@ export function LanguageSwitcher() {
   };
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="sm"
       onClick={toggleLocale}
-      className="btn btn-ghost btn-sm text-sm font-bold text-black dark:text-white cursor-target"
+      className="cursor-pointer rounded-md text-sm font-semibold text-muted-foreground hover:text-foreground"
       aria-label={locale === 'zh' ? 'Switch to English' : '切换到中文'}
     >
       {locale === 'zh' ? 'EN' : '中'}
-    </button>
+    </Button>
   );
 }

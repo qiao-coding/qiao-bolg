@@ -126,12 +126,11 @@ export function SearchBox({ className }: SearchBoxProps) {
                         duration: 0.3,
                         ease: "easeInOut",
                     }}
-                    whileHover={{ scale: 1.04, rotate: -15 }}
                 >
                     {!isExpanded && <Button
                         size="sm"
                         onClick={toggleExpand}
-                        className="bg-transparent hover:bg-transparent text-lg shadow-none border-none p-2 cursor-pointer"
+                        className="bg-transparent hover:bg-accent text-lg shadow-none border-none p-2 cursor-pointer"
                     >
                         🔍
                     </Button>}
@@ -141,7 +140,7 @@ export function SearchBox({ className }: SearchBoxProps) {
                 <AnimatePresence>
                     {isExpanded && (
                         <motion.div
-                            className="flex items-center bg-white/90 dark:bg-gray-800/90 border border-sky-300 dark:border-sky-600 rounded-lg overflow-hidden"
+                            className="flex items-center overflow-hidden rounded-md border border-border bg-card/95"
                             initial={{ width: 0, opacity: 0 }}
                             animate={{ width: "250px", opacity: 1 }}
                             exit={{ width: 0, opacity: 0 }}
@@ -174,8 +173,7 @@ export function SearchBox({ className }: SearchBoxProps) {
                                     size="sm"
                                     onClick={handleSearch}
                                     
-                                    className="bg-sky-500 hover:bg-sky-600 text-white
-                   rounded-l-none h-full min-h-10"
+                                    className="h-full min-h-10 rounded-l-none bg-foreground text-background hover:bg-foreground/85"
                                 >
                                     {t('search.search')}
                                 </Button>
@@ -189,18 +187,18 @@ export function SearchBox({ className }: SearchBoxProps) {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="absolute top-full right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-lg bg-white shadow-lg dark:bg-gray-800 p-2 z-50"
+                        className="absolute top-full right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-lg border border-border/70 bg-card/95 shadow-sm p-2 z-50"
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
                     >
                         {isLoading ? (
-                            <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                            <div className="px-4 py-2 text-sm text-muted-foreground">
                                 {t('search.searching')}
                             </div>
                         ) : searchResults.length === 0 ? (
-                            <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                            <div className="px-4 py-2 text-sm text-muted-foreground">
                                 {searchQuery.trim() ? t('search.noResults') : t('search.hint')}
                             </div>
                         ) : (
@@ -209,22 +207,22 @@ export function SearchBox({ className }: SearchBoxProps) {
                                     <Link
                                         key={result.id}
                                         href={result.href}
-                                        className="block p-3 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        className="block p-3 cursor-pointer rounded-md hover:bg-brand-blue-soft/70 transition-colors"
                                         onClick={() => {
                                             setIsOpen(false);
                                             setSearchQuery('');
                                             setIsExpanded(false);
                                         }}
                                     >
-                                        <header className="font-medium text-sm text-gray-900 dark:text-white mb-1">
+                                        <header className="font-medium text-sm text-foreground mb-1">
                                             {result.title}
                                         </header>
                                         {result.content && (
-                                            <div className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                                            <div className="text-xs text-muted-foreground line-clamp-2">
                                                 {result.content}
                                             </div>
                                         )}
-                                        <div className="text-xs text-sky-600 dark:text-sky-400 mt-1">
+                                        <div className="text-xs text-brand-blue-deep mt-1">
                                             {result.type === 'note' ? t('search.typeNote') : t('search.typePage')}
                                         </div>
                                     </Link>

@@ -16,10 +16,10 @@ export default function AdminBlogPage() {
   const { data: session } = useSession();
   const [blogData, setBlogData] = useState<BlogData>({
     // 博客基本信息
-    blogName: "HaoWhiteの小站",
+    blogName: "小小乔の小站",
     // 主页信息
     homePage: {
-      mainTitle: "Hi! HaoWhite 🥰",
+      mainTitle: "Hi! xiaoxiaoqiao 🥰",
       subTitle: "愿生活的每一天，都有惊喜!",
       isDynamicTitle: true,
       isDynamicTiltCard: true,
@@ -77,9 +77,9 @@ export default function AdminBlogPage() {
 
         // 合并API返回的数据和本地默认数据
         setBlogData({
-          blogName: data.blogName || "HaoWhite",
+          blogName: data.blogName || "xiaoxiaoqiao",
           homePage: {
-            mainTitle: data.homePage?.mainTitle || "Hi! HaoWhite 🥰",
+            mainTitle: data.homePage?.mainTitle || "Hi! xiaoxiaoqiao 🥰",
             subTitle: data.homePage?.subTitle || "愿生活的每一天，都有惊喜!",
             isDynamicTitle: data.homePage?.isDynamicTitle ?? true,
             isDynamicTiltCard: data.homePage?.isDynamicTiltCard ?? true,

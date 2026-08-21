@@ -37,7 +37,7 @@ function ReadingProgress() {
       </div>
       <div className="h-[2px] w-full rounded-full bg-border/50 overflow-hidden">
         <motion.div
-          className="h-full rounded-full bg-primary"
+          className="h-full rounded-full bg-brand-pink dark:bg-[#b9d7f2]"
           style={{ width: `${progress}%` }}
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
         />
@@ -74,7 +74,7 @@ export function NoteToc({ items, instanceId = "toc" }: { items: TocItem[]; insta
                   "text-[13px] leading-snug transition-colors duration-200",
                   "[overflow-wrap:anywhere]",
                   isActive
-                    ? "text-primary font-medium"
+                    ? "text-brand-pink-deep font-medium dark:text-[#dbe9f8]"
                     : "hover:text-foreground hover:bg-accent/40"
                 )}
                 whileHover={{ x: isActive ? 0 : 3 }}
@@ -88,17 +88,16 @@ export function NoteToc({ items, instanceId = "toc" }: { items: TocItem[]; insta
                   }
                 }}
               >
-                {/* 活动项背景 pill + 左侧渐变指示点 —— 合并为单个 layoutId 容器，只做一次果冻动画 */}
+                {/* 活动项背景 */}
                 {isActive && (
                   <motion.span
                     layoutId={`${instanceId}-active`}
-                    className="absolute inset-0 rounded-lg bg-primary/8 border border-primary/15"
+                    className="absolute inset-0 rounded-lg border border-brand-pink/25 bg-brand-pink-soft/55 dark:border-[#8fb7df]/24 dark:bg-[#b9d7f2]/10"
                     transition={{ type: "spring", stiffness: 700, damping: 32 }}
                   >
                     <span className="absolute -left-[1px] top-1/2 -translate-y-1/2
                                      w-1.5 h-1.5 rounded-full
-                                     bg-gradient-to-b from-primary to-primary/50
-                                     shadow-[0_0_6px_rgba(var(--primary)/0.3)]" />
+                                     bg-brand-pink dark:bg-[#b9d7f2]" />
                   </motion.span>
                 )}
 

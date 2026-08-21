@@ -5,7 +5,6 @@ import { getPromptMeta } from '@/lib/parse-frontmatter';
 import NextRouter from '@/components/layout/NextRouter';
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import Title from '@/components/ui/public/title';
-import { motion } from 'framer-motion';
 import { Link } from '@/i18n/navigation';
 import { useT } from '@/i18n/LocaleContext';
 import { User, Layers, ExternalLink, Copy, Check } from 'lucide-react';
@@ -60,12 +59,7 @@ export default function PromptsPageClient({ prompts, noteId }: PromptsPageClient
   return (
     <TechBackgroundNoGrid>
       <NextRouter>
-        <motion.main
-          initial={{ opacity: 0, y: 150, scale: 1 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          aria-labelledby="prompts-title"
-        >
+        <main aria-labelledby="prompts-title">
           <section className="py-12 px-4 sm:px-6 lg:px-8 min-h-screen max-w-3xl mx-auto pt-28">
             <header>
               <Title>{t('prompts.pageTitle')}</Title>
@@ -90,18 +84,15 @@ export default function PromptsPageClient({ prompts, noteId }: PromptsPageClient
                 {parsed.map(({ page, meta }, index) => {
                   const url = `/notes/${noteId}/${page.uid}`;
                   return (
-                    <motion.div
+                    <div
                       key={page.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.03 }}
                       className="group flex items-start gap-3 p-3 rounded-lg
-                        border border-border/30 bg-card/40 backdrop-blur-sm
-                        hover:bg-card/70 hover:border-primary/20 transition-all"
+                        border border-border/70 bg-card/85
+                        hover:bg-card hover:border-brand-blue/35 transition-colors"
                     >
                       {/* 序号 */}
-                      <span className="flex-shrink-0 w-7 h-7 rounded bg-primary/10
-                        flex items-center justify-center text-primary font-mono text-xs mt-0.5">
+                      <span className="flex-shrink-0 w-7 h-7 rounded bg-brand-blue-soft
+                        flex items-center justify-center text-brand-blue-deep font-mono text-xs mt-0.5">
                         {index + 1}
                       </span>
 
@@ -110,7 +101,7 @@ export default function PromptsPageClient({ prompts, noteId }: PromptsPageClient
                         {/* 标题 → 真实 URL */}
                         <Link
                           href={url}
-                          className="font-medium text-sm text-card-foreground hover:text-primary
+                          className="font-medium text-sm text-card-foreground hover:text-brand-blue-deep
                             transition-colors inline-flex items-center gap-1 group/link"
                         >
                           {meta!.title}
@@ -132,7 +123,7 @@ export default function PromptsPageClient({ prompts, noteId }: PromptsPageClient
                           {url}
                         </p>
                       </div>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
@@ -142,7 +133,7 @@ export default function PromptsPageClient({ prompts, noteId }: PromptsPageClient
               </section>
             )}
           </section>
-        </motion.main>
+        </main>
       </NextRouter>
     </TechBackgroundNoGrid>
   );

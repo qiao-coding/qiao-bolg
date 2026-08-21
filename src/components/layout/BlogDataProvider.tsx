@@ -11,12 +11,16 @@ interface BlogDataContextType {
 
 const BlogDataContext = createContext<BlogDataContextType | undefined>(undefined)
 
-export function BlogDataProvider({ children }: { children: ReactNode }) {
-  const [blogData, setBlogData] = useState<BlogData | null>(null);
-  const [isLoading, setIsLoading] = useState(true)
+export function BlogDataProvider({ children, initialData = null }: { children: ReactNode; initialData?: BlogData | null }) {
+  const [blogData, setBlogData] = useState<BlogData | null>(initialData);
+  const [isLoading, setIsLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (initialData) {
+      return;
+    }
+
     const fetchBlogData = async () => {
       try {
         const response = await fetch('/api/blog')
@@ -36,7 +40,7 @@ export function BlogDataProvider({ children }: { children: ReactNode }) {
     }
 
     fetchBlogData()
-  }, [])
+  }, [initialData])
 
   return (
     <BlogDataContext.Provider value={{ blogData, isLoading, error }}>
