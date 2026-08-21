@@ -28,7 +28,7 @@ export function ChatMessageBubble({ msg }: { msg: ChatMessage }) {
       ) : (
         <div className="shrink-0 w-7 h-7 rounded-full overflow-hidden ring-1 ring-border/50">
           <Image
-            src="/UserImage/up.jpg"
+            src="/user_img/up.jpg"
             alt="qiaoqiao"
             width={28}
             height={28}

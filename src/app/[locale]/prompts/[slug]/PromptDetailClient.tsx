@@ -71,7 +71,7 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
         <header className="container mx-auto px-4 sm:px-6 py-8 pt-24">
           <Link
             href="/prompts"
-            className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors mb-6"
+            className="inline-flex items-center gap-1 text-muted-foreground hover:text-brand-blue-deep transition-colors mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
             {t('prompts.pageTitle')}
@@ -106,7 +106,7 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
           <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
             {/* Left: Markdown body */}
             <div className="min-w-0">
-              <div className="bg-card/60 backdrop-blur-sm rounded-lg border border-border/40 p-6">
+              <div className="rounded-lg border border-border/70 bg-card/85 p-6">
                 <NotePageContent
                   content={body}
                   theme={theme as 'light' | 'dark'}
@@ -137,9 +137,9 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
 
               {/* When to use */}
               {pm.whenToUse && (
-                <div className="bg-card/60 backdrop-blur-sm rounded-lg border border-border/40 p-4">
+                <div className="rounded-lg border border-border/70 bg-card/85 p-4">
                   <h3 className="text-sm font-semibold text-card-foreground mb-2 flex items-center gap-1.5">
-                    <FileText className="w-4 h-4 text-primary" />
+                    <FileText className="w-4 h-4 text-brand-blue" />
                     {t('prompts.whenToUse')}
                   </h3>
                   <p className="text-sm text-muted-foreground">{pm.whenToUse}</p>
@@ -148,7 +148,7 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
 
               {/* Inputs */}
               {pm.inputs && pm.inputs.length > 0 && (
-                <div className="bg-card/60 backdrop-blur-sm rounded-lg border border-border/40 p-4">
+                <div className="rounded-lg border border-border/70 bg-card/85 p-4">
                   <h3 className="text-sm font-semibold text-card-foreground mb-2">
                     {t('prompts.inputs')}
                   </h3>
@@ -162,7 +162,7 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
 
               {/* Outputs */}
               {pm.outputs && pm.outputs.length > 0 && (
-                <div className="bg-card/60 backdrop-blur-sm rounded-lg border border-border/40 p-4">
+                <div className="rounded-lg border border-border/70 bg-card/85 p-4">
                   <h3 className="text-sm font-semibold text-card-foreground mb-2">
                     {t('prompts.outputs')}
                   </h3>
@@ -176,7 +176,7 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
 
               {/* Forbidden */}
               {pm.forbidden && pm.forbidden.length > 0 && (
-                <div className="bg-destructive/5 backdrop-blur-sm rounded-lg border border-destructive/20 p-4">
+                <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4">
                   <h3 className="text-sm font-semibold text-destructive mb-2 flex items-center gap-1.5">
                     <AlertTriangle className="w-4 h-4" />
                     {t('prompts.forbidden')}
@@ -193,9 +193,9 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
 
           {/* Acceptance criteria */}
           {pm.acceptanceCriteria && pm.acceptanceCriteria.length > 0 && (
-            <div className="mt-8 bg-card/60 backdrop-blur-sm rounded-lg border border-border/40 p-6">
+            <div className="mt-8 rounded-lg border border-border/70 bg-card/85 p-6">
               <h3 className="text-sm font-semibold text-card-foreground mb-3 flex items-center gap-1.5">
-                <ListChecks className="w-4 h-4 text-primary" />
+                <ListChecks className="w-4 h-4 text-brand-blue-deep" />
                 {t('prompts.acceptanceCriteria')}
               </h3>
               <ul className="space-y-1.5 list-disc list-inside text-muted-foreground">
@@ -211,7 +211,7 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
             {prevPrompt ? (
               <Link
                 href={`/prompts/${prevPrompt.pageId}`}
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors group"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-brand-blue-deep transition-colors group"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                 <div>
@@ -226,7 +226,7 @@ export default function PromptDetailClient({ prompt, allPrompts }: PromptDetailC
             {nextPrompt ? (
               <Link
                 href={`/prompts/${nextPrompt.pageId}`}
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors group text-right"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-brand-blue-deep transition-colors group text-right"
               >
                 <div>
                   <div className="text-xs opacity-60">{t('prompts.nextPromptSingle')}</div>

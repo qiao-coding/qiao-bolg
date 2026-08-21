@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext } from 'react';
+import { createContext, useCallback, useContext } from 'react';
 import { zh, en, type Locale } from './dictionaries';
 
 export type { Locale };
@@ -35,7 +35,7 @@ export function useT() {
   const locale = useLocale();
   const dict = getDict(locale);
 
-  function t(key: string, params?: Record<string, string | number>): string {
+  const t = useCallback((key: string, params?: Record<string, string | number>): string => {
     let value = getValue(dict as unknown as Record<string, unknown>, key);
     if (params) {
       for (const [k, v] of Object.entries(params)) {
@@ -43,7 +43,7 @@ export function useT() {
       }
     }
     return value;
-  }
+  }, [dict]);
 
   return t;
 }

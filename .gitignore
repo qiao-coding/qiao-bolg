@@ -44,3 +44,9 @@ next-env.d.ts
 
 # build output
 build.log
+output/
+
+.vercel
+
+# playwright artifacts
+.playwright-cli/

@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-@plugin "daisyui";
 
 /* 笔记页面显示自定义页面滚动条 */
 html.notes-scrollbar {
@@ -59,36 +58,27 @@ html {
    用于笔记正文 / markdown 渲染
    ===================================================== */
 .markdown-body {
-  --md-blue: #38bdf8;
-  --md-blue-soft: #e0f2fe;
-  --md-pink: #f472b6;
-  --md-pink-soft: #fdf2f8;
-  --md-pink-deep: #ec4899;
-  --md-pink-border: rgba(244, 114, 182, 0.45);
-  --md-grad: linear-gradient(90deg, #38bdf8, #f472b6);
-  --md-grad-soft: linear-gradient(90deg, #e0f2fe, #fdf2f8);
+  /* 品牌令牌别名：单一事实源在 :root/.dark 的 --brand-* */
+  --md-blue: var(--brand-blue);
+  --md-blue-soft: var(--brand-blue-soft);
+  --md-pink: var(--brand-pink);
+  --md-pink-soft: var(--brand-pink-soft);
+  --md-pink-deep: var(--brand-pink-deep);
+  --md-pink-border: var(--brand-pink-border);
+  --md-grad: var(--brand-grad);
+  --md-grad-soft: var(--brand-grad-soft);
   color: var(--foreground);
   font-size: 0.9375rem;
   line-height: 1.85;
   letter-spacing: 0.01em;
   overflow-wrap: break-word;
 }
-.dark .markdown-body {
-  --md-blue: #7dd3fc;
-  --md-blue-soft: oklch(0.45 0.12 245 / 30%);
-  --md-pink: #f9a8d4;
-  --md-pink-soft: oklch(0.5 0.16 340 / 30%);
-  --md-pink-deep: #f9a8d4;
-  --md-pink-border: rgba(249, 168, 212, 0.45);
-  --md-grad: linear-gradient(90deg, #7dd3fc, #f9a8d4);
-  --md-grad-soft: linear-gradient(90deg, oklch(0.45 0.12 245 / 30%), oklch(0.5 0.16 340 / 30%));
-}
 
 /* 首尾元素 */
 .markdown-body > :first-child { margin-top: 0 !important; }
 .markdown-body > :last-child  { margin-bottom: 0 !important; }
 
-/* ---- 标题（蓝白 + 粉 二次元风） ---- */
+/* ---- 标题（日系轻博客：低饱和强调） ---- */
 .markdown-body h1,
 .markdown-body h2,
 .markdown-body h3,
@@ -100,12 +90,12 @@ html {
   margin-top: 2.2em;
   margin-bottom: 0.6em;
   scroll-margin-top: 6.5rem;
-  color: var(--md-blue);
+  color: var(--foreground);
 }
 .markdown-body h1 {
   font-size: 1.75rem;
   padding-bottom: 0.55rem;
-  color: var(--md-blue);
+  color: var(--foreground);
   position: relative;
 }
 .markdown-body h1::after {
@@ -115,14 +105,15 @@ html {
   bottom: -2px;
   width: 6rem;
   height: 3px;
-  background: var(--md-grad);
+  background: var(--md-blue);
   border-radius: 9999px;
 }
 .markdown-body h2 {
   font-size: 1.4rem;
   padding-left: 0.8rem;
-  background: var(--md-grad) no-repeat left center / 4px 72%;
-  border-radius: 2px;
+  border-left: 4px solid color-mix(in oklab, var(--md-blue) 58%, white);
+  background: transparent;
+  border-radius: 0;
 }
 .markdown-body h3 { font-size: 1.15rem; }
 .markdown-body h4 { font-size: 1.05rem; }
@@ -131,7 +122,7 @@ html {
 
 /* ---- 段落与行内 ---- */
 .markdown-body p { margin: 1.05em 0; }
-.markdown-body strong { font-weight: 700; color: var(--md-pink-deep); }
+.markdown-body strong { font-weight: 700; color: var(--md-blue-deep); }
 .markdown-body em { font-style: italic; }
 .markdown-body del {
   color: var(--muted-foreground);
@@ -140,12 +131,12 @@ html {
 
 /* ---- 选区 / 高亮 / 嵌套列表 ---- */
 .markdown-body ::selection {
-  background: var(--md-pink-soft);
-  color: var(--md-pink-deep);
+  background: var(--md-blue-soft);
+  color: var(--md-blue-deep);
 }
 .markdown-body mark {
-  background: linear-gradient(180deg, transparent 55%, var(--md-pink-soft) 55%);
-  color: var(--md-pink-deep);
+  background: linear-gradient(180deg, transparent 55%, var(--md-blue-soft) 55%);
+  color: var(--md-blue-deep);
   padding: 0 0.15em;
   border-radius: 2px;
 }
@@ -166,27 +157,25 @@ html {
   border-bottom-style: solid;
 }
 
-/* ---- 行内代码（粉） ---- */
+/* ---- 行内代码 ---- */
 .markdown-body :not(pre) > code {
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 0.85em;
   font-weight: 500;
-  color: var(--md-pink-deep);
-  background: var(--md-pink-soft);
-  border: 1px solid var(--md-pink-border);
+  color: var(--md-blue-deep);
+  background: var(--md-blue-soft);
+  border: 1px solid color-mix(in oklab, var(--md-blue) 25%, transparent);
   border-radius: 6px;
   padding: 0.15em 0.4em;
   margin: 0 0.15em;
 }
 
-/* ---- 引用（渐变竖条 + 粉蓝底） ---- */
+/* ---- 引用 ---- */
 .markdown-body blockquote {
   margin: 1.5em 0;
   padding: 0.65em 1.1em;
-  border-left: none;
-  background:
-    var(--md-grad) left / 3px 100% no-repeat,
-    var(--md-grad-soft);
+  border-left: 3px solid color-mix(in oklab, var(--md-blue) 58%, white);
+  background: color-mix(in oklab, var(--md-blue-soft) 45%, white);
   border-radius: 0 0.6rem 0.6rem 0;
   color: var(--muted-foreground);
 }
@@ -212,7 +201,7 @@ html {
   content: "▸";
   position: absolute;
   left: -1.05em;
-  color: var(--md-pink);
+  color: var(--md-blue);
   font-weight: 700;
 }
 .markdown-body ol {
@@ -237,31 +226,31 @@ html {
   font-size: 0.75em;
   font-weight: 700;
   font-style: italic;
-  color: var(--md-pink-deep);
-  background: var(--md-pink-soft);
-  border: 1px solid var(--md-pink-border);
+  color: var(--md-blue-deep);
+  background: var(--md-blue-soft);
+  border: 1px solid color-mix(in oklab, var(--md-blue) 25%, transparent);
   border-radius: 9999px;
 }
 .markdown-body li > ul,
 .markdown-body li > ol { margin: 0.25em 0; }
 
-/* ---- 任务列表（粉勾选） ---- */
+/* ---- 任务列表 ---- */
 .markdown-body li:has(> input[type="checkbox"]) { list-style: none; }
 .markdown-body li:has(> input[type="checkbox"])::before { content: none; }
 .markdown-body input[type="checkbox"] {
-  accent-color: var(--md-pink);
+  accent-color: var(--md-blue);
   width: 1em;
   height: 1em;
   margin-right: 0.5em;
   vertical-align: -0.15em;
 }
 
-/* ---- 分割线（蓝粉渐变） ---- */
+/* ---- 分割线 ---- */
 .markdown-body hr {
   border: 0;
   height: 2px;
   margin: 2.5em auto;
-  background: linear-gradient(90deg, transparent, var(--md-blue), var(--md-pink), transparent);
+  background: linear-gradient(90deg, transparent, var(--md-blue), transparent);
   border-radius: 9999px;
 }
 
@@ -276,19 +265,19 @@ html {
   box-shadow: 0 2px 8px oklch(0.5 0.15 340 / 12%);
 }
 
-/* ---- 表格（渐变表头 + 粉蓝条纹） ---- */
+/* ---- 表格 ---- */
 .markdown-body table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.875rem;
   margin: 0; /* 外层容器 my-6 负责间距，避免边框盒内出现空隙 */
 }
-.markdown-body thead { background: var(--md-pink); }
+.markdown-body thead { background: color-mix(in oklab, var(--md-blue-soft) 70%, white); }
 .markdown-body th {
   padding: 0.6em 0.9em;
   text-align: left;
   font-weight: 600;
-  color: #fff;
+  color: var(--foreground);
   border: 1px solid var(--border);
   border-bottom: 2px solid var(--md-pink-border);
   white-space: nowrap;
@@ -299,15 +288,47 @@ html {
   vertical-align: middle;
 }
 .markdown-body tbody tr:nth-child(even) {
-  background: var(--md-pink-soft);
+  background: var(--md-blue-soft);
 }
-.markdown-body tbody tr:hover { background: var(--md-pink-soft); }
+.markdown-body tbody tr:hover { background: var(--md-blue-soft); }
+
+.dark .markdown-body tbody tr:nth-child(even),
+.dark .markdown-body tbody tr:hover {
+  background: rgba(116, 179, 255, 0.12);
+}
+
+.dark .markdown-body thead {
+  background: rgba(116, 179, 255, 0.18);
+}
+
+/* 品牌工具类（日系轻博客） */
+@utility bg-brand-grad {
+  background-image: linear-gradient(90deg, var(--brand-blue), var(--brand-pink));
+}
+@utility bg-brand-grad-soft {
+  background-image: linear-gradient(90deg, var(--brand-blue-soft), var(--brand-pink-soft));
+}
+@utility text-brand-grad {
+  background-image: linear-gradient(90deg, var(--brand-blue), var(--brand-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* 品牌色（日系轻博客）：见 docs/design-system.md */
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-strong: var(--brand-blue-strong);
+  --color-brand-blue-deep: var(--brand-blue-deep);
+  --color-brand-blue-soft: var(--brand-blue-soft);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-pink-deep: var(--brand-pink-deep);
+  --color-brand-pink-soft: var(--brand-pink-soft);
+  --color-brand-paper: var(--brand-paper);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -345,23 +366,23 @@ html {
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #fff1f8;
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: #fff8fc;
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: #ffe5f2;
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --muted: #ffe5f2;
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: #ffeaf5;
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --border: #f4cce0;
+  --input: #f4cce0;
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -376,38 +397,94 @@ html {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* 品牌令牌：蓝粉二次元，但保持前台阅读清爽 */
+  --brand-blue: #92cfff;
+  --brand-blue-strong: #62b7f8;
+  --brand-blue-deep: #3f8fc4;
+  --brand-blue-soft: #e8f6ff;
+  --brand-pink: #ff84bd;
+  --brand-pink-deep: #d94f8f;
+  --brand-pink-soft: #ffe0ef;
+  --brand-pink-border: rgba(255, 132, 189, 0.46);
+  --brand-paper: #fff1f8;
+  --brand-paper-deep: #ffe7f3;
+  --brand-grad: linear-gradient(90deg, #ff84bd, #ffb3d8);
+  --brand-grad-soft: linear-gradient(135deg, #ffe0ef, #fff4fa 52%, #ffe8f4);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #182236;
+  --foreground: #eef6ff;
+  --card: #202a3f;
+  --card-foreground: #eef6ff;
+  --popover: #202a3f;
+  --popover-foreground: #eef6ff;
+  --primary: #b9d7f2;
+  --primary-foreground: #172033;
+  --secondary: #26334d;
+  --secondary-foreground: #eef6ff;
+  --muted: #26334d;
+  --muted-foreground: #b9c8d8;
+  --accent: #30405d;
+  --accent-foreground: #eef6ff;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: rgba(143, 183, 223, 0.28);
+  --input: rgba(143, 183, 223, 0.32);
+  --ring: #b9d7f2;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: #202a3f;
+  --sidebar-foreground: #eef6ff;
+  --sidebar-primary: #b9d7f2;
+  --sidebar-primary-foreground: #172033;
+  --sidebar-accent: #26334d;
+  --sidebar-accent-foreground: #eef6ff;
+  --sidebar-border: rgba(143, 183, 223, 0.24);
+  --sidebar-ring: #b9d7f2;
+  /* 品牌令牌：暗色统一为月亮蓝灰，保留少量星光粉作点缀 */
+  --brand-blue: #b9d7f2;
+  --brand-blue-strong: #dbe9f8;
+  --brand-blue-deep: #eef6ff;
+  --brand-blue-soft: rgba(185, 215, 242, 0.16);
+  --brand-pink: #f0b8d4;
+  --brand-pink-deep: #ffddec;
+  --brand-pink-soft: rgba(240, 184, 212, 0.13);
+  --brand-pink-border: rgba(240, 184, 212, 0.24);
+  --brand-paper: #182236;
+  --brand-paper-deep: #202a3f;
+  --brand-grad: linear-gradient(90deg, #b9d7f2, #f0b8d4);
+  --brand-grad-soft: linear-gradient(135deg, rgba(185, 215, 242, 0.18), rgba(240, 184, 212, 0.1));
+}
+
+.blog-theme-bg {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(255, 132, 189, 0.22), transparent 24rem),
+    radial-gradient(circle at 88% 8%, rgba(255, 196, 226, 0.28), transparent 24rem),
+    radial-gradient(circle at 58% 64%, rgba(255, 228, 241, 0.34), transparent 28rem),
+    linear-gradient(180deg, var(--brand-paper), var(--brand-paper-deep));
+}
+
+.dark .blog-theme-bg {
+  background:
+    radial-gradient(circle at 14% 8%, rgba(185, 215, 242, 0.18), transparent 24rem),
+    radial-gradient(circle at 84% 10%, rgba(240, 184, 212, 0.1), transparent 20rem),
+    radial-gradient(circle at 52% 70%, rgba(143, 183, 223, 0.12), transparent 30rem),
+    linear-gradient(180deg, #182236 0%, #202a3f 58%, #26334d 100%);
+}
+
+.blog-theme-decor {
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='92' height='92' viewBox='0 0 92 92' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ff84bd' stroke-opacity='.22' stroke-linecap='round' stroke-width='1.4'%3E%3Cpath d='M18 20c5 1 7 3 8 8 1-5 3-7 8-8-5-1-7-3-8-8-1 5-3 7-8 8Z'/%3E%3Cpath d='M60 58c4 .8 5.8 2.6 6.6 6.6.8-4 2.6-5.8 6.6-6.6-4-.8-5.8-2.6-6.6-6.6-.8 4-2.6 5.8-6.6 6.6Z'/%3E%3Ccircle cx='72' cy='22' r='2.8' fill='%23ffb3d8' fill-opacity='.28' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 92px 92px;
+  opacity: 0.65;
+}
+
+.dark .blog-theme-decor {
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='112' height='112' viewBox='0 0 112 112' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23b9d7f2' stroke-opacity='.22' stroke-linecap='round' stroke-width='1.3'%3E%3Cpath d='M70 22a16 16 0 1 0 20 20 18 18 0 1 1-20-20Z' fill='%23b9d7f2' fill-opacity='.12' stroke='none'/%3E%3Cpath d='M22 32c4 .8 5.7 2.5 6.5 6.5.8-4 2.5-5.7 6.5-6.5-4-.8-5.7-2.5-6.5-6.5-.8 4-2.5 5.7-6.5 6.5Z'/%3E%3Cpath d='M40 80c3 .6 4.4 2 5 5 .6-3 2-4.4 5-5-3-.6-4.4-2-5-5-.6 3-2 4.4-5 5Z'/%3E%3Ccircle cx='86' cy='76' r='2.2' fill='%23dbe9f8' fill-opacity='.24' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 112px 112px;
+  opacity: 0.5;
 }

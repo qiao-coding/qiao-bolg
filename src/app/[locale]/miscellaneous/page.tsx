@@ -9,7 +9,6 @@ import { MiscellaneousTimeline } from "@/components/features/miscellaneous/Misce
 import { RotatingCube } from "@/components/features/mol/RotatingCube";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
 import { ArrowUpIcon } from "lucide-react";
-import { motion } from "framer-motion";
 import { Miscellaneous } from "@/types/miscellaneous/type";
 import { useT } from "@/i18n/LocaleContext";
 
@@ -34,12 +33,7 @@ export default function MiscellaneousPage() {
   return (
     <TechBackgroundNoGrid>
       <NextRouter>
-        <motion.main
-          initial={{ opacity: 0, y: 150, scale: 1 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          aria-labelledby="miscellaneous-title"
-        >
+        <main aria-labelledby="miscellaneous-title">
           {/* 说说内容区域 */}
           <section className="py-12 px-4 sm:px-6 lg:px-8 min-h-screen max-w-5xl mx-auto pt-28" aria-label="说说时间线">
             <header>
@@ -50,11 +44,11 @@ export default function MiscellaneousPage() {
             ) : (
               <section className="flex flex-col justify-center items-center " aria-live="polite" aria-busy="true">
                 <RotatingCube />
-                <p className="text-3xl text-sky-400 dark:text-white font-bold">{t('miscellaneous.loading')}</p>
+                <p className="text-lg font-medium text-muted-foreground">{t('miscellaneous.loading')}</p>
               </section>
             )}
           </section>
-        </motion.main>
+        </main>
       </NextRouter>
       <footer
         className="fixed bottom-[3%] left-[3%] "
@@ -63,7 +57,7 @@ export default function MiscellaneousPage() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           variant="outline"
           aria-label={t('common.backToTop')}
-          className="bg-card/60 text-black dark:text-white"
+          className="border-border bg-card/90 text-foreground"
         >
           <span className="hidden md:inline-block">{t('common.backToTop')}</span>
           <ArrowUpIcon aria-hidden="true" />

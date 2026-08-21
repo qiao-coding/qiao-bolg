@@ -59,11 +59,11 @@ export default function NotesSideber() {
   const getIconComponent = (name: string) => {
     switch (name.toLowerCase()) {
       case 'github':
-        return <Github className="w-4 h-4 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300" />;
+        return <Github className="w-4 h-4 text-brand-blue-deep" />;
       case 'gitee':
         return <SiGitee className="w-4 h-4 bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400" />;
       default:
-        return <div className="w-4 h-4 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 flex items-center justify-center text-xs">{name.charAt(0)}</div>;
+        return <div className="w-4 h-4 text-brand-blue-deep flex items-center justify-center text-xs">{name.charAt(0)}</div>;
     }
   };
 
@@ -87,46 +87,43 @@ export default function NotesSideber() {
   }
 
   return (
-    <div className="hidden lg:block 
-    lg:w-[200px] xl:w-[250px] 
-    bg-white dark:bg-gray-800/90
-     rounded-2xl shadow-sm dark:shadow-lg dark:shadow-gray-900/20 p-6 sticky top-24 self-start dark:border dark:border-gray-700">
+    <div className="hidden lg:block
+    lg:w-[200px] xl:w-[250px]
+    rounded-lg border border-border/70 bg-card/85 p-6 shadow-sm sticky top-24 self-start">
       <div className="flex flex-col items-center mb-6">
         <div className="relative mb-5">
-          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg dark:shadow-gray-900/50">
+          <div className="w-32 h-32 rounded-lg overflow-hidden border border-border bg-muted shadow-sm">
             <Image
-              src={session?.user?.image || "/UserImage/up.jpg"}
+              src={session?.user?.image || "/user_img/up.jpg"}
               alt="个人头像"
               width={128}
               height={128}
               loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+              className="w-full h-full object-cover"
             />
-          </div>
-          <div className="absolute -inset-1 rounded-full border-2 border-dashed border-primary/30 animate-spin-slow">
           </div>
         </div>
 
-        <h1 className="text-xl font-bold mb-1 text-gray-800 dark:text-white">
+        <h1 className="text-xl font-bold mb-1 text-foreground">
           {handleDynamicName()}
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-muted-foreground">
           {handleDynamicEmail()}
         </p>
       </div>
 
       <div className="space-y-3 mb-6" >
 
-        <h3 className="text-base font-semibold mb-3 text-gray-800 dark:text-white">联系方式</h3>
+        <h3 className="text-base font-semibold mb-3 text-foreground">联系方式</h3>
         {sidebarData.socialLinks.map((item, index) => (
 
           <a
             key={index}
             href={item.link}
 
-            className="flex items-center gap-2 p-2.5 rounded-lg transition-all bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="flex items-center gap-2 p-2.5 rounded-md transition-colors bg-brand-blue-soft/60 text-foreground hover:bg-brand-blue-soft"
           >
-            <div className="p-1.5 rounded-lg">
+            <div className="p-1.5 rounded-md">
               {getIconComponent(item.name)}
             </div>
             <span className="text-sm truncate">{item.name}</span>

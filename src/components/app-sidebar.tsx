@@ -28,7 +28,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/shadcnComponents/navigation/collapsible"
-import { useRouter } from "@/i18n/navigation"
+import { usePathname, useRouter } from "@/i18n/navigation"
 import type { Note } from "@/types/note/type"
 
 // 模块级时间戳：区分 StrictMode 双挂载（<300ms，重播保证入场动画可见）
@@ -52,8 +52,10 @@ export function AppSidebar({
   ...props
 }: AppSidebarProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const menuRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const pendingRefreshPath = useRef<string | null>(null)
   // 防抖：记录上次跳转目标，300ms 内重复点击同一项直接忽略（避免连点触发多次跳转）
   const lastJumpRef = useRef<{ key: string; at: number } | null>(null)
   // 本地高亮：点击时乐观更新（立即高亮），服务器返回后同步
@@ -61,6 +63,16 @@ export function AppSidebar({
   useEffect(() => {
     setActivePage(activePageUid)
   }, [activePageUid])
+
+  useEffect(() => {
+    if (
+      pendingRefreshPath.current &&
+      (pathname === pendingRefreshPath.current || pathname.endsWith(pendingRefreshPath.current))
+    ) {
+      pendingRefreshPath.current = null
+      router.refresh()
+    }
+  }, [pathname, router])
   // 默认展开当前笔记分类
   const [expandedIds, setExpandedIds] = useState<Set<number>>(
     () => new Set([activeNoteId])
@@ -110,7 +122,9 @@ export function AppSidebar({
     onNavigate?.()
     // 乐观更新：点击立即高亮，不等服务器返回
     setActivePage(target)
-    router.push(`/notes/${noteId}/${target}`)
+    const targetPath = `/notes/${noteId}/${target}`
+    pendingRefreshPath.current = targetPath
+    router.push(targetPath)
   }
 
   // 分类行入场 stagger（时间戳锁：StrictMode 双挂载重播保证首次可见；导航重挂载不再播放）
@@ -165,15 +179,15 @@ export function AppSidebar({
   return (
     <Sidebar
       collapsible="offcanvas"
-      className="bg-gradient-to-b from-sky-200/75 to-sky-100/60 [&_[data-slot=sidebar-inner]]:bg-transparent border-sky-200/80 dark:from-slate-700/90 dark:to-slate-800/80 dark:[&_[data-slot=sidebar-inner]]:bg-transparent dark:border-sky-500/30"
+      className="border-r border-brand-pink/12 bg-[#fff2f8] [&_[data-slot=sidebar-inner]]:bg-transparent dark:border-[#8fb7df]/24 dark:bg-[#202a3f] dark:[&_[data-slot=sidebar-inner]]:bg-transparent"
       {...props}
     >
-      <SidebarHeader className="border-b border-sky-200/80 bg-sky-200/50 dark:border-sky-500/25 dark:bg-slate-700/70">
+      <SidebarHeader className="border-b border-brand-pink/12 bg-white/45 dark:border-[#8fb7df]/24 dark:bg-[#26334d]">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="data-[slot=sidebar-menu-button]:p-1.5!">
-              <BookMarked className="size-5! shrink-0 text-sky-500 dark:text-sky-300" />
-              <span className="text-base font-semibold text-sky-700 dark:text-sky-200">
+              <BookMarked className="size-5! shrink-0 text-brand-pink dark:text-[#b9d7f2]" />
+              <span className="text-base font-semibold text-foreground">
                 笔记导航
               </span>
             </SidebarMenuButton>
@@ -185,7 +199,7 @@ export function AppSidebar({
         onScroll={() => {
           if (scrollRef.current) savedSidebarScroll = scrollRef.current.scrollTop
         }}
-        className="[scrollbar-width:thin] [scrollbar-color:color-mix(in_oklab,var(--color-sky-400)_60%,transparent)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-sky-400/55 hover:[&::-webkit-scrollbar-thumb]:bg-sky-400/80 dark:[&::-webkit-scrollbar-thumb]:bg-slate-500/60">
+        className="[scrollbar-width:thin] [scrollbar-color:color-mix(in_oklab,var(--color-brand-pink)_45%,transparent)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-brand-pink/35 hover:[&::-webkit-scrollbar-thumb]:bg-brand-pink/55 dark:[&::-webkit-scrollbar-thumb]:bg-[#8fb7df]/50">
         <SidebarGroup>
           <SidebarGroupLabel>分类 · 页面</SidebarGroupLabel>
           <div ref={menuRef}>
@@ -209,9 +223,9 @@ export function AppSidebar({
                         >
                           <ChevronRight className="shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                           {expanded ? (
-                            <FolderOpen className="shrink-0 text-sky-500 dark:text-sky-300" />
+                            <FolderOpen className="shrink-0 text-brand-pink dark:text-[#b9d7f2]" />
                           ) : (
-                            <Folder className="shrink-0 text-sky-500 dark:text-sky-300" />
+                            <Folder className="shrink-0 text-brand-pink dark:text-[#b9d7f2]" />
                           )}
                           <span className="flex-1 truncate">{note.title}</span>
                           <SidebarMenuBadge>{note.page?.length || 0}</SidebarMenuBadge>

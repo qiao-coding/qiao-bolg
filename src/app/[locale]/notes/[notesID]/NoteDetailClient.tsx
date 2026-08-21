@@ -1,15 +1,15 @@
 "use client";
 // 笔记详情页面客户端组件 - 展示笔记标题和页面导航
 import NextRouter from "@/components/layout/NextRouter";
-import { Link, useRouter } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import TechBackgroundNoGrid from "@/components/ui/public/background_img";
 import Title from "@/components/ui/public/title";
 import { Note } from "@/types/note/type";
 import { NoteListCard } from "@/components/features/notes/noteListCard";
 import { Button } from "@/components/ui/shadcnComponents/forms/button";
-import { ArrowUpIcon } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowLeft, ArrowUpIcon, List } from "lucide-react";
 import ThemePage from "@/components/ui/public/themePage";
+import { useEffect, useRef } from "react";
 
 interface NoteDetailClientProps {
   note: Note;
@@ -18,60 +18,54 @@ interface NoteDetailClientProps {
 
 export default function NoteDetailClient({ note, notesID }: NoteDetailClientProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const pendingRefreshPath = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (
+      pendingRefreshPath.current &&
+      (pathname === pendingRefreshPath.current || pathname.endsWith(pendingRefreshPath.current))
+    ) {
+      pendingRefreshPath.current = null;
+      router.refresh();
+    }
+  }, [pathname, router]);
 
   // 处理点击笔记页面跳转
   const handleUid = (notePageID: string) => {
-    router.push(`/notes/${notesID}/${notePageID}`);
+    const targetPath = `/notes/${notesID}/${notePageID}`;
+    pendingRefreshPath.current = targetPath;
+    router.push(targetPath);
   };
 
   return (
     <TechBackgroundNoGrid>
       <NextRouter showHeader={false} >
-        <header className="flex justify-between mb-5 container mx-auto px-4 sm:px-6 py-4 flex">
+        <header className="container mx-auto flex justify-between px-4 py-5 sm:px-6">
           <Link
             href="/notes"
-            className="flex items-center
-             text-[#8A94A6] dark:text-white/65
-             hover:text-[#4A6FA5] transition-colors cursor-target"
+            className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/76 px-4 py-2 text-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:text-brand-pink-deep dark:border-[#8fb7df]/24 dark:bg-[#26334d] dark:text-[#dbe9f8]"
           >
-            <svg
-              className="mr-2 w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
+            <ArrowLeft className="size-4" />
             <span>返回列表</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link
               href={`/notes/${notesID}/contents`}
-              className="flex items-center text-sm
-               text-[#8A94A6] dark:text-white/65
-               hover:text-[#4A6FA5] transition-colors cursor-target gap-1"
+              className="inline-flex items-center gap-2 rounded-full border border-brand-pink/25 bg-brand-pink-soft/80 px-4 py-2 text-sm font-semibold text-brand-pink-deep transition-colors hover:bg-white/80 dark:border-[#8fb7df]/24 dark:bg-[#b9d7f2]/10 dark:text-[#dbe9f8] dark:hover:bg-[#30405d]"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                  d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
+              <List className="size-4" />
               目录
             </Link>
             <ThemePage />
           </div>
         </header>
-        <motion.main
-          initial={{ opacity: 0, y: 150, scale: 1 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <header>
-            <Title>{note && note.title}</Title>
+        <main className="mx-auto max-w-5xl px-4 pb-20 sm:px-6">
+          <header className="mb-10 border-b border-brand-pink/15 pb-8 text-center">
+            <div>
+              <Title>{note && note.title}</Title>
+              <p className="mt-4 text-sm text-muted-foreground">{note.page?.length ?? 0} 篇笔记</p>
+            </div>
           </header>
 
           <section className="min-h-screen">
@@ -80,7 +74,7 @@ export default function NoteDetailClient({ note, notesID }: NoteDetailClientProp
               handleUid={handleUid}
             />}
           </section>
-        </motion.main>
+        </main>
       </NextRouter>
 
       <footer
@@ -90,7 +84,7 @@ export default function NoteDetailClient({ note, notesID }: NoteDetailClientProp
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           variant="outline"
           aria-label="返回顶部"
-          className="bg-sky-100/80 text-sky-700 hover:bg-sky-200/70 dark:bg-slate-700/60 dark:text-sky-200"
+          className="border-border bg-card/90 text-foreground hover:bg-accent"
         >
           <span className="hidden md:inline-block">返回顶部</span>
           <ArrowUpIcon />

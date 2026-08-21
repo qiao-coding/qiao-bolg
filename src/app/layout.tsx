@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body
-        className="antialiased bg-image-[url('/bg.webp')]"
+        className="min-h-screen font-sans antialiased"
         suppressHydrationWarning
       >
         {/* 路由跳转顶部加载进度条（anime 蓝） */}

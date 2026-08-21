@@ -25,9 +25,9 @@ export default function ThemePage() {
                 checked={updateTheme}
                 onCheckedChange={()=>setTheme(theme === 'light' ? 'dark' : 'light')}
                 id="theme-toggle"
-                className="data-[state=checked]:bg-primary"
+                className="data-[state=checked]:bg-brand-blue"
             />
-            <Moon className="h-4 w-4 text-indigo-400" />
+            <Moon className="h-4 w-4 text-brand-blue" />
         </div>
     )
 

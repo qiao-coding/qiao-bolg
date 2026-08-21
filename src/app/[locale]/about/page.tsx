@@ -4,7 +4,6 @@ import NextRouter from '@/components/layout/NextRouter';
 import TechBackgroundNoGrid from '@/components/ui/public/background_img';
 import NotesSideber from '@/components/ui/notes/noteSideber';
 import Title from '@/components/ui/public/title';
-import { motion } from 'framer-motion'
 import { api_about } from '@/hooks/about/api_about';
 import { useT } from '@/i18n/LocaleContext';
 
@@ -42,57 +41,43 @@ const AboutPage = () => {
         {/* 页面主内容区域 */}
         <div className="pt-20 pb-16 px-4 min-h-screen">
           {/* 页面标题区域 */}
-          <motion.div
-            initial={{ opacity: 0, y: 150 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 , ease: "easeOut" }}
-          >
+          <div>
             <div className="max-w-6xl w-full mx-auto mb-16">
               <Title>{t('about.pageTitle')}</Title>
             </div>
-          </motion.div>
+          </div>
 
           {/* 个人信息和侧边栏内容区域 */}
-          <motion.div
-            initial={{ opacity: 0, y: 150, scale: 1 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
+          <div>
             <div className="max-w-6xl w-full mx-auto">
               {/* 主内容和侧边栏布局 */}
               <div className="flex flex-col lg:flex-row gap-8">
                 <div className="w-full lg:w-2/3">
                   {/* 个人简介卡片 */}
-                  <article className="mb-8 bg-white dark:bg-gray-800/90 rounded-2xl shadow-sm dark:shadow-lg dark:shadow-gray-900/20 p-6 dark:border dark:border-gray-700">
+                  <article className="mb-8 rounded-lg border border-border/70 bg-card/85 p-6 shadow-sm">
                     <header className="flex items-center gap-3 mb-5">
-                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('about.personalIntro')}</h2>
+                      <h2 className="text-xl font-bold text-foreground">{t('about.personalIntro')}</h2>
                     </header>
 
                     <div className="space-y-4">
-                      <motion.p 
-                        className="text-gray-700 dark:text-gray-300 leading-relaxed"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
+                      <p
+                        className="text-foreground/80 leading-relaxed"
                       >
                         {personalInfo.description}
-                      </motion.p>
+                      </p>
                       
                       {/* 详细信息列表 */}
                       <div className="grid grid-cols-1 gap-5 mt-2 pb-10">
-                        {personalInfo.details.map((info, index) => (
-                          <motion.div 
+                        {personalInfo.details.map((info) => (
+                          <div 
                             key={info.label}
-                            className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5, delay: 0.1 * index }}
+                            className="rounded-md border border-border/60 bg-brand-blue-soft/55 p-3 dark:bg-brand-blue-soft"
                           >
                             <div className="flex justify-between">
-                              <span className="text-gray-600 dark:text-gray-400">{info.label}</span>
-                              <span className="font-medium text-gray-800 dark:text-white">{info.value}</span>
+                              <span className="text-muted-foreground">{info.label}</span>
+                              <span className="font-medium text-foreground">{info.value}</span>
                             </div>
-                          </motion.div>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -104,7 +89,7 @@ const AboutPage = () => {
                 <NotesSideber />
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </NextRouter>
     </TechBackgroundNoGrid>
