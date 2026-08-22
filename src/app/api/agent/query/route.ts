@@ -260,36 +260,62 @@ Rules:
 - Answer in the same language as the question (Chinese questions → Chinese).
 - Do not mention retrieval or searching mechanisms.`;
 
-  try {
-    const client = createDeepSeekClient(apiKey || "missing");
-    const completion = await client.chat.completions.create({
-      model: "deepseek-v4-flash",
-      messages: [
-        { role: "system", content: await buildSystemPrompt(RAG_TASK_PROMPT) },
-        {
-          role: "user",
-          content: `Question:\n${question}\n\nMaterials:\n${
-            context.trim() || "(没有检索到相关笔记材料)"
-          }`,
-        },
-      ],
-      temperature: 0.3,
-      max_tokens: 800,
-    });
-    const answer = completion.choices[0]?.message?.content?.trim() || "没有找到相关内容。";
+  // --- LLM call with a single retry for transient upstream failures ---
+  const client = createDeepSeekClient(apiKey || "missing");
+  const MAX_ATTEMPTS = 2;
+  const RETRY_DELAY_MS = 800;
 
-    const sources = top.map((c) => ({
-      title: c.title,
-      href: c.href,
-      excerpt: c.excerpt.slice(0, 160),
-    }));
+  let completion:
+    | { choices: { message?: { content?: string | null } | null }[] }
+    | undefined;
+  let lastError: unknown;
 
-    return NextResponse.json({ answer, sources });
-  } catch (err) {
-    console.error("RAG answer failed:", err);
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    try {
+      completion = await client.chat.completions.create({
+        model: "deepseek-v4-flash",
+        messages: [
+          { role: "system", content: await buildSystemPrompt(RAG_TASK_PROMPT) },
+          {
+            role: "user",
+            content: `Question:\n${question}\n\nMaterials:\n${
+              context.trim() || "(没有检索到相关笔记材料)"
+            }`,
+          },
+        ],
+        temperature: 0.3,
+        max_tokens: 800,
+      });
+      break;
+    } catch (err) {
+      lastError = err;
+      const status = (err as { status?: number })?.status;
+      // Retry on rate-limit, server errors, and network failures (no status).
+      // Non-retryable 4xx (auth, bad request) fail immediately.
+      const retryable = !status || status === 429 || status >= 500;
+      if (attempt < MAX_ATTEMPTS - 1 && retryable) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS * (attempt + 1)));
+        continue;
+      }
+      break;
+    }
+  }
+
+  if (!completion) {
+    console.error("RAG answer failed:", lastError);
     return NextResponse.json(
       { error: "AI 服务暂时不可用，请稍后再试" },
       { status: 500 }
     );
   }
+
+  const answer = completion.choices[0]?.message?.content?.trim() || "没有找到相关内容。";
+
+  const sources = top.map((c) => ({
+    title: c.title,
+    href: c.href,
+    excerpt: c.excerpt.slice(0, 160),
+  }));
+
+  return NextResponse.json({ answer, sources });
 }
