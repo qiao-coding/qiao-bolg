@@ -9,9 +9,11 @@ import type { ChatMessage } from "./types";
 export function ChatMessages({
   messages,
   isStreaming,
+  welcomeKey,
 }: {
   messages: ChatMessage[];
   isStreaming: boolean;
+  welcomeKey?: string;
 }) {
   const t = useT();
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -24,7 +26,7 @@ export function ChatMessages({
     <ScrollArea className="flex-1 px-4 py-4">
       {messages.length === 0 ? (
         <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap px-1">
-          {t("admin.ai.welcome")}
+          {t(welcomeKey ?? "admin.ai.welcome")}
         </div>
       ) : (
         <div className="space-y-0">
