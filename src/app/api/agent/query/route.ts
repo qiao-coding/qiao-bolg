@@ -1,16 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
-import { createDeepSeekClient } from "../../ai/lib/client";
+import { streamText, tool, isStepCount } from "ai";
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { z } from "zod";
 import { buildSystemPrompt } from "../../ai/lib/persona";
+import { searchNotes, readNote, listNotes, type SearchHit } from "../../ai/tools/home";
 
 // ---------------------------------------------------------------------------
-// Public, read-only RAG lookup over notes. No auth required.
-// Keyword search (DeepSeek has no embedding API) + scoring + excerpt + LLM answer.
+// 主页悬浮 AI 聊天的公开只读 agent（无 auth）。
+// 用 Vercel AI SDK 的 tool-calling 循环：模型按需调用 search_notes / read_note /
+// list_notes，不再每次把全部上下文塞进 prompt。noteContext 只作为 hint 提供
+// 元数据（标题/分类/链接/标签），需要全文时由模型调用 read_note 读取。
 // ---------------------------------------------------------------------------
+
+export const maxDuration = 60;
 
 const MAX_QUESTION_LEN = 500;
-const MAX_CONTEXT_CHARS = 8000;
 const RATE_LIMIT = 20; // requests per minute per IP (best-effort)
 
 // Best-effort in-memory rate limiting
@@ -28,103 +32,48 @@ function rateLimited(ip: string): boolean {
   return false;
 }
 
-const LATIN_STOPWORDS = new Set([
-  "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
-  "do", "does", "did", "have", "has", "had", "will", "would", "can", "could",
-  "should", "shall", "may", "might", "must", "of", "in", "on", "at", "to",
-  "for", "from", "with", "and", "or", "but", "not", "how", "what", "why",
-  "when", "where", "which", "who", "whom", "this", "that", "these", "those",
-  "it", "its", "me", "my", "you", "your", "about", "explain", "tell", "about",
-  "please", "show", "give", "want", "need", "help", "me",
-]);
+type Source = { title: string; href: string; excerpt: string };
 
-const CJK_STOPWORDS = new Set([
-  "的", "了", "是", "在", "和", "与", "或", "被", "把", "让", "就", "都",
-  "要", "会", "能", "可", "可以", "怎么", "什么", "如何", "为什么", "怎样",
-  "请问", "一下", "给我", "解释", "讲讲", "说说", "介绍", "这个", "那个",
-]);
-
-function normalize(text: string): string {
-  return text
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/[#*_`>\-]|!\[.*?\]\(.*?\)/g, " ")
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-/** Extract ≤6 search keywords from a question (latin words + CJK windows). */
-function extractKeywords(question: string): string[] {
-  const normalized = normalize(question);
-  if (!normalized) return [];
-
-  const keywords = new Set<string>();
-  const add = (k: string) => {
-    if (k.length >= 2 && keywords.size < 6) keywords.add(k);
-  };
-
-  // Latin words
-  for (const word of normalized.split(/[^\p{L}\p{N}]+/u)) {
-    if (/^[\x00-\x7F]+$/.test(word) && !LATIN_STOPWORDS.has(word)) add(word);
-  }
-
-  // CJK runs: ≤4 chars keep whole, longer take sliding 2-4 char windows
-  const cjkRuns = normalized.match(/[一-鿿]+/g) ?? [];
-  for (const run of cjkRuns) {
-    if (run.length <= 4) {
-      if (!CJK_STOPWORDS.has(run)) add(run);
-    } else {
-      for (let w = 4; w >= 2 && keywords.size < 6; w--) {
-        for (let i = 0; i + w <= run.length && keywords.size < 6; i++) {
-          const seg = run.slice(i, i + w);
-          if (!CJK_STOPWORDS.has(seg)) add(seg);
-        }
-      }
-    }
-    if (keywords.size >= 6) break;
-  }
-
-  // Fallback: whole normalized question
-  if (keywords.size === 0) add(normalized.slice(0, 60));
-  return [...keywords];
-}
-
-type Candidate = {
-  kind: "note" | "page";
+type NoteHint = {
   title: string;
+  category: string;
   href: string;
-  excerpt: string;
-  score: number;
-  date: string | null;
+  tags: string[];
 };
 
-const DAY = 24 * 60 * 60 * 1000;
-
-/** Slice an excerpt around the first keyword occurrence (or first 300 chars). */
-function makeExcerpt(text: string, keywords: string[]): string {
-  const cleaned = text
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/!\[.*?\]\(.*?\)/g, " ")
-    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
-    .replace(/https?:\/\/\S+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  if (!cleaned) return "";
-
-  let idx = -1;
-  for (const k of keywords) {
-    const i = cleaned.indexOf(k);
-    if (i >= 0) { idx = i; break; }
-  }
-  if (idx < 0) return cleaned.slice(0, 300);
-  return cleaned.slice(Math.max(0, idx - 150), idx + 150);
+function normalizeNoteHint(input: unknown): NoteHint | null {
+  if (!input || typeof input !== "object") return null;
+  const raw = input as Record<string, unknown>;
+  const title = typeof raw.title === "string" ? raw.title.trim() : "";
+  const category = typeof raw.category === "string" ? raw.category.trim() : "";
+  const href = typeof raw.href === "string" ? raw.href.trim() : "";
+  const tags = Array.isArray(raw.tags)
+    ? raw.tags.filter((tag): tag is string => typeof tag === "string").slice(0, 8)
+    : [];
+  if (!title) return null;
+  return {
+    title: title.slice(0, 180),
+    category: category.slice(0, 120),
+    href: href.slice(0, 240),
+    tags,
+  };
 }
 
-function scoreText(text: string, keywords: string[]): number {
-  let s = 0;
-  for (const k of keywords) if (text.includes(k)) s++;
-  return s;
-}
+const HOME_AGENT_PROMPT = `你是「小小乔の小站」博客助手。回答用户的提问。
+
+回答规则：
+1. 先判断问题类型，默认不要调用工具：
+   - 关于博主本人、博客介绍、闲聊、建议、常识类问题 → 直接用系统提示里的【关于我】和你的常识回答，绝对不要调用工具。
+   - 只有当问题需要博客笔记里的具体内容（某个技术主题、某篇文章讲了什么、某个知识点）时，才调用工具。
+2. 调用工具时按需、克制，不要贪多：
+   - search_notes(query)：检索笔记，返回标题 + 链接 + 摘要列表（不含全文）。**只调用一次**，把要检索的关键词一次性写全。
+   - read_note(target)：按链接或 id 读取某篇笔记/页面的全文（target 形如 /notes/3 或 /notes/3/uid）。**最多读 1~2 篇**最关键的文章；摘要已经能回答的，就不要读全文。
+   - list_notes()：列出全部笔记（标题 + 链接 + 标签）。
+3. 调用工具之前不要输出任何文字，先拿结果，再一次性组织回答。
+4. 引用资料时用 markdown 链接形式：[标题](链接)，链接保持相对路径（形如 /notes/3 或 /notes/3/uid），不要拼接域名。
+5. 找不到相关内容时，直接说明没有找到，不要编造。
+6. 用提问所用的语言回答（中文问题用中文）。
+7. 不要提及工具或检索机制。`;
 
 // ---------------------------------------------------------------------------
 // POST
@@ -139,11 +88,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Too many requests, try again later" }, { status: 429 });
   }
 
-  // --- Validate question ---
+  // --- Validate question + optional conversation history + current-note hint ---
   let question: string;
+  let history: { role: "user" | "assistant"; content: string }[] = [];
+  let noteHint: NoteHint | null = null;
   try {
     const body = await req.json();
     question = (body.question ?? "").toString().trim();
+    noteHint = normalizeNoteHint(body.noteContext);
+    if (Array.isArray(body.history)) {
+      history = (body.history as unknown[])
+        .filter((m): m is { role: "user" | "assistant"; content: string } => {
+          if (!m || typeof m !== "object") return false;
+          const r = (m as { role?: unknown }).role;
+          const c = (m as { content?: unknown }).content;
+          return (r === "user" || r === "assistant") && typeof c === "string";
+        })
+        .slice(-6); // keep the last 6 turns for context
+    }
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
@@ -154,168 +116,141 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "question too long" }, { status: 400 });
   }
 
-  // --- Keyword extraction ---
-  const keywords = extractKeywords(question);
+  // --- noteContext: metadata hint only (no full content) ---
+  const noteHintBlock = noteHint
+    ? `
 
-  // --- Retrieve candidates (skip when no keywords — persona questions only) ---
-  type NoteWithPages = Prisma.NoteGetPayload<{ include: { page: true } }>;
-  type PageWithNote = Prisma.NotesPageGetPayload<{ include: { note: true } }>;
-  let noteRows: NoteWithPages[] = [];
-  let pageRows: PageWithNote[] = [];
-  if (keywords.length > 0) {
-    [noteRows, pageRows] = await Promise.all([
-      prisma.note.findMany({
-        where: {
-          OR: [
-            { title: { contains: keywords[0] } },
-            { tags: { hasSome: keywords } },
-          ],
-        },
-        include: { page: { orderBy: { dateEnd: "desc" } } },
-        take: 20,
-      }),
-      prisma.notesPage.findMany({
-        where: {
-          OR: [
-            { title: { contains: keywords[0] } },
-            { content: { contains: keywords[0] } },
-            { pageTags: { hasSome: keywords } },
-          ],
-        },
-        include: { note: true },
-        take: 30,
-      }),
-    ]);
-  }
+【当前正在阅读】标题：《${noteHint.title}》｜分类：${noteHint.category || "-"}｜链接：${noteHint.href || "-"}｜标签：${noteHint.tags.join(" / ") || "-"}
+如果用户的问题与当前笔记相关（如「这篇讲了什么」「上面的内容」「本文」，或追问当前文章细节），请调用 read_note 读取《${noteHint.title}》的全文后再回答。`
+    : "";
 
-  const candidates: Candidate[] = [];
-
-  // Note category matches
-  for (const note of noteRows) {
-    const titleScore = scoreText(note.title.toLowerCase(), keywords) * 3;
-    const tagScore =
-      note.tags.filter((t) => keywords.some((k) => t.toLowerCase().includes(k))).length * 2;
-    if (titleScore + tagScore === 0) continue;
-    const firstPage = note.page[0];
-    const excerpt = firstPage ? makeExcerpt(firstPage.content, keywords) : note.title;
-    candidates.push({
-      kind: "note",
-      title: note.title,
-      href: `/notes/${note.id}`,
-      excerpt,
-      score: titleScore + tagScore,
-      date: firstPage?.dateEnd ?? null,
-    });
-  }
-
-  // Page matches
-  for (const page of pageRows) {
-    const titleScore = scoreText(page.title.toLowerCase(), keywords) * 3;
-    const tagScore =
-      page.pageTags.filter((t) => keywords.some((k) => t.toLowerCase().includes(k))).length * 2;
-    const contentScore = scoreText(page.content.toLowerCase(), keywords);
-    const total = titleScore + tagScore + contentScore;
-    if (total === 0) continue;
-    candidates.push({
-      kind: "page",
-      title: page.title,
-      href: `/notes/${page.noteId}/${page.uid}`,
-      excerpt: makeExcerpt(page.content, keywords) || page.title,
-      score: total,
-      date: page.dateEnd ?? null,
-    });
-  }
-
-  // --- Rank: score desc, +1 recency (180d), tiebreak date desc ---
-  const now = Date.now();
-  candidates.sort((a, b) => {
-    const aDate = a.date ? new Date(a.date).getTime() : 0;
-    const bDate = b.date ? new Date(b.date).getTime() : 0;
-    const aRecency = now - aDate < 180 * DAY ? 1 : 0;
-    const bRecency = now - bDate < 180 * DAY ? 1 : 0;
-    const aTotal = a.score + aRecency;
-    const bTotal = b.score + bRecency;
-    if (aTotal !== bTotal) return bTotal - aTotal;
-    return bDate - aDate;
-  });
-  const top = candidates.slice(0, 5);
-
-  // --- Assemble bounded context ---
-  let context = "";
-  for (const [i, c] of top.entries()) {
-    const label = c.kind === "note" ? "笔记" : "页面";
-    const block = `[${i + 1}] ${label}「${c.title}」\n${c.excerpt}\n\n`;
-    if (context.length + block.length > MAX_CONTEXT_CHARS) break;
-    context += block;
-  }
-
-  // --- LLM answer (persona + blog info + note materials) ---
   const apiKey = process.env.DEEPSEEK_API_KEY;
-  const RAG_TASK_PROMPT = `Now answer the user's question.
 
-Rules:
-- If the question is about the blog, the blogger, or personal info, answer using 【关于我】 above.
-- Otherwise answer using the numbered materials in the user message (cite as [1], [2], ...).
-- If neither has relevant information, say you could not find anything related.
-- Answer in the same language as the question (Chinese questions → Chinese).
-- Do not mention retrieval or searching mechanisms.`;
+  // --- Agent loop: model decides which read-only tool to call ---
+  const deepseek = createOpenAICompatible({
+    name: "deepseek",
+    baseURL: "https://api.deepseek.com/v1",
+    apiKey: apiKey || "missing",
+  });
 
-  // --- LLM call with a single retry for transient upstream failures ---
-  const client = createDeepSeekClient(apiKey || "missing");
-  const MAX_ATTEMPTS = 2;
-  const RETRY_DELAY_MS = 800;
+  const result = streamText({
+    model: deepseek("deepseek-v4-flash"),
+    system: await buildSystemPrompt(HOME_AGENT_PROMPT + noteHintBlock),
+    messages: [
+      // Prior turns give the model conversational context for follow-ups.
+      ...history,
+      { role: "user", content: question },
+    ],
+    tools: {
+      search_notes: tool({
+        description:
+          "检索博客笔记，返回相关笔记的标题、链接和摘要列表（不含全文）。用关键词描述想找的内容。",
+        inputSchema: z.object({ query: z.string().describe("搜索关键词") }),
+        execute: async ({ query }) => searchNotes(query),
+      }),
+      read_note: tool({
+        description:
+          "按链接或 id 读取某篇笔记/页面的完整内容（最多 4000 字）。target 形如 /notes/3 或 /notes/3/uid，也可以是数字 id。",
+        inputSchema: z.object({ target: z.string().describe("笔记链接或 id") }),
+        execute: async ({ target }) => readNote(target),
+      }),
+      list_notes: tool({
+        description: "列出全部笔记（标题 + 链接 + 标签），用于浏览博客有哪些笔记。",
+        inputSchema: z.object({}),
+        execute: async () => listNotes(),
+      }),
+    },
+    stopWhen: isStepCount(5),
+    temperature: 0.3,
+    maxOutputTokens: 800,
+  });
 
-  let completion:
-    | { choices: { message?: { content?: string | null } | null }[] }
-    | undefined;
-  let lastError: unknown;
+  // --- Map AI SDK stream to the existing SSE contract (text/sources/error/done) ---
+  const encoder = new TextEncoder();
+  const sendEvent = (event: unknown) => {
+    return encoder.encode(`data: ${JSON.stringify(event)}\n\n`);
+  };
 
-  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-    try {
-      completion = await client.chat.completions.create({
-        model: "deepseek-v4-flash",
-        messages: [
-          { role: "system", content: await buildSystemPrompt(RAG_TASK_PROMPT) },
-          {
-            role: "user",
-            content: `Question:\n${question}\n\nMaterials:\n${
-              context.trim() || "(没有检索到相关笔记材料)"
-            }`,
-          },
-        ],
-        temperature: 0.3,
-        max_tokens: 800,
-      });
-      break;
-    } catch (err) {
-      lastError = err;
-      const status = (err as { status?: number })?.status;
-      // Retry on rate-limit, server errors, and network failures (no status).
-      // Non-retryable 4xx (auth, bad request) fail immediately.
-      const retryable = !status || status === 429 || status >= 500;
-      if (attempt < MAX_ATTEMPTS - 1 && retryable) {
-        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS * (attempt + 1)));
-        continue;
+  // noteContext source first if present (metadata as excerpt), then search hits / read results.
+  const noteSource: Source | null = noteHint?.href
+    ? { title: noteHint.title, href: noteHint.href, excerpt: noteHint.category }
+    : null;
+  let sources: Source[] = noteSource ? [noteSource] : [];
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        // Emit the current-note source up front so the panel shows it even before tools run.
+        if (noteSource) {
+          controller.enqueue(sendEvent({ type: "sources", sources: [...sources] }));
+        }
+        for await (const chunk of result.stream) {
+          switch (chunk.type) {
+            case "text-delta": {
+              controller.enqueue(sendEvent({ type: "text", content: chunk.text }));
+              break;
+            }
+            case "tool-call": {
+              controller.enqueue(sendEvent({
+                type: "tool_call",
+                name: chunk.toolName,
+                input: chunk.input,
+              }));
+              break;
+            }
+            case "tool-result": {
+              if (chunk.toolName === "search_notes") {
+                // Fresh search replaces the hits, keeping the current-note source pinned first.
+                const hits = (Array.isArray(chunk.output) ? chunk.output : []) as SearchHit[];
+                sources = [noteSource, ...hits].filter(Boolean) as Source[];
+                controller.enqueue(sendEvent({ type: "sources", sources: [...sources] }));
+              } else if (chunk.toolName === "read_note") {
+                // The actually-read note joins the sources (dedup by href).
+                const out = (chunk.output ?? null) as
+                  | { title?: string; href?: string }
+                  | null;
+                if (out && typeof out.title === "string" && typeof out.href === "string") {
+                  if (!sources.some((s) => s.href === out.href)) {
+                    sources.push({ title: out.title, href: out.href, excerpt: "" });
+                    controller.enqueue(sendEvent({ type: "sources", sources: [...sources] }));
+                  }
+                }
+              }
+              break;
+            }
+            case "finish": {
+              controller.enqueue(sendEvent({ type: "done" }));
+              break;
+            }
+            case "error": {
+              console.error("AI agent stream error:", chunk.error);
+              controller.enqueue(sendEvent({
+                type: "error",
+                error: "AI 服务暂时不可用，请稍后再试",
+              }));
+              break;
+            }
+            // Other parts (start-step / finish-step / reasoning / text-start ...) ignored.
+          }
+        }
+      } catch (err) {
+        console.error("AI agent stream failed:", err);
+        controller.enqueue(sendEvent({
+          type: "error",
+          error: "AI 服务暂时不可用，请稍后再试",
+        }));
+      } finally {
+        controller.close();
       }
-      break;
-    }
-  }
+    },
+  });
 
-  if (!completion) {
-    console.error("RAG answer failed:", lastError);
-    return NextResponse.json(
-      { error: "AI 服务暂时不可用，请稍后再试" },
-      { status: 500 }
-    );
-  }
-
-  const answer = completion.choices[0]?.message?.content?.trim() || "没有找到相关内容。";
-
-  const sources = top.map((c) => ({
-    title: c.title,
-    href: c.href,
-    excerpt: c.excerpt.slice(0, 160),
-  }));
-
-  return NextResponse.json({ answer, sources });
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/event-stream; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
+    },
+  });
 }

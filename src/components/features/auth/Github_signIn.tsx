@@ -1,11 +1,11 @@
 import { signIn } from "../../../../auth"
 import { Github } from "lucide-react"
 
-export function SignIn() {
+export function SignIn({ redirectTo }: { redirectTo: string }) {
     return (
         <form action={async () => {
             "use server"
-            await signIn("github", { redirectTo: "/" })
+            await signIn("github", { redirectTo })
         }}>
             <button
                 type="submit"

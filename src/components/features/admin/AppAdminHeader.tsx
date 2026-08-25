@@ -58,7 +58,6 @@ export function AppAdminHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-3 sm:px-5">
         {/* 左：后台 logo */}
         <div className="flex items-center gap-2">
-          <GalleryVerticalEnd className="h-6 w-6 text-brand-blue" />
           <Link
             href="/admin"
             className="text-sm lg:text-base font-semibold tracking-wide text-foreground transition-colors hover:text-brand-blue-deep"
@@ -76,15 +75,15 @@ export function AppAdminHeader() {
               <Link
                 key={item.url}
                 href={item.url}
-                className={`relative flex items-center gap-2 p-2 font-extrabold transition-colors duration-300 ${
+                className={`relative flex items-center gap-2 p-2 px-4 font-extrabold transition-colors duration-300 ${
                   active
                     ? "text-brand-blue-deep dark:text-brand-blue"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
                 aria-current={active ? "page" : undefined}
               >
-                <Icon className="size-4" />
-                <span>{t(`admin.${item.nameKey}`)}</span>
+                <Icon className="size-6" />
+                {/* <span className="text-10">{t(`admin.${item.nameKey}`)}</span> */}
                 <span
                   className={`absolute -bottom-1 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-brand-blue transition-opacity duration-300 ${
                     active ? "opacity-100" : "opacity-0"

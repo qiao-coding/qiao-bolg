@@ -20,15 +20,12 @@ export function AgentConsolePage() {
   return (
     <main className="mx-auto max-w-4xl px-4">
       <div className="flex flex-col h-[calc(100vh-12rem)] rounded-[28px] border border-white/70 bg-card/72 shadow-[0_24px_70px_rgba(255,132,189,0.14)] backdrop-blur-md dark:border-[#8fb7df]/20 dark:bg-[#202a3f]/74 dark:shadow-[0_24px_70px_rgba(10,18,34,0.28)] overflow-hidden">
-        {/* Header */}
+        {/* Header：图标作标识，无标题文本 */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-border/50 shrink-0">
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-brand-grad text-white shadow-[0_10px_22px_rgba(255,143,199,0.28)]">
             <Bot className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-base font-semibold text-foreground">
-              {t("admin.ai.agentTitle")}
-            </h2>
             <p className="text-xs text-muted-foreground truncate">
               {t("admin.ai.agentDesc")}
             </p>
