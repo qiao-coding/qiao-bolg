@@ -6,9 +6,10 @@ import { SignIn } from "../auth/Github_signIn"
 
 
 export function LoginForm({
+  locale,
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { locale: string }) {
 
 
 
@@ -22,13 +23,13 @@ export function LoginForm({
           <div className="flex flex-col gap-6 p-6 text-left md:p-8">
             <div className="space-y-2">
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-brand-blue-deep">Welcome back</p>
-              <h1 className="text-2xl font-semibold text-foreground">登录 HaoWhite Blog</h1>
+              <h1 className="text-2xl font-semibold text-foreground">登录 小小乔の小站</h1>
               <p className="text-sm leading-6 text-muted-foreground">
                 使用 GitHub 账号继续阅读、管理你的内容和后台设置。
               </p>
             </div>
             <div className="w-full">
-              <SignIn />
+              <SignIn redirectTo={`/${locale}`} />
             </div>
           </div>
 

@@ -301,6 +301,15 @@ html {
   background: rgba(116, 179, 255, 0.18);
 }
 
+/* ---- 聊天 markdown 代码块 ----
+   highlight.js 主题只提供 token 颜色；背景/前景交给气泡容器
+   （.chat-md .pre 的 Tailwind bg）控制，保证明暗主题下不突兀。 */
+.chat-md .hljs {
+  display: block;
+  background: transparent;
+  color: inherit;
+}
+
 /* 品牌工具类（日系轻博客） */
 @utility bg-brand-grad {
   background-image: linear-gradient(90deg, var(--brand-blue), var(--brand-pink));

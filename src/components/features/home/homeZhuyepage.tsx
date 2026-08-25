@@ -7,7 +7,6 @@ import { useMemo } from "react";
 import { Link } from "@/i18n/navigation";
 import { useBlogDataContext } from "@/components/layout/BlogDataProvider";
 import { useT } from "@/i18n/LocaleContext";
-import { AgentQueryBox } from "@/components/features/search/AgentQueryBox";
 
 export function HomeZhuyepage() {
     const t = useT();
@@ -138,9 +137,6 @@ export function HomeZhuyepage() {
                         <div className="mt-4 rounded-2xl border border-white/70 bg-brand-grad-soft p-4 text-sm leading-6 text-muted-foreground dark:border-[#8fb7df]/18 dark:bg-[#26334d]/72 dark:text-[#b9c8d8]">
                             愿生活的每一天，都有惊喜!
                         </div>
-
-                        {/* 右侧边栏 AI 聊天（公开只读 RAG） */}
-                        <AgentQueryBox compact />
                     </aside>
                 </div>
             </section>

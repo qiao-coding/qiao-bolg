@@ -1,12 +1,12 @@
 'use client'
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import { MarkdownStyle } from '../editor/markdown/utils';
 import { CodeBlock } from '../editor/markdown/components/CodeBlock';
-import { extractTocFromContent, type TocItem } from '@/lib/docs/toc';
+import type { TocItem } from '@/lib/docs/toc';
 
 interface NotePageContentProps {
   content: string;
@@ -15,11 +15,26 @@ interface NotePageContentProps {
 }
 
 export function NotePageContent({ content, theme, onTocReady }: NotePageContentProps) {
-  const tocItems = useMemo(() => extractTocFromContent(content), [content]);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    onTocReady?.(tocItems);
-  }, [tocItems, onTocReady]);
+    const frameId = requestAnimationFrame(() => {
+      const headings = Array.from(
+        contentRef.current?.querySelectorAll<HTMLHeadingElement>("h2[id], h3[id]") ?? []
+      );
+      const tocItems = headings
+        .map((heading) => ({
+          id: heading.id,
+          title: heading.textContent?.trim() ?? "",
+          level: Number(heading.tagName.slice(1)) as 2 | 3,
+        }))
+        .filter((item): item is TocItem => Boolean(item.id && item.title && (item.level === 2 || item.level === 3)));
+
+      onTocReady?.(tocItems);
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [content, onTocReady]);
 
   useEffect(() => {
     MarkdownStyle.getMarkdownStyle({ theme })
@@ -28,6 +43,7 @@ export function NotePageContent({ content, theme, onTocReady }: NotePageContentP
   return (
     <div className="text-foreground mb-12 max-w-[75ch]">
       <div
+        ref={contentRef}
         className="markdown-body min-h-[50vh] max-w-none"
         style={{ contentVisibility: "auto", containIntrinsicSize: "auto 2000px" } as React.CSSProperties}
       >

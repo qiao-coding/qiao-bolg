@@ -1,5 +1,6 @@
 'use client'
 import ReduxProvider from "@/lib/store/ReduxProvider";
+import { HomeAIChat } from "@/components/features/search/HomeAIChat";
 import { ThemeProvider } from "next-themes";
 
 interface ClientProvidersProps {
@@ -18,6 +19,7 @@ export function ClientProviders({ children }: ClientProvidersProps) {
         themes={['light', 'dark']}
       >
           {children}
+          <HomeAIChat />
       </ThemeProvider>
     </ReduxProvider>
   )

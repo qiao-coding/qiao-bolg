@@ -6,6 +6,21 @@ import { useActiveHeading } from "@/lib/use-active-heading";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 
+function getHeadingOffset() {
+  const header = document.querySelector<HTMLElement>("[data-note-site-header]");
+  const headerHeight = header?.getBoundingClientRect().height ?? 48;
+  return headerHeight + 22;
+}
+
+function scrollToHeading(id: string) {
+  const element = document.getElementById(id);
+  if (!element) return;
+
+  const top = element.getBoundingClientRect().top + window.scrollY - getHeadingOffset();
+  window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  window.history.pushState(null, "", `#${id}`);
+}
+
 /** 阅读进度条 */
 function ReadingProgress() {
   const [progress, setProgress] = useState(0);
@@ -48,7 +63,7 @@ function ReadingProgress() {
 
 export function NoteToc({ items, instanceId = "toc" }: { items: TocItem[]; instanceId?: string }) {
   const headingIds = items.map((item) => item.id);
-  const activeId = useActiveHeading(headingIds);
+  const activeId = useActiveHeading(headingIds, 70);
 
   if (items.length === 0) return null;
 
@@ -81,11 +96,7 @@ export function NoteToc({ items, instanceId = "toc" }: { items: TocItem[]; insta
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 onClick={(e) => {
                   e.preventDefault();
-                  const element = document.getElementById(item.id);
-                  if (element) {
-                    element.scrollIntoView({ behavior: "smooth", block: "start" });
-                    window.history.pushState(null, "", `#${item.id}`);
-                  }
+                  scrollToHeading(item.id);
                 }}
               >
                 {/* 活动项背景 */}

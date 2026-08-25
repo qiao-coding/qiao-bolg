@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, User } from "lucide-react";
+import { User } from "lucide-react";
 import Image from "next/image";
 import { ToolCallCard } from "./ToolCallCard";
 import { useT } from "@/i18n/LocaleContext";
@@ -81,7 +81,7 @@ function TypingIndicator() {
 }
 
 /** Minimal markdown-to-HTML converter (bold, italic, code, lists, links) */
-function simpleMarkdown(text: string): string {
+export function simpleMarkdown(text: string): string {
   return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

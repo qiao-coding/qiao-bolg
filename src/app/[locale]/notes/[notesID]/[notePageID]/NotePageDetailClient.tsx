@@ -24,6 +24,18 @@ interface NotePageDetailClientProps {
   allNotes: Note[];
 }
 
+declare global {
+  interface Window {
+    __BLOG_NOTE_CONTEXT__?: {
+      title: string;
+      category: string;
+      href: string;
+      tags: string[];
+      content: string;
+    };
+  }
+}
+
 export default function NotePageDetailClient({
   note,
   notesPage,
@@ -44,10 +56,31 @@ export default function NotePageDetailClient({
     navigateTimer.current = setTimeout(() => setIsNavigating(false), 1500);
   }, []);
 
-  // 新页面内容到达（uid 变化）即关闭 loading
+  // 新页面内容到达（uid 变化）：关闭 loading 并清空旧 TOC，
+  // 避免残留上一页的 TOC 导致布局在旧/新目录间跳变
   useEffect(() => {
     setIsNavigating(false);
+    setTocItems([]);
   }, [notesPage?.uid]);
+
+  useEffect(() => {
+    const content = (notesPage.content || "").slice(0, 12000);
+    window.__BLOG_NOTE_CONTEXT__ = {
+      title: notesPage.title,
+      category: note.title,
+      href: window.location.pathname,
+      tags: notesPage.pageTags || [],
+      content,
+    };
+    window.dispatchEvent(new CustomEvent("blog-note-context", {
+      detail: window.__BLOG_NOTE_CONTEXT__,
+    }));
+
+    return () => {
+      delete window.__BLOG_NOTE_CONTEXT__;
+      window.dispatchEvent(new CustomEvent("blog-note-context", { detail: null }));
+    };
+  }, [note.title, notesPage.content, notesPage.pageTags, notesPage.title]);
 
   const handleTocReady = useCallback((items: TocItem[]) => {
     setTocItems(items);
