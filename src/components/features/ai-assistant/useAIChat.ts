@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { ChatMessage, SSEEvent } from "./types";
-import { getApiKey } from "@/lib/ai/apiKey";
 
 const MAX_MESSAGES = 50;
 
@@ -67,14 +66,15 @@ export function useAIChat(opts?: { endpoint?: string; storageKey?: string }) {
       abortRef.current = controller;
 
       try {
-        const allMessages = [...messages, userMsg].map((m) => ({
-          role: m.role,
-          content: m.content,
-        }));
+        // 只把 user/assistant 消息发给后端。tool 消息不能跨轮重放——
+        // 它们依赖本轮的 tool_call_id，重放时无法配对（DeepSeek 会 400）。
+        const allMessages = [...messages, userMsg]
+          .filter((m): m is ChatMessage & { role: "user" | "assistant" } =>
+            m.role === "user" || m.role === "assistant"
+          )
+          .map((m) => ({ role: m.role, content: m.content }));
 
         const headers: Record<string, string> = { "Content-Type": "application/json" };
-        const apiKey = getApiKey();
-        if (apiKey) headers["x-api-key"] = apiKey;
 
         const res = await fetch(endpoint, {
           method: "POST",

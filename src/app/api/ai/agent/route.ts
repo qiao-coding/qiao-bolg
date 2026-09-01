@@ -61,8 +61,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "messages array is required" }, { status: 400 });
   }
 
-  // --- API key: client-provided x-api-key, falling back to server env ---
-  const apiKey = req.headers.get("x-api-key") || process.env.DEEPSEEK_API_KEY;
+  // --- API key: server env only ---
+  const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }

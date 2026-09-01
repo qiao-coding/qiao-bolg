@@ -123,7 +123,7 @@ export function HomeAIChat() {
       } catch (err) {
         setConversation((c) =>
           c.map((m) =>
-            m.id === assistantId
+            m.id === assistantId && !m.content
               ? {
                   ...m,
                   content: err instanceof Error ? err.message : String(err),
@@ -333,12 +333,18 @@ function MessageRow({ msg }: { msg: HomeMsg }) {
         ) : msg.content ? (
           <>
             <ChatMarkdown content={msg.content} />
-            {msg.toolCalls && msg.toolCalls.length > 0 && (
-              <p className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground/70">
-                <Search className="size-3" />
-                {t("home.askDone", { count: msg.toolCalls.length })}
-              </p>
-            )}
+            {msg.toolCalls && msg.toolCalls.length > 0 && (() => {
+              // 「已查阅 N 篇资料」只统计真正读过全文的 read_note；
+              // search_notes/list_notes 是检索/浏览，不算查阅。
+              const readCount = msg.toolCalls.filter((c) => c.name === "read_note").length;
+              if (readCount === 0) return null;
+              return (
+                <p className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground/70">
+                  <Search className="size-3" />
+                  {t("home.askDone", { count: readCount })}
+                </p>
+              );
+            })()}
           </>
         ) : msg.toolCalls && msg.toolCalls.length > 0 ? (
           <ToolLooking />
@@ -404,9 +410,12 @@ function handleStreamEvent(
     }
 
     if (event.type === "error") {
+      // 只在还没有内容时用错误消息填充；已有部分回答则保留（半截回答比报错有用）。
       setConversation((items) =>
         items.map((m) =>
-          m.id === assistantId ? { ...m, content: event.error, isError: true } : m
+          m.id === assistantId && !m.content
+            ? { ...m, content: event.error, isError: true }
+            : m
         )
       );
     }
