@@ -5,8 +5,6 @@ import { useT } from "@/i18n/LocaleContext";
 import ThemePage from "@/components/ui/public/themePage";
 import {
   Bot,
-  GalleryVerticalEnd,
-  KeyRound,
   Leaf,
   LinkIcon,
   LogOut,
@@ -27,7 +25,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/shadcnComponents/overlay/dropdown-menu";
-import { ApiKeyDialog } from "./ApiKeyDialog";
 import { useState } from "react";
 
 // 后台导航项（与公共 Header 同款写法，8 个后台路由）
@@ -46,7 +43,6 @@ export function AppAdminHeader() {
   const t = useT();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [apiKeyOpen, setApiKeyOpen] = useState(false);
   const { data: session } = useSession();
 
   // 判断当前激活项（去掉 locale 前缀后比较路径）
@@ -123,15 +119,6 @@ export function AppAdminHeader() {
               align="end"
               className="mr-2 min-w-40 rounded-lg border-border bg-card/95"
             >
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onSelect={() => setApiKeyOpen(true)}
-              >
-                <span className="flex w-full items-center gap-2">
-                  <KeyRound className="size-4" />
-                  {t("admin.menu.apiKey")}
-                </span>
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 asChild
@@ -187,7 +174,6 @@ export function AppAdminHeader() {
         </div>
       )}
 
-      <ApiKeyDialog open={apiKeyOpen} onOpenChange={setApiKeyOpen} />
     </header>
   );
 }

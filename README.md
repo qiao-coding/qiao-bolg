@@ -185,6 +185,9 @@ NEXTAUTH_SECRET="your-secret-key"
 AUTH_GITHUB_ID="your-github-client-id"
 AUTH_GITHUB_SECRET="your-github-client-secret"
 
+# AI 助手（主页悬浮聊天 + 后台智能助手，缺省时 AI 返回「服务不可用」）
+DEEPSEEK_API_KEY="sk-..."
+
 ```
 
 4. **数据库初始化**
