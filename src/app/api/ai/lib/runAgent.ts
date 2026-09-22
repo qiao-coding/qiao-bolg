@@ -37,16 +37,13 @@ export function runAgent(cfg: AgentRunConfig): ReadableStream {
 
       try {
         const client = createDeepSeekClient(apiKey);
+        // 历史里的 role=tool 消息不能重放：它们的 tool_call_id 属于上一轮，
+        // 重放无法配对（DeepSeek 会拒绝 "role 'tool' must be a response to a
+        // preceding message with 'tool_calls'"）。只保留 user/assistant。
+        const historyMessages = messages.filter((m) => m.role !== "tool");
         const conversation: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
           { role: "system", content: systemPrompt },
-          ...messages.map((m) => {
-            if (m.role === "tool") {
-              return {
-                role: "tool" as const,
-                tool_call_id: "",
-                content: m.content,
-              };
-            }
+          ...historyMessages.map((m) => {
             return {
               role: m.role as "user" | "assistant",
               content: m.content,

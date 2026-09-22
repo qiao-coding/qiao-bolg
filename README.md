@@ -177,13 +177,16 @@ npm install
 # 数据库配置
 DATABASE_URL="postgresql://username:password@localhost:5432/hanwhite_blog"
 
-# NextAuth配置
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-key"
+# NextAuth（Auth.js v5）配置。v5 只认 AUTH_* 前缀；NEXTAUTH_SECRET 仅作兼容兜底。
+AUTH_URL="http://localhost:3000"
+AUTH_SECRET="your-secret-key"          # 必填，可用 `npx auth secret` 生成
 
-# GitHub OAuth
+# GitHub OAuth（ID 与 Secret 必须来自同一个 OAuth App）
 AUTH_GITHUB_ID="your-github-client-id"
 AUTH_GITHUB_SECRET="your-github-client-secret"
+
+# AI 助手（主页悬浮聊天 + 后台智能助手，缺省时 AI 返回「服务不可用」）
+DEEPSEEK_API_KEY="sk-..."
 
 ```
 
@@ -216,6 +219,34 @@ npm run build
 ```bash
 npm run start
 ```
+
+3. **上线前自检（登录失败最常见的原因）**
+
+`AUTH_URL` / `AUTH_SECRET` / `AUTH_GITHUB_*` 都不会提交到仓库（`.env*` 已被 gitignore），
+必须逐条配置在部署平台的**环境变量**里，改完要重新部署才生效。
+
+```bash
+# 1) 密钥已配置：应返回 200 与一个 csrfToken；返回 500 说明 AUTH_SECRET 缺失
+curl -i https://你的域名/api/auth/csrf | head -1
+
+# 2) provider 已注册：应返回 200，含 github 的 signinUrl / callbackUrl
+curl -s https://你的域名/api/auth/providers
+
+# 3) OAuth 应用配置：应返回 302 且 Location 指向 github.com/login/oauth/authorize
+curl -i -X POST https://你的域名/api/auth/signin/github | head -1
+```
+
+两个必须对齐的点：
+
+- `AUTH_GITHUB_ID` 与 `AUTH_GITHUB_SECRET` 必须属于**同一个** GitHub OAuth App。
+  只换 ID 没换 Secret 时，登录会在 GitHub 授权完成后的换取 token 阶段失败。
+- 该 OAuth App 的 **Authorization callback URL** 必须精确等于
+  `https://你的域名/api/auth/callback/github`（协议、`www`、结尾斜杠都要一致）。
+
+> 注意：`GET /api/auth/signin/github` 在 Auth.js v5 里**不受支持**（该地址只接受 POST），
+> 直接访问会得到 `Configuration` 错误。它只用于排查 provider 是否注册，不代表登录链路。
+> 排查线上问题时可临时设置 `AUTH_DEBUG=1` 打开 Auth.js 详细日志；
+> 所有认证错误都会带 `?error=<Code>` 落到 `/auth-error` 页面。
 
 ## 开发指南
 
