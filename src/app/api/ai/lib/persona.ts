@@ -57,6 +57,15 @@ export async function getBlogPersonaContext(): Promise<string> {
  * Task rules are appended last so hard requirements stay authoritative.
  */
 export async function buildSystemPrompt(taskPrompt: string): Promise<string> {
-  const blogCtx = await getBlogPersonaContext();
-  return `${XIAOXIAOQIAO_PERSONA}\n\n${blogCtx}\n\n${taskPrompt}`;
+  let blogCtx = "";
+  try {
+    blogCtx = await getBlogPersonaContext();
+  } catch (error) {
+    // 个人信息只影响「关于我」这类回答。DB 抖动时退化为静态人设 + 任务规则，
+    // 不让一次查询失败把整条 AI 请求变成 500（这三条路由都在 await 它）。
+    console.error("获取博客个人信息失败，已退化为基础人设:", error);
+  }
+  return blogCtx
+    ? `${XIAOXIAOQIAO_PERSONA}\n\n${blogCtx}\n\n${taskPrompt}`
+    : `${XIAOXIAOQIAO_PERSONA}\n\n${taskPrompt}`;
 }
